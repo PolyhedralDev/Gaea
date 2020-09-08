@@ -7,7 +7,7 @@ import org.polydev.gaea.biome.BiomeGrid;
  *     Contains method to get interpolated noise at a coordinate within the chunk.
  */
 public class ChunkInterpolator {
-    private Interpolator[][] interpGrid = new Interpolator[4][4];
+    private final Interpolator[][] interpGrid = new Interpolator[4][4];
 
     /**
      * Instantiates a ChunkInterpolator at a pair of chunk coordinates, with a BiomeGrid and FastNoise instance.

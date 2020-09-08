@@ -29,7 +29,7 @@ public class Interpolator {
      * @param v1 - Value at v1.
      * @return double - The interpolated value.
      */
-    private double lerp(double t, double v0, double v1) {
+    public static double lerp(double t, double v0, double v1) {
         return v0 + t * (v1 - v0);
     }
 
