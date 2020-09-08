@@ -4,7 +4,10 @@ import org.bukkit.World;
 import org.bukkit.generator.ChunkGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.polydev.gaea.math.ChunkInterpolator;
+import org.polydev.gaea.math.ChunkInterpolator2;
+import org.polydev.gaea.math.ChunkInterpolator3;
 import org.polydev.gaea.math.FastNoise;
+import org.polydev.gaea.math.InterpolationType;
 import org.polydev.gaea.profiler.ProfileFuture;
 import org.polydev.gaea.profiler.WorldProfiler;
 
@@ -15,6 +18,11 @@ public abstract class GaeaChunkGenerator extends ChunkGenerator {
     private FastNoise gen;
     private ChunkInterpolator interp;
     private WorldProfiler profiler;
+    private final InterpolationType interpolationType;
+
+    public GaeaChunkGenerator(InterpolationType type) {
+        interpolationType = type;
+    }
 
     @Override
     public @NotNull ChunkData generateChunkData(@NotNull World world, @NotNull Random random, int chunkX, int chunkZ, @NotNull BiomeGrid biome) {
@@ -25,7 +33,7 @@ public abstract class GaeaChunkGenerator extends ChunkGenerator {
             gen.setFractalOctaves(getNoiseOctaves(world));
             gen.setFrequency(getNoiseFrequency(world));
         }
-        interp = new ChunkInterpolator(chunkX, chunkZ, this.getBiomeGrid(world), gen);
+        interp = interpolationType.getInstance(chunkX, chunkZ, this.getBiomeGrid(world), gen);
         ProfileFuture base = measure("ChunkBaseGenTime");
         ChunkData chunk = generateBase(world, random, chunkX, chunkZ, gen);
         if(base != null) base.complete();
@@ -46,6 +54,10 @@ public abstract class GaeaChunkGenerator extends ChunkGenerator {
 
     public double getInterpolatedNoise(byte x, byte z) {
         return this.interp.getNoise(x, z);
+    }
+
+    public double getInterpolatedNoise(byte x, int y, byte z) {
+        return this.interp.getNoise(x, y, z);
     }
 
     public void attachProfiler(WorldProfiler p) {

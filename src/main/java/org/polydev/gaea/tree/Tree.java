@@ -3,7 +3,7 @@ package org.polydev.gaea.tree;
 import org.bukkit.Location;
 import org.bukkit.TreeType;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.polydev.gaea.taskchain.BukkitTaskChainFactory;
+import co.aikar.taskchain.BukkitTaskChainFactory;
 import org.polydev.gaea.tree.fractal.FractalTree;
 
 import java.util.Random;

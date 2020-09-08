@@ -6,7 +6,7 @@ import org.polydev.gaea.biome.BiomeGrid;
  * Class to abstract away the 16 Interpolators needed to generate a chunk.<br>
  *     Contains method to get interpolated noise at a coordinate within the chunk.
  */
-public class ChunkInterpolator3 {
+public class ChunkInterpolator3 implements ChunkInterpolator {
     private final Interpolator3[][][] interpGrid = new Interpolator3[4][64][4];
 
     /**
@@ -33,6 +33,11 @@ public class ChunkInterpolator3 {
                 }
             }
         }
+    }
+
+    @Override
+    public double getNoise(byte x, byte z) {
+        return getNoise(x, 0, z);
     }
 
     /**

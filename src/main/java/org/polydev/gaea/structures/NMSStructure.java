@@ -2,8 +2,8 @@ package org.polydev.gaea.structures;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.polydev.gaea.reflectasm.ConstructorAccess;
-import org.polydev.gaea.reflectasm.MethodAccess;
+import com.esotericsoftware.reflectasm.ConstructorAccess;
+import com.esotericsoftware.reflectasm.MethodAccess;
 
 import java.io.IOException;
 import java.io.InputStream;
