@@ -145,7 +145,7 @@ public class ProbabilityCollection<E> {
      * @param <T> Type of element
      * @author Lewys Davies
      */
-    final static class ProbabilitySetElement<T> {
+    public final static class ProbabilitySetElement<T> {
         private final T object;
         private final int probability;
         private int index;

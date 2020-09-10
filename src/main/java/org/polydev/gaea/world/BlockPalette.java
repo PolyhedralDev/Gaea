@@ -1,9 +1,11 @@
 package org.polydev.gaea.world;
 
 import org.bukkit.Material;
+import org.bukkit.block.data.BlockData;
 import org.polydev.gaea.math.ProbabilityCollection;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -29,7 +31,7 @@ public class BlockPalette {
      * @return - BlockPalette instance for chaining.
      */
     public BlockPalette add(Material m, int layers) {
-        pallet.add(new PaletteLayer(m, layers + (pallet.size() == 0 ? 0 : pallet.get(pallet.size() - 1).getLayers())));
+        pallet.add(new PaletteLayer(m.createBlockData(), layers + (pallet.size() == 0 ? 0 : pallet.get(pallet.size() - 1).getLayers())));
         return this;
     }
 
@@ -41,6 +43,24 @@ public class BlockPalette {
      * @return - BlockPalette instance for chaining.
      */
     public BlockPalette add(ProbabilityCollection<Material> m, int layers) {
+        ProbabilityCollection<BlockData> d = new ProbabilityCollection<>();
+        Iterator<ProbabilityCollection.ProbabilitySetElement<Material>> i = m.iterator();
+        while(i.hasNext()) {
+            ProbabilityCollection.ProbabilitySetElement<Material> e = i.next();
+            d.add(e.getObject().createBlockData(), e.getProbability());
+        }
+        pallet.add(new PaletteLayer(d, layers + (pallet.size() == 0 ? 0 : pallet.get(pallet.size() - 1).getLayers())));
+        return this;
+    }
+
+    /**
+     * Adds a ProbabilityCollection to the palette, for a number of layers.
+     *
+     * @param m      - The ProbabilityCollection to add to the palette.
+     * @param layers - The number of layers the material occupies.
+     * @return - BlockPalette instance for chaining.
+     */
+    public BlockPalette addBlockData(ProbabilityCollection<BlockData> m, int layers) {
         pallet.add(new PaletteLayer(m, layers + (pallet.size() == 0 ? 0 : pallet.get(pallet.size() - 1).getLayers())));
         return this;
     }
@@ -53,6 +73,13 @@ public class BlockPalette {
      */
     public Material get(int layer, Random random) {
         for(PaletteLayer p : pallet) {
+            if(layer < p.getLayers()) return p.get(random).getMaterial();
+        }
+        return pallet.get(pallet.size() - 1).get(random).getMaterial();
+    }
+    
+    public BlockData getBlockData(int layer, Random random) {
+        for(PaletteLayer p : pallet) {
             if(layer < p.getLayers()) return p.get(random);
         }
         return pallet.get(pallet.size() - 1).get(random);
@@ -64,8 +91,8 @@ public class BlockPalette {
     private static class PaletteLayer {
         private final boolean col;
         private final int layers;
-        private ProbabilityCollection<Material> collection;
-        private Material m;
+        private ProbabilityCollection<BlockData> collection;
+        private BlockData m;
 
         /**
          * Constructs a PaletteLayer with a ProbabilityCollection of materials and a number of layers.
@@ -73,7 +100,7 @@ public class BlockPalette {
          * @param type   - The collection of materials to choose from.
          * @param layers - The number of layers.
          */
-        public PaletteLayer(ProbabilityCollection<Material> type, int layers) {
+        public PaletteLayer(ProbabilityCollection<BlockData> type, int layers) {
             this.col = true;
             this.collection = type;
             this.layers = layers;
@@ -85,7 +112,7 @@ public class BlockPalette {
          * @param type   - The material to use.
          * @param layers - The number of layers.
          */
-        public PaletteLayer(Material type, int layers) {
+        public PaletteLayer(BlockData type, int layers) {
             this.col = false;
             this.m = type;
             this.layers = layers;
@@ -105,7 +132,7 @@ public class BlockPalette {
          *
          * @return Material - the material..
          */
-        public Material get(Random random) {
+        public BlockData get(Random random) {
             if(col) return this.collection.get(random);
             return m;
         }
