@@ -33,5 +33,5 @@ public abstract class BiomeTerrain {
      *
      * @return BlocPalette - The biome's palette.
      */
-    public abstract BlockPalette getPalette();
+    public abstract BlockPalette getPalette(int y);
 }

@@ -1,6 +1,7 @@
 package org.polydev.gaea.math;
 
 import org.polydev.gaea.biome.BiomeGrid;
+import org.polydev.gaea.biome.BiomeTerrain;
 
 /**
  * Class to abstract away the 16 Interpolators needed to generate a chunk.<br>
@@ -8,6 +9,10 @@ import org.polydev.gaea.biome.BiomeGrid;
  */
 public class ChunkInterpolator3 implements ChunkInterpolator {
     private final Interpolator3[][][] interpGrid = new Interpolator3[4][64][4];
+    private final int chunkX;
+    private final int chunkZ;
+    private final BiomeGrid grid;
+    private final FastNoise noise;
 
     /**
      * Instantiates a 3D ChunkInterpolator at a pair of chunk coordinates, with a BiomeGrid and FastNoise instance.
@@ -19,20 +24,32 @@ public class ChunkInterpolator3 implements ChunkInterpolator {
     public ChunkInterpolator3(int chunkX, int chunkZ, BiomeGrid grid, FastNoise noise) {
         int xOrigin = chunkX << 4;
         int zOrigin = chunkZ << 4;
+        this.chunkX = chunkX;
+        this.chunkZ = chunkZ;
+        this.grid = grid;
+        this.noise = noise;
         for(byte x = 0; x < 4; x++) {
-            for(int y = 0; y < 64; y++) {
-                for(byte z = 0; z < 4; z++) {
-                    interpGrid[x][y][z] = new Interpolator3(grid.getBiome(xOrigin + x * 4,  zOrigin + z * 4).getGenerator().getNoise(noise, xOrigin + x * 4, y*4,  zOrigin + z * 4) * 2.0f,
-                            grid.getBiome(xOrigin + x * 4 + 4,  zOrigin + z * 4).getGenerator().getNoise(noise, xOrigin + x * 4 + 4, y*4,  zOrigin + z * 4) * 2.0f,
-                            grid.getBiome(xOrigin + x * 4,  zOrigin + z * 4).getGenerator().getNoise(noise, xOrigin + x * 4, y*4  + 4,  zOrigin + z * 4) * 2.0f,
-                            grid.getBiome(xOrigin + x * 4 + 4,  zOrigin + z * 4).getGenerator().getNoise(noise, xOrigin + x * 4 + 4, y*4  + 4,  zOrigin + z * 4) * 2.0f,
-                            grid.getBiome(xOrigin + x * 4,  zOrigin + z * 4 + 4).getGenerator().getNoise(noise, xOrigin + x * 4, y*4,  zOrigin + z * 4 + 4) * 2.0f,
-                            grid.getBiome(xOrigin + x * 4 + 4,  zOrigin + z * 4 + 4).getGenerator().getNoise(noise, xOrigin + x * 4 + 4, y*4,  zOrigin + z * 4 + 4) * 2.0f,
-                            grid.getBiome(xOrigin + x * 4,  zOrigin + z * 4 + 4).getGenerator().getNoise(noise, xOrigin + x * 4, y*4 + 4,  zOrigin + z * 4 + 4) * 2.0f,
-                            grid.getBiome(xOrigin + x * 4 + 4,  zOrigin + z * 4 + 4).getGenerator().getNoise(noise, xOrigin + x * 4 + 4, y*4 + 4,  zOrigin + z * 4 + 4) * 2.0f);
+            for(byte z = 0; z < 4; z++) {
+                for(int y = 0; y < 64; y++) {
+                    interpGrid[x][y][z] = new Interpolator3(
+                            biomeAvg(xOrigin + x * 4, y*4,  zOrigin + z * 4) * 2.0f,
+                            biomeAvg(xOrigin + x * 4 + 4, y*4,  zOrigin + z * 4) * 2.0f,
+                            biomeAvg(xOrigin + x * 4, y*4  + 4,  zOrigin + z * 4) * 2.0f,
+                            biomeAvg(xOrigin + x * 4 + 4, y*4  + 4,  zOrigin + z * 4) * 2.0f,
+                            biomeAvg(xOrigin + x * 4, y*4,  zOrigin + z * 4 + 4) * 2.0f,
+                            biomeAvg(xOrigin + x * 4 + 4, y*4,  zOrigin + z * 4 + 4) * 2.0f,
+                            biomeAvg(xOrigin + x * 4, y*4 + 4,  zOrigin + z * 4 + 4) * 2.0f,
+                            biomeAvg(xOrigin + x * 4 + 4, y*4 + 4,  zOrigin + z * 4 + 4) * 2.0f);
                 }
             }
         }
+    }
+
+    private double biomeAvg(int x, int y, int z) {
+        return (grid.getBiome(x+4,  z).getGenerator().getNoise(noise, x, y,  z)
+        + grid.getBiome(x-4,  z).getGenerator().getNoise(noise, x, y,  z)
+        + grid.getBiome(x,  z+4).getGenerator().getNoise(noise, x, y,  z)
+        + grid.getBiome(x,  z-4).getGenerator().getNoise(noise, x, y,  z))/4D;
     }
 
     @Override

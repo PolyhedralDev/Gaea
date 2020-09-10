@@ -37,6 +37,19 @@ public abstract class GaeaChunkGenerator extends ChunkGenerator {
         ProfileFuture base = measure("ChunkBaseGenTime");
         ChunkData chunk = generateBase(world, random, chunkX, chunkZ, gen);
         if(base != null) base.complete();
+        for(byte x = 0; x < 16; x++) {
+            for(byte z = 0; z < 16; z++) {
+                int paletteLevel = 0;
+                for(int y = world.getMaxHeight()-1; y > 0; y--) {
+                    if(chunk.getType(x, y, z).isAir()){
+                        paletteLevel = 0;
+                        continue;
+                    }
+                    chunk.setBlock(x, y, z, getBiomeGrid(world).getBiome((chunkX << 4) + x, (chunkZ << 4) + z).getGenerator().getPalette(y).get(paletteLevel, random));
+                    paletteLevel++;
+                }
+            }
+        }
         for(GenerationPopulator g : getGenerationPopulators(world)) {
             chunk = g.populate(world, chunk, random, chunkX, chunkZ);
         }
