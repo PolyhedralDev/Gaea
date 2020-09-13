@@ -33,8 +33,8 @@ public abstract class GaeaChunkGenerator extends ChunkGenerator {
             gen.setFractalOctaves(getNoiseOctaves(world));
             gen.setFrequency(getNoiseFrequency(world));
         }
-        interp = interpolationType.getInstance(chunkX, chunkZ, this.getBiomeGrid(world), gen);
         ProfileFuture base = measure("ChunkBaseGenTime");
+        interp = interpolationType.getInstance(chunkX, chunkZ, this.getBiomeGrid(world), gen);
         ChunkData chunk = generateBase(world, random, chunkX, chunkZ, gen);
         if(base != null) base.complete();
         for(byte x = 0; x < 16; x++) {

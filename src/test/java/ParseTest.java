@@ -11,11 +11,12 @@ import java.util.List;
 public class ParseTest {
     public static void main(String[] args) {
         long l = System.nanoTime();
-        Scope s = Scope.create();
+        Parser p = new Parser();
+        Scope s = p.getScope();
         Variable x = s.getVariable("x");
         Expression e = null;
         try {
-            e = Parser.parse("2 + (7 - 5) * 3.14159 * x^(12-10) + sin(-3.141)", s);
+            e = p.parse("2 + (7 - 5) * 3.14159 * x^(12-10) + sin(-3.141)", s);
         } catch(ParseException parseException) {
             parseException.printStackTrace();
         }
