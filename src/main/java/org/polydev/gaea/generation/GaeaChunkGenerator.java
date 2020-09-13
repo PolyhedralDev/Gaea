@@ -40,8 +40,8 @@ public abstract class GaeaChunkGenerator extends ChunkGenerator {
         for(byte x = 0; x < 16; x++) {
             for(byte z = 0; z < 16; z++) {
                 int paletteLevel = 0;
-                for(int y = world.getMaxHeight()-1; y > 0; y--) {
-                    if(chunk.getType(x, y, z).isAir()){
+                for(int y = world.getMaxHeight()-1; y >= 0; y--) {
+                    if(!chunk.getType(x, y, z).isSolid()){
                         paletteLevel = 0;
                         continue;
                     }

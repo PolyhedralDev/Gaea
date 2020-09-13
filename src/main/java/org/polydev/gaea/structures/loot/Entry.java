@@ -17,7 +17,6 @@ import java.util.Random;
  * Representation of a single item entry within a Loot Table pool.
  */
 public class Entry {
-    private final JSONObject entry;
     private final Material item;
     private final long weight;
     private final List<Function> functions = new ArrayList<>();
@@ -28,11 +27,10 @@ public class Entry {
      * @param entry The JSON Object to instantiate from.
      */
     public Entry(JSONObject entry) {
-        this.entry = entry;
         this.item = Material.valueOf(entry.get("name").toString().toUpperCase());
         this.weight = (long) entry.get("weight");
-        if(this.entry.containsKey("functions")) {
-            for(Object function : (JSONArray) this.entry.get("functions")) {
+        if(entry.containsKey("functions")) {
+            for(Object function : (JSONArray) entry.get("functions")) {
                 switch(((String) ((JSONObject) function).get("function"))) {
                     case "set_count":
                         long max = (long) ((JSONObject) ((JSONObject) function).get("count")).get("max");

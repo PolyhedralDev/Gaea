@@ -56,11 +56,10 @@ public class LootTable {
         List<ItemStack> loot = getLoot(r);
         for(ItemStack stack : loot) {
             while(stack.getAmount() != 0) {
-                int deposit = Math.min(r.nextInt(2) + 1, stack.getAmount());
                 ItemStack newStack = stack.clone();
-                newStack.setAmount(deposit);
+                newStack.setAmount(1);
                 i.setItem(r.nextInt(i.getSize()), newStack);
-                stack.setAmount(stack.getAmount() - deposit);
+                stack.setAmount(stack.getAmount() - 1);
             }
         }
     }

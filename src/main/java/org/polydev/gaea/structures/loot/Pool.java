@@ -13,7 +13,8 @@ import java.util.Random;
  * Representation of a Loot Table pool, or a set of items to be fetched independently.
  */
 public class Pool {
-    private final JSONObject pool;
+    private final int max;
+    private final int min;
     private final ProbabilityCollection<Entry> entries = new ProbabilityCollection<>();
 
     /**
@@ -22,7 +23,8 @@ public class Pool {
      * @param pool The JSON Object to instantiate from.
      */
     public Pool(JSONObject pool) {
-        this.pool = pool;
+        this.max = Math.toIntExact((long) ((JSONObject) pool.get("rolls")).get("max"));
+        this.min = Math.toIntExact((long) ((JSONObject) pool.get("rolls")).get("min"));
         for(Object entryJSON : (JSONArray) pool.get("entries")) {
             Entry entry = new Entry((JSONObject) entryJSON);
             entries.add(entry, Math.toIntExact(entry.getWeight()));
@@ -36,8 +38,7 @@ public class Pool {
      * @return List&lt;ItemStack&gt; - The list of items fetched.
      */
     public List<ItemStack> getItems(Random r) {
-        int max = Math.toIntExact((long) ((JSONObject) pool.get("rolls")).get("max"));
-        int min = Math.toIntExact((long) ((JSONObject) pool.get("rolls")).get("min"));
+
         int rolls = r.nextInt(max - min + 1) + min;
         List<ItemStack> items = new ArrayList<>();
         for(int i = 0; i < rolls; i++) {

@@ -1,5 +1,6 @@
 package org.polydev.gaea.world;
 
+import com.google.common.collect.Sets;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -8,34 +9,55 @@ import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 public enum Fauna {
-    TALL_GRASS(true, Material.TALL_GRASS),
-    TALL_FERN(true, Material.LARGE_FERN),
-    GRASS(false, Material.GRASS),
-    FERN(false, Material.FERN),
-    AZURE_BLUET(false, Material.AZURE_BLUET),
-    LILY_OF_THE_VALLEY(false, Material.LILY_OF_THE_VALLEY),
-    BLUE_ORCHID(false, Material.BLUE_ORCHID),
-    POPPY(false, Material.POPPY),
-    DANDELION(false, Material.DANDELION),
-    WITHER_ROSE(false, Material.WITHER_ROSE);
+    TALL_GRASS(Sets.newHashSet(Material.GRASS_BLOCK), Bukkit.createBlockData("minecraft:tall_grass[half=lower]"), Bukkit.createBlockData("minecraft:tall_grass[half=upper]")),
+    TALL_FERN(Sets.newHashSet(Material.GRASS_BLOCK), Bukkit.createBlockData("minecraft:large_fern[half=lower]"), Bukkit.createBlockData("minecraft:large_fern[half=upper]")),
+    SUNFLOWER(Sets.newHashSet(Material.GRASS_BLOCK), Bukkit.createBlockData("minecraft:sunflower[half=lower]"), Bukkit.createBlockData("minecraft:sunflower[half=upper]")),
+    ROSE_BUSH(Sets.newHashSet(Material.GRASS_BLOCK), Bukkit.createBlockData("minecraft:rose_bush[half=lower]"), Bukkit.createBlockData("minecraft:rose_bush[half=upper]")),
+    LILAC(Sets.newHashSet(Material.GRASS_BLOCK), Bukkit.createBlockData("minecraft:lilac[half=lower]"), Bukkit.createBlockData("minecraft:lilac[half=upper]")),
+    PEONY(Sets.newHashSet(Material.GRASS_BLOCK), Bukkit.createBlockData("minecraft:peony[half=lower]"), Bukkit.createBlockData("minecraft:peony[half=upper]")),
+    GRASS(Sets.newHashSet(Material.GRASS_BLOCK), Bukkit.createBlockData("minecraft:grass")),
+    FERN(Sets.newHashSet(Material.GRASS_BLOCK), Bukkit.createBlockData("minecraft:fern")),
+    AZURE_BLUET(Sets.newHashSet(Material.GRASS_BLOCK), Bukkit.createBlockData("minecraft:azure_bluet")),
+    LILY_OF_THE_VALLEY(Sets.newHashSet(Material.GRASS_BLOCK), Bukkit.createBlockData("minecraft:lily_of_the_valley")),
+    BLUE_ORCHID(Sets.newHashSet(Material.GRASS_BLOCK), Bukkit.createBlockData("minecraft:blue_orchid")),
+    POPPY(Sets.newHashSet(Material.GRASS_BLOCK), Bukkit.createBlockData("minecraft:poppy")),
+    DANDELION(Sets.newHashSet(Material.GRASS_BLOCK), Bukkit.createBlockData("minecraft:dandelion")),
+    WITHER_ROSE(Sets.newHashSet(Material.GRASS_BLOCK), Bukkit.createBlockData("minecraft:wither_rose")),
+    DEAD_BUSH(Sets.newHashSet(Material.GRASS_BLOCK, Material.SAND, Material.RED_SAND), Bukkit.createBlockData("minecraft:dead_bush")),
+    RED_TULIP(Sets.newHashSet(Material.GRASS_BLOCK), Bukkit.createBlockData("minecraft:red_tulip")),
+    ORANGE_TULIP(Sets.newHashSet(Material.GRASS_BLOCK), Bukkit.createBlockData("minecraft:orange_tulip")),
+    WHITE_TULIP(Sets.newHashSet(Material.GRASS_BLOCK), Bukkit.createBlockData("minecraft:white_tulip")),
+    PINK_TULIP(Sets.newHashSet(Material.GRASS_BLOCK), Bukkit.createBlockData("minecraft:pink_tulip")),
+    OXEYE_DAISY(Sets.newHashSet(Material.GRASS_BLOCK), Bukkit.createBlockData("minecraft:oxeye_daisy")),
+    ALLIUM(Sets.newHashSet(Material.GRASS_BLOCK), Bukkit.createBlockData("minecraft:allium")),
+    CORNFLOWER(Sets.newHashSet(Material.GRASS_BLOCK), Bukkit.createBlockData("minecraft:cornflower")),
+    LILY_PAD(Sets.newHashSet(Material.WATER), Bukkit.createBlockData("minecraft:lily_pad")),
+    RED_MUSHROOM(Sets.newHashSet(Material.GRASS_BLOCK, Material.DIRT, Material.STONE, Material.NETHERRACK), Bukkit.createBlockData("minecraft:red_mushroom")),
+    BROWN_MUSHROOM(Sets.newHashSet(Material.GRASS_BLOCK, Material.DIRT, Material.STONE, Material.NETHERRACK), Bukkit.createBlockData("minecraft:brown_mushroom")),
+    NETHER_SPROUTS(Sets.newHashSet(Material.GRASS_BLOCK), Bukkit.createBlockData("minecraft:nether_sprouts")),
+    WARPED_ROOTS(Sets.newHashSet(Material.GRASS_BLOCK, Material.NETHERRACK, Material.CRIMSON_NYLIUM, Material.WARPED_NYLIUM), Bukkit.createBlockData("minecraft:warped_roots")),
+    CRIMSON_ROOTS(Sets.newHashSet(Material.GRASS_BLOCK, Material.NETHERRACK, Material.CRIMSON_NYLIUM, Material.WARPED_NYLIUM), Bukkit.createBlockData("minecraft:crimson_roots")),
+    CRIMSON_FUNGUS(Sets.newHashSet(Material.GRASS_BLOCK, Material.NETHERRACK, Material.CRIMSON_NYLIUM, Material.WARPED_NYLIUM), Bukkit.createBlockData("minecraft:warped_fungus")),
+    WARPED_FUNGUS(Sets.newHashSet(Material.GRASS_BLOCK, Material.NETHERRACK, Material.CRIMSON_NYLIUM, Material.WARPED_NYLIUM), Bukkit.createBlockData("minecraft:crimson_fungus"));
 
     private final List<BlockData> data = new ArrayList<>();
 
+    private final Set<Material> spawns;
 
-    Fauna(boolean tall, Material type) {
-        if(tall) {
-            data.add(Bukkit.createBlockData(type));
-            data.add(Bukkit.createBlockData(type, "[half=upper]"));
-        } else data.add(type.createBlockData());
+    Fauna(Set<Material> validSpawns, BlockData... type) {
+        data.addAll(Arrays.asList(type));
+        this.spawns = validSpawns;
     }
 
-    public static Block getHighestValidSpawnAt(Chunk chunk, int x, int z) {
+    public Block getHighestValidSpawnAt(Chunk chunk, int x, int z) {
         int y;
-        for(y = chunk.getWorld().getMaxHeight() - 1; (chunk.getBlock(x, y, z).getType() != Material.GRASS_BLOCK) && y > 0; y--)
-            ;
+        for(y = chunk.getWorld().getMaxHeight() - 1; (!spawns.contains(chunk.getBlock(x, y, z).getType())) && y > 0; y--);
         if(y <= 0) return null;
         return chunk.getBlock(x, y, z);
     }
