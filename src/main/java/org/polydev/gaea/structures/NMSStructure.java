@@ -235,6 +235,10 @@ public class NMSStructure {
         this.rotation = rotation;
     }
 
+    public void setOrigin(Location origin) {
+        this.origin = origin;
+    }
+
     /**
      * Gets the locations containing the structure.
      *

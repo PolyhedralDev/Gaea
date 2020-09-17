@@ -1,6 +1,7 @@
 package org.polydev.gaea.world.carving;
 
 
+import org.bukkit.World;
 import org.bukkit.util.Vector;
 
 import java.util.Random;
@@ -21,7 +22,7 @@ public class CaveCarver extends Carver {
 
 
     @Override
-    public boolean isChunkCarved(Random r) {
+    public boolean isChunkCarved(World w, int chunkX, int chunkZ, Random r) {
         return r.nextInt(100) < chance;
     }
 

@@ -1,5 +1,6 @@
 package org.polydev.gaea.world.carving;
 
+import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.generator.ChunkGenerator.ChunkData;
 import org.bukkit.util.Vector;
@@ -40,5 +41,11 @@ public class CarvingData {
             if(!m.equals(Material.BEDROCK) && m.isSolid()) data.setBlock(v.getBlockX(), v.getBlockY(), v.getBlockZ(), (v.getBlockY() < 8 && doLava) ? Material.LAVA : Material.AIR);
         }
         return data;
+    }
+    public void merge(Chunk data, boolean doLava) {
+        for(Vector v : carvedBlocks) {
+            Material m = data.getBlock(v.getBlockX(), v.getBlockY(), v.getBlockZ()).getType();
+            if(!m.equals(Material.BEDROCK) && m.isSolid()) data.getBlock(v.getBlockX(), v.getBlockY(), v.getBlockZ()).setType((v.getBlockY() < 8 && doLava) ? Material.LAVA : Material.AIR);
+        }
     }
 }

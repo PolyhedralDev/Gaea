@@ -55,11 +55,22 @@ public class LootTable {
     public void fillInventory(Inventory i, Random r) {
         List<ItemStack> loot = getLoot(r);
         for(ItemStack stack : loot) {
-            while(stack.getAmount() != 0) {
+            int attempts = 0;
+            while(stack.getAmount() != 0 && attempts < 10) {
                 ItemStack newStack = stack.clone();
                 newStack.setAmount(1);
-                i.setItem(r.nextInt(i.getSize()), newStack);
-                stack.setAmount(stack.getAmount() - 1);
+                int slot = r.nextInt(i.getSize());
+                ItemStack slotItem = i.getItem(slot);
+                if(slotItem == null) {
+                    i.setItem(slot, newStack);
+                    stack.setAmount(stack.getAmount() - 1);
+                } else if(slotItem.getType() == newStack.getType()) {
+                    ItemStack dep = newStack.clone();
+                    dep.setAmount(newStack.getAmount() + slotItem.getAmount());
+                    i.setItem(slot, dep);
+                    stack.setAmount(stack.getAmount() - 1);
+                }
+                attempts++;
             }
         }
     }

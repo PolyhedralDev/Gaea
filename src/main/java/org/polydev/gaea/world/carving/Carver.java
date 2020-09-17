@@ -18,7 +18,7 @@ public abstract class Carver {
         CarvingData data = new CarvingData(chunkX, chunkZ);
         for(int x = chunkX - 4; x < chunkX + 4; x++) {
             for(int z = chunkZ - 4; z < chunkZ + 4; z++) {
-                if(isChunkCarved(new Random(MathUtil.hashToLong(this.getClass().getName() + "_" + x + "&" + z)))) {
+                if(isChunkCarved(w, chunkX, chunkZ, new Random(MathUtil.hashToLong(this.getClass().getName() + "_" + x + "&" + z)))) {
                     long seed = MathUtil.getCarverChunkSeed(x, z, w.getSeed());
                     Random r = new Random(seed);
                     Worm carving = getWorm(seed, new Vector((x << 4) + r.nextInt(16), r.nextInt(maxY-minY+1)+minY, (z << 4) + r.nextInt(16)));
@@ -33,5 +33,5 @@ public abstract class Carver {
         return data;
     }
     public abstract Worm getWorm(long seed, Vector l);
-    public abstract boolean isChunkCarved(Random r);
+    public abstract boolean isChunkCarved(World w, int chunkX, int chunkZ, Random r);
 }

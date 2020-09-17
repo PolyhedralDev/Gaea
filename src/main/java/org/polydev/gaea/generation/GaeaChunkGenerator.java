@@ -55,9 +55,11 @@ public abstract class GaeaChunkGenerator extends ChunkGenerator {
         }
 
         ProfileFuture biomeProfile = measure("BiomeSetTime");
-        for(byte x = 0; x < 16; x++) {
-            for(byte z = 0; z < 16; z++) {
-                biome.setBiome(x, z, getBiomeGrid(world).getBiome((chunkX << 4) + x, (chunkZ << 4) + z).getVanillaBiome());
+        for(byte x = 0; x < 4; x++) {
+            for(byte z = 0; z < 4; z++) {
+                int x2 = x << 2;
+                int z2 = z << 2;
+                biome.setBiome(x2, z2, getBiomeGrid(world).getBiome((chunkX << 4) + x2, (chunkZ << 4) + z2).getVanillaBiome());
             }
         }
         if(biomeProfile != null) biomeProfile.complete();

@@ -85,6 +85,10 @@ public class BlockPalette {
         return pallet.get(pallet.size() - 1).get(random);
     }
 
+    public int getSize() {
+        return pallet.get(pallet.size()-1).getLayers();
+    }
+
     /**
      * Class representation of a layer of a BlockPalette.
      */

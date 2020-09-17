@@ -21,7 +21,7 @@ public abstract class FractalTree {
     private final Location origin;
     private final Random random;
     private final List<Material> replaceable = Arrays.asList(Material.AIR, Material.GRASS_BLOCK, Material.DIRT, Material.STONE, Material.COARSE_DIRT, Material.GRAVEL, Material.PODZOL,
-            Material.GRASS, Material.TALL_GRASS, Material.FERN, Material.POPPY, Material.LARGE_FERN, Material.BLUE_ORCHID, Material.AZURE_BLUET, Material.END_STONE, Material.SNOW, Material.SAND);
+            Material.GRASS, Material.TALL_GRASS, Material.FERN, Material.POPPY, Material.LARGE_FERN, Material.BLUE_ORCHID, Material.AZURE_BLUET, Material.END_STONE, Material.SNOW, Material.SAND, Material.STONE_BUTTON, Material.DEAD_BUSH);
 
 
     /**

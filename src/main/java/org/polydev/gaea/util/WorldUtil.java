@@ -17,6 +17,7 @@ public class WorldUtil {
                 && chunk.getBlock(x, y, z).getType() != Material.DIRT
                 && chunk.getBlock(x, y, z).getType() != Material.STONE
                 && chunk.getBlock(x, y, z).getType() != Material.SAND
+                && chunk.getBlock(x, y, z).getType() != Material.RED_SAND
                 && chunk.getBlock(x, y, z).getType() != Material.COARSE_DIRT) && y > 0; y--)
             ;
         return y;

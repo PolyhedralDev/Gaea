@@ -4,6 +4,7 @@ import org.bukkit.World;
 import org.polydev.gaea.math.ProbabilityCollection;
 import org.polydev.gaea.structures.Structure;
 import org.polydev.gaea.tree.Tree;
+import org.polydev.gaea.tree.TreeType;
 import org.polydev.gaea.world.Fauna;
 
 import java.util.HashMap;
