@@ -1,5 +1,6 @@
 package org.polydev.gaea.structures.loot.functions;
 
+import org.bukkit.Bukkit;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.json.simple.JSONArray;
@@ -47,8 +48,11 @@ public class EnchantWithLevelsFunction implements Function {
                     if(chosen.conflictsWith(ench)) continue iter;
                 }
                 int lvl = r.nextInt(1 + (int) (((enchant / 40 > 1) ? 1 : enchant / 40) * (chosen.getMaxLevel())));
-                if(lvl != 0) original.addEnchantment(chosen, lvl);
-                else original.addEnchantment(chosen, 1);
+                try {
+                    original.addEnchantment(chosen, Math.max(lvl, 1));
+                } catch(IllegalArgumentException e) {
+                    Bukkit.getLogger().warning("[Gaea] Attempted to enchant " + original.getType() + " with " + chosen + " at level " + Math.max(lvl, 1) + ", but an unexpected exception occurred! Usually this is caused by a misbehaving enchantment plugin.");
+                }
             }
         }
         return original;

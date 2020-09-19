@@ -75,12 +75,16 @@ public abstract class Worm {
 
         public void carve(CarvingData data, int chunkX, int chunkZ) {
             if(Math.abs(origin.getBlockX()/16 - chunkX) > 1 && Math.abs(origin.getBlockZ()/16 - chunkZ) > 1) return;
-            for(int x = - getRadius(0); x <= getRadius(0); x++) {
-                for(int y = - getRadius(1); y <= getRadius(1); y++) {
-                    for(int z = - getRadius(2); z <= getRadius(2); z++) {
+            for(int x = - getRadius(0)-1; x <= getRadius(0)+1; x++) {
+                for(int y = - getRadius(1)-1; y <= getRadius(1)+1; y++) {
+                    for(int z = - getRadius(2)-1; z <= getRadius(2)+1; z++) {
                         Vector position = origin.clone().add(new Vector(x, y, z));
-                        if(ellipseEquation(x, y, z, getRadius(0), getRadius(1), getRadius(2)) <= 1) {
-                            if(Math.floor((double)(position.getBlockX())/16) == chunkX && Math.floor((double)(position.getBlockZ())/16) == chunkZ && position.getY() >= 0) data.carve(position.getBlockX() - (chunkX*16), position.getBlockY(), position.getBlockZ() - (chunkZ*16));
+                        if(Math.floor((double)(position.getBlockX())/16) == chunkX && Math.floor((double)(position.getBlockZ())/16) == chunkZ && position.getY() >= 0) {
+                            if(ellipseEquation(x, y, z, getRadius(0), getRadius(1), getRadius(2)) <= 1) {
+                                data.carve(position.getBlockX() - (chunkX * 16), position.getBlockY(), position.getBlockZ() - (chunkZ * 16));
+                            } else if(ellipseEquation(x, y, z, getRadius(0) + 1, getRadius(1) + 1, getRadius(2) + 1) <= 1) {
+                                data.carveWall(position.getBlockX() - (chunkX * 16), position.getBlockY(), position.getBlockZ() - (chunkZ * 16));
+                            }
                         }
                     }
                 }
