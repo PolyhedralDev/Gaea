@@ -1,5 +1,7 @@
 package org.polydev.gaea.math;
 
+import org.polydev.gaea.biome.NormalizationUtil;
+
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Random;
@@ -113,6 +115,14 @@ public class ProbabilityCollection<E> {
         return this.collection.floor(toFind).getObject();
     }
 
+    public E get(FastNoise random, int x, int z) {
+        if(this.totalProbability == 0) return null;
+        ProbabilitySetElement<E> toFind = new ProbabilitySetElement<>(null, 0);
+        toFind.setIndex(NormalizationUtil.normalize(random.getNoise(x, z), this.totalProbability) + 1);
+
+        return this.collection.floor(toFind).getObject();
+    }
+
     /**
      * @return Sum of all element's probability
      */
@@ -120,7 +130,7 @@ public class ProbabilityCollection<E> {
         return this.totalProbability;
     }
 
-    /*
+    /**
      * Calculate the size of all element's "block" of space:
      * i.e 1-5, 6-10, 11-14, 15, 16
      *

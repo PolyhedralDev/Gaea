@@ -1,7 +1,7 @@
 package org.polydev.gaea.biome;
 
 import org.polydev.gaea.math.FastNoise;
-import org.polydev.gaea.world.BlockPalette;
+import org.polydev.gaea.world.palette.BlockPalette;
 
 public abstract class BiomeTerrain {
     public BiomeTerrain() {

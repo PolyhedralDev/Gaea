@@ -1,7 +1,8 @@
-package org.polydev.gaea.world;
+package org.polydev.gaea.world.palette;
 
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
+import org.polydev.gaea.math.FastNoise;
 import org.polydev.gaea.math.ProbabilityCollection;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import java.util.Random;
  * A class representation of a "slice" of the world.
  * Used to get a section of blocks, based on the depth at which they are found.
  */
-public class BlockPalette {
+public abstract class BlockPalette {
     private final List<PaletteLayer> pallet = new ArrayList<>();
 
     /**
@@ -65,34 +66,35 @@ public class BlockPalette {
         return this;
     }
 
+    public Material get(int layer, int x, int z) {
+        return getBlockData(layer, x, z).getMaterial();
+    }
+
     /**
      * Fetches a material from the palette, at a given layer.
      *
      * @param layer - The layer at which to fetch the material.
-     * @return - Material - The material fetched.
+     * @return BlockData - The material fetched.
      */
-    public Material get(int layer, Random random) {
-        for(PaletteLayer p : pallet) {
-            if(layer < p.getLayers()) return p.get(random).getMaterial();
-        }
-        return pallet.get(pallet.size() - 1).get(random).getMaterial();
-    }
-    
-    public BlockData getBlockData(int layer, Random random) {
-        for(PaletteLayer p : pallet) {
-            if(layer < p.getLayers()) return p.get(random);
-        }
-        return pallet.get(pallet.size() - 1).get(random);
-    }
+    public abstract BlockData getBlockData(int layer, int x, int z);
+
 
     public int getSize() {
         return pallet.get(pallet.size()-1).getLayers();
     }
 
+    enum NoiseType {
+        WHITE_NOISE, SIMPLEX_FRACTAL
+    }
+
+    public List<PaletteLayer> getLayers() {
+        return pallet;
+    }
+
     /**
      * Class representation of a layer of a BlockPalette.
      */
-    private static class PaletteLayer {
+    public static class PaletteLayer {
         private final boolean col;
         private final int layers;
         private ProbabilityCollection<BlockData> collection;
@@ -138,6 +140,11 @@ public class BlockPalette {
          */
         public BlockData get(Random random) {
             if(col) return this.collection.get(random);
+            return m;
+        }
+
+        public BlockData get(FastNoise random, int x, int z) {
+            if(col) return this.collection.get(random, x, z);
             return m;
         }
     }

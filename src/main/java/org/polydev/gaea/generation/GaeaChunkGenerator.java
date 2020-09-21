@@ -4,10 +4,7 @@ import org.bukkit.World;
 import org.bukkit.generator.ChunkGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.polydev.gaea.math.ChunkInterpolator;
-import org.polydev.gaea.math.ChunkInterpolator2;
-import org.polydev.gaea.math.ChunkInterpolator3;
 import org.polydev.gaea.math.FastNoise;
-import org.polydev.gaea.math.InterpolationType;
 import org.polydev.gaea.profiler.ProfileFuture;
 import org.polydev.gaea.profiler.WorldProfiler;
 
@@ -18,9 +15,9 @@ public abstract class GaeaChunkGenerator extends ChunkGenerator {
     private FastNoise gen;
     private ChunkInterpolator interp;
     private WorldProfiler profiler;
-    private final InterpolationType interpolationType;
+    private final ChunkInterpolator.InterpolationType interpolationType;
 
-    public GaeaChunkGenerator(InterpolationType type) {
+    public GaeaChunkGenerator(ChunkInterpolator.InterpolationType type) {
         interpolationType = type;
     }
 
@@ -45,7 +42,7 @@ public abstract class GaeaChunkGenerator extends ChunkGenerator {
                         paletteLevel = 0;
                         continue;
                     }
-                    chunk.setBlock(x, y, z, getBiomeGrid(world).getBiome((chunkX << 4) + x, (chunkZ << 4) + z).getGenerator().getPalette(y).get(paletteLevel, random));
+                    chunk.setBlock(x, y, z, getBiomeGrid(world).getBiome((chunkX << 4) + x, (chunkZ << 4) + z).getGenerator().getPalette(y).getBlockData(paletteLevel, (chunkX << 4) + x, (chunkZ << 4) + z));
                     paletteLevel++;
                 }
             }
