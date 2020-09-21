@@ -4,6 +4,8 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.polydev.gaea.math.FastNoise;
 
+import javax.vecmath.Vector2f;
+
 public abstract class BiomeGrid {
     private final FastNoise biome;
     private final FastNoise climate;
@@ -18,23 +20,10 @@ public abstract class BiomeGrid {
         this.sizeZ = 16;
         this.world = w;
         this.biome = new FastNoise((int) w.getSeed());
-        this.biome.setNoiseType(normal.getNoiseType());
-        this.biome.setFrequency(freq1);
         this.climate = new FastNoise((int) w.getSeed() + 1);
-        this.climate.setNoiseType(normal.getNoiseType());
+        setNormalType(normal);
+        this.biome.setFrequency(freq1);
         this.climate.setFrequency(freq2);
-        if(normal.getNoiseType().equals(FastNoise.NoiseType.Cellular)) {
-            FastNoise base = new FastNoise((int) w.getSeed());
-            base.setNoiseType(FastNoise.NoiseType.Simplex);
-            base.setFrequency(freq1);
-            biome.setCellularNoiseLookup(base);
-            biome.setCellularDistanceFunction(FastNoise.CellularDistanceFunction.Natural);
-            FastNoise base2 = new FastNoise((int) w.getSeed()+1);
-            base2.setNoiseType(FastNoise.NoiseType.Simplex);
-            base2.setFrequency(freq2);
-            climate.setCellularNoiseLookup(base2);
-            climate.setCellularDistanceFunction(FastNoise.CellularDistanceFunction.Natural);
-        }
     }
 
     public BiomeGrid(World w, float freq1, float freq2, int sizeX, int sizeZ) {
@@ -42,23 +31,10 @@ public abstract class BiomeGrid {
         this.sizeZ = sizeZ;
         this.world = w;
         this.biome = new FastNoise((int) w.getSeed());
-        this.biome.setNoiseType(normal.getNoiseType());
-        this.biome.setFrequency(freq1);
         this.climate = new FastNoise((int) w.getSeed() + 1);
-        this.climate.setNoiseType(normal.getNoiseType());
+        setNormalType(normal);
+        this.biome.setFrequency(freq1);
         this.climate.setFrequency(freq2);
-        if(normal.getNoiseType().equals(FastNoise.NoiseType.Cellular)) {
-            FastNoise base = new FastNoise((int) w.getSeed());
-            base.setNoiseType(FastNoise.NoiseType.Simplex);
-            base.setFrequency(freq1);
-            biome.setCellularNoiseLookup(base);
-            biome.setCellularDistanceFunction(FastNoise.CellularDistanceFunction.Natural);
-            FastNoise base2 = new FastNoise((int) w.getSeed()+1);
-            base2.setNoiseType(FastNoise.NoiseType.Simplex);
-            base2.setFrequency(freq2);
-            climate.setCellularNoiseLookup(base2);
-            climate.setCellularDistanceFunction(FastNoise.CellularDistanceFunction.Natural);
-        }
     }
 
     public void setNormalType(NormalType n) {
@@ -144,7 +120,7 @@ public abstract class BiomeGrid {
             protected int getOctaves() {
                 return 5;
             }
-        }, CELLULAR {
+        }, LOOKUP4096 {
             @Override
             protected int normalize(double i, int range) {
                 return NormalizationUtil.normalize(i, range);
@@ -152,12 +128,12 @@ public abstract class BiomeGrid {
 
             @Override
             protected FastNoise.NoiseType getNoiseType() {
-                return FastNoise.NoiseType.Cellular;
+                return FastNoise.NoiseType.SimplexFractal;
             }
 
             @Override
             protected int getOctaves() {
-                return 5;
+                return 4;
             }
         };
 
