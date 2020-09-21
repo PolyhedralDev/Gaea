@@ -1,5 +1,6 @@
 package org.polydev.gaea.biome;
 
+import org.bukkit.World;
 import org.polydev.gaea.math.FastNoise;
 import org.polydev.gaea.world.palette.BlockPalette;
 
@@ -15,7 +16,7 @@ public abstract class BiomeTerrain {
      * @param z   - The z coordinate.
      * @return double - Noise value at the specified coordinates.
      */
-    public abstract double getNoise(FastNoise gen, int x, int z);
+    public abstract double getNoise(FastNoise gen, World w, int x, int z);
 
     /**
      * Gets the 3D noise at a pair of coordinates using the provided FastNoise instance.
@@ -26,7 +27,7 @@ public abstract class BiomeTerrain {
      * @param z   - The z coordinate.
      * @return double - Noise value at the specified coordinates.
      */
-    public abstract double getNoise(FastNoise gen, int x, int y, int z);
+    public abstract double getNoise(FastNoise gen, World w, int x, int y, int z);
 
     /**
      * Gets the BlocPalette to generate the biome with.

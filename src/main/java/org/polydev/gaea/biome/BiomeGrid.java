@@ -64,6 +64,10 @@ public abstract class BiomeGrid {
         return grid[normal.normalize(biomeNoise, sizeX)][normal.normalize(climateNoise, sizeZ)];
     }
 
+    public Biome[][] getGrid() {
+        return grid;
+    }
+
     /**
      * Gets the biome at a location.
      *
@@ -80,7 +84,13 @@ public abstract class BiomeGrid {
         return world;
     }
 
+    public int getSizeX() {
+        return sizeX;
+    }
 
+    public int getSizeZ() {
+        return sizeZ;
+    }
 
     public enum NormalType {
         LEGACY {

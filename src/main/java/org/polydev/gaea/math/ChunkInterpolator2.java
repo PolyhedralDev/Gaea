@@ -1,5 +1,6 @@
 package org.polydev.gaea.math;
 
+import org.bukkit.World;
 import org.polydev.gaea.biome.BiomeGrid;
 import org.polydev.gaea.biome.BiomeTerrain;
 
@@ -13,6 +14,7 @@ public class ChunkInterpolator2 implements ChunkInterpolator {
     private final int xOrigin;
     private final int zOrigin;
     private final FastNoise noise;
+    private final World w;
     /**
      * Instantiates a ChunkInterpolator at a pair of chunk coordinates, with a BiomeGrid and FastNoise instance.
      * @param chunkX X coordinate of the chunk.
@@ -20,10 +22,11 @@ public class ChunkInterpolator2 implements ChunkInterpolator {
      * @param grid BiomeGrid to use for noise fetching.
      * @param noise FastNoise instance to use.
      */
-    public ChunkInterpolator2(int chunkX, int chunkZ, BiomeGrid grid, FastNoise noise) {
+    public ChunkInterpolator2(World w, int chunkX, int chunkZ, BiomeGrid grid, FastNoise noise) {
         this.xOrigin = chunkX << 4;
         this.zOrigin = chunkZ << 4;
         this.noise = noise;
+        this.w = w;
         BiomeTerrain[][] gridTemp = new BiomeTerrain[8][8];
         for(int x = -2; x < 6; x++) {
             for(int z = -2; z < 6; z++) {
@@ -41,10 +44,10 @@ public class ChunkInterpolator2 implements ChunkInterpolator {
     }
 
     private double biomeAvg(int x, int z, BiomeTerrain[][] g) {
-        return (g[x+3][z+2].getNoise(noise, x*4+xOrigin, z*4+zOrigin)
-                + g[x+1][z+2].getNoise(noise, x*4+xOrigin, z*4+zOrigin)
-                + g[x+2][z+3].getNoise(noise, x*4+xOrigin, z*4+zOrigin)
-                + g[x+2][z+1].getNoise(noise, x*4+xOrigin, z*4+zOrigin))/4D;
+        return (g[x+3][z+2].getNoise(noise, w, x*4+xOrigin, z*4+zOrigin)
+                + g[x+1][z+2].getNoise(noise, w, x*4+xOrigin, z*4+zOrigin)
+                + g[x+2][z+3].getNoise(noise, w, x*4+xOrigin, z*4+zOrigin)
+                + g[x+2][z+1].getNoise(noise, w, x*4+xOrigin, z*4+zOrigin))/4D;
     }
 
     /**
