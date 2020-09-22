@@ -79,6 +79,20 @@ public abstract class BlockPalette {
     public abstract BlockData getBlockData(int layer, int x, int z);
 
 
+    /**
+     * Gets the BlockData at a layer using the provided Random instance.
+     * @param layer The layer to fetch
+     * @return BlockData at layer.
+     */
+    public BlockData getBlockData(int layer, Random r) {
+        List<PaletteLayer> pl = getLayers();
+        for(PaletteLayer p : pl) {
+            if(layer < p.getLayers()) return p.get(r);
+        }
+        return pl.get(pl.size() - 1).get(r);
+    }
+
+
     public int getSize() {
         return pallet.get(pallet.size()-1).getLayers();
     }

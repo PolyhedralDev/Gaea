@@ -64,6 +64,30 @@ public abstract class BiomeGrid {
         return grid[normal.normalize(biomeNoise, sizeX)][normal.normalize(climateNoise, sizeZ)];
     }
 
+    /**
+     * Get the raw X-noise for coordinates in the Grid.
+     * @param x X coordinate
+     * @param z Z coordinate
+     * @return Normalized noise
+     */
+    public int getBiomeNoiseX(int x, int z) {
+        return normal.normalize(biome.getNoise((float) x, (float) z), sizeX);
+    }
+
+    public float[] getRawNoise(int x, int z) {
+        return new float[] {biome.getNoise(x, z), climate.getNoise(x, z)};
+    }
+
+    /**
+     * Get the raw Z-noise for coordinates in the Grid.
+     * @param x X coordinate
+     * @param z Z coordinate
+     * @return Normalized noise
+     */
+    public int getBiomeNoiseZ(int x, int z) {
+        return normal.normalize(climate.getNoise((float) x, (float) z), sizeZ);
+    }
+
     public Biome[][] getGrid() {
         return grid;
     }
