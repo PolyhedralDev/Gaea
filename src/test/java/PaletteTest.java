@@ -1,4 +1,7 @@
 import org.bukkit.Material;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
 import org.polydev.gaea.math.ProbabilityCollection;
 import org.polydev.gaea.world.palette.Palette;
 import org.polydev.gaea.world.palette.RandomPalette;
@@ -8,7 +11,24 @@ import java.util.List;
 import java.util.Random;
 
 public class PaletteTest {
-    public static void main(String[] args) {
+    @Test
+    public void getBlocks() {
+        Palette<Material> palette = new RandomPalette<>(new Random(2403));
+        for(int i = 0; i < 100; i++) {
+            palette.add(i % 2 == 0 ? Material.DIRT : Material.STONE, 1);
+        }
+        for(int i = 0; i < 100; i++) {
+            assertEquals(palette.get(i, 0, 0), i % 2 == 0 ? Material.DIRT : Material.STONE);
+        }
+    }
+
+    @Test
+    public void getProbabilityBlocks() {
+
+    }
+
+    @Test
+    public void main() {
         long l = System.nanoTime();
         Random r = new Random();
         //testing time taken to instantiate/fill palette. Realistic test.
@@ -38,7 +58,7 @@ public class PaletteTest {
         System.out.println((double) (System.nanoTime() - l) / 1000000 + "ms elapsed (Getters, raw x10), got " + m.size() + " values");
 
         //testing time taken to get 100k materials. Unrealistic stress test.
-        for(int i = 0; i < 100000; i++) {
+        for(int i = 0; i < 1000000; i++) {
             p.get(i, 0, 0);
         }
         System.out.println((double) (System.nanoTime() - l) / 1000000 + "ms elapsed (Getters, raw x100000), got " + 100000 + " values");
@@ -47,8 +67,8 @@ public class PaletteTest {
         System.out.println();
         System.out.println("Beginning fill for stress-test");
         l = System.nanoTime();
-        Palette p2 = new RandomPalette(new Random(2403));
-        for(int i = 0; i < 500000; i++) {
+        Palette<Material> p2 = new RandomPalette<>(new Random(2403));
+        for(int i = 0; i < 1000; i++) {
             p2.add(Material.DIRT, 1);
             p2.add(Material.STONE, 1);
         }

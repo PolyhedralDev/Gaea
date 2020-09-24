@@ -4,7 +4,7 @@ import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 
-public interface Fauna {
+public interface Flora {
     Block getHighestValidSpawnAt(Chunk chunk, int x, int z);
     boolean plant(Location l);
 }

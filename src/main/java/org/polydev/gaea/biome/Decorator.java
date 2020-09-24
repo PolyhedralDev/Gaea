@@ -4,8 +4,7 @@ import org.bukkit.World;
 import org.polydev.gaea.math.ProbabilityCollection;
 import org.polydev.gaea.structures.Structure;
 import org.polydev.gaea.tree.Tree;
-import org.polydev.gaea.tree.TreeType;
-import org.polydev.gaea.world.Fauna;
+import org.polydev.gaea.world.Flora;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,9 +24,9 @@ public abstract class Decorator {
 
     public abstract org.bukkit.block.Biome getVanillaBiome();
 
-    public abstract ProbabilityCollection<Fauna> getFauna();
+    public abstract ProbabilityCollection<Flora> getFlora();
 
-    public abstract int getFaunaChance();
+    public abstract int getFloraChance();
 
     /**
      * Sets the structures that are to be generated in a world. Intended to be invoked during subclass instantiation, or by a configuration class.

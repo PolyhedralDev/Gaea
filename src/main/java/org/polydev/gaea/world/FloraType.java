@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-public enum FaunaType implements Fauna {
+public enum FloraType implements Flora {
     TALL_GRASS(Sets.newHashSet(Material.GRASS_BLOCK, Material.PODZOL), Bukkit.createBlockData("minecraft:tall_grass[half=lower]"), Bukkit.createBlockData("minecraft:tall_grass[half=upper]")),
     TALL_FERN(Sets.newHashSet(Material.GRASS_BLOCK, Material.PODZOL), Bukkit.createBlockData("minecraft:large_fern[half=lower]"), Bukkit.createBlockData("minecraft:large_fern[half=upper]")),
     SUNFLOWER(Sets.newHashSet(Material.GRASS_BLOCK, Material.PODZOL), Bukkit.createBlockData("minecraft:sunflower[half=lower]"), Bukkit.createBlockData("minecraft:sunflower[half=upper]")),
@@ -44,7 +44,7 @@ public enum FaunaType implements Fauna {
 
     private final Set<Material> spawns;
 
-    FaunaType(Set<Material> validSpawns, BlockData... type) {
+    FloraType(Set<Material> validSpawns, BlockData... type) {
         data.addAll(Arrays.asList(type));
         this.spawns = validSpawns;
     }
