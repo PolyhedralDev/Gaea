@@ -23,8 +23,6 @@ public abstract class Decorator {
 
     public abstract boolean overrideStructureChance();
 
-    public abstract boolean shouldGenerateSnow();
-
     public abstract org.bukkit.block.Biome getVanillaBiome();
 
     public abstract ProbabilityCollection<Fauna> getFauna();

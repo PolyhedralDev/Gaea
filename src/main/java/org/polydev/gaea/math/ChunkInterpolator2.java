@@ -2,7 +2,7 @@ package org.polydev.gaea.math;
 
 import org.bukkit.World;
 import org.polydev.gaea.biome.BiomeGrid;
-import org.polydev.gaea.biome.BiomeTerrain;
+import org.polydev.gaea.biome.Generator;
 
 /**
  * Class to abstract away the 16 Interpolators needed to generate a chunk.<br>
@@ -27,7 +27,7 @@ public class ChunkInterpolator2 implements ChunkInterpolator {
         this.zOrigin = chunkZ << 4;
         this.noise = noise;
         this.w = w;
-        BiomeTerrain[][] gridTemp = new BiomeTerrain[8][8];
+        Generator[][] gridTemp = new Generator[8][8];
         for(int x = -2; x < 6; x++) {
             for(int z = -2; z < 6; z++) {
                 gridTemp[x+2][z+2] = grid.getBiome(xOrigin + x * 4, zOrigin + z * 4).getGenerator();
@@ -43,7 +43,7 @@ public class ChunkInterpolator2 implements ChunkInterpolator {
         }
     }
 
-    private double biomeAvg(int x, int z, BiomeTerrain[][] g) {
+    private double biomeAvg(int x, int z, Generator[][] g) {
         return (g[x+3][z+2].getNoise(noise, w, x*4+xOrigin, z*4+zOrigin)
                 + g[x+1][z+2].getNoise(noise, w, x*4+xOrigin, z*4+zOrigin)
                 + g[x+2][z+3].getNoise(noise, w, x*4+xOrigin, z*4+zOrigin)

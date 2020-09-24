@@ -1,13 +1,11 @@
 package org.polydev.gaea.biome;
 
 import org.bukkit.World;
+import org.bukkit.block.data.BlockData;
 import org.polydev.gaea.math.FastNoise;
-import org.polydev.gaea.world.palette.BlockPalette;
+import org.polydev.gaea.world.palette.Palette;
 
-public abstract class BiomeTerrain {
-    public BiomeTerrain() {
-    }
-
+public abstract class Generator {
     /**
      * Gets the 2D noise at a pair of coordinates using the provided FastNoise instance.
      *
@@ -34,5 +32,5 @@ public abstract class BiomeTerrain {
      *
      * @return BlocPalette - The biome's palette.
      */
-    public abstract BlockPalette getPalette(int y);
+    public abstract Palette<BlockData> getPalette(int y);
 }

@@ -20,7 +20,7 @@ public interface Biome {
      * Gets the BiomeTerrain instance used to generate the biome.
      * @return BiomeTerrain - The terrain generation instance.
      */
-    BiomeTerrain getGenerator();
+    Generator getGenerator();
 
     /**
      * Gets a list of Structure Features to be applied to all structures in the biome.

@@ -3,6 +3,7 @@ package org.polydev.gaea.generation;
 import org.bukkit.World;
 import org.bukkit.generator.ChunkGenerator;
 import org.jetbrains.annotations.NotNull;
+import org.polydev.gaea.biome.Biome;
 import org.polydev.gaea.math.ChunkInterpolator;
 import org.polydev.gaea.math.FastNoise;
 import org.polydev.gaea.profiler.ProfileFuture;
@@ -34,15 +35,22 @@ public abstract class GaeaChunkGenerator extends ChunkGenerator {
         interp = interpolationType.getInstance(world, chunkX, chunkZ, this.getBiomeGrid(world), gen);
         ChunkData chunk = generateBase(world, random, chunkX, chunkZ, gen);
         if(base != null) base.complete();
+        org.polydev.gaea.biome.BiomeGrid grid = getBiomeGrid(world);
         for(byte x = 0; x < 16; x++) {
             for(byte z = 0; z < 16; z++) {
                 int paletteLevel = 0;
+                int cx = (chunkX << 4) + x;
+                int cz = (chunkZ << 4) + z;
+                Biome b = grid.getBiome(cx, cz);
+                if(x % 4 == 0 && z% 4 == 0) {
+                    biome.setBiome(x, z, b.getVanillaBiome());
+                }
                 for(int y = world.getMaxHeight()-1; y >= 0; y--) {
-                    if(!chunk.getType(x, y, z).isSolid()){
+                    if(!chunk.getType(x, y, z).isSolid()) {
                         paletteLevel = 0;
                         continue;
                     }
-                    chunk.setBlock(x, y, z, getBiomeGrid(world).getBiome((chunkX << 4) + x, (chunkZ << 4) + z).getGenerator().getPalette(y).getBlockData(paletteLevel, (chunkX << 4) + x, (chunkZ << 4) + z));
+                    chunk.setBlock(x, y, z, b.getGenerator().getPalette(y).get(paletteLevel, cx, cz));
                     paletteLevel++;
                 }
             }
@@ -51,15 +59,6 @@ public abstract class GaeaChunkGenerator extends ChunkGenerator {
             chunk = g.populate(world, chunk, random, chunkX, chunkZ);
         }
 
-        ProfileFuture biomeProfile = measure("BiomeSetTime");
-        for(byte x = 0; x < 4; x++) {
-            for(byte z = 0; z < 4; z++) {
-                int x2 = x << 2;
-                int z2 = z << 2;
-                biome.setBiome(x2, z2, getBiomeGrid(world).getBiome((chunkX << 4) + x2, (chunkZ << 4) + z2).getVanillaBiome());
-            }
-        }
-        if(biomeProfile != null) biomeProfile.complete();
         if(total != null) total.complete();
         return chunk;
     }
