@@ -28,15 +28,9 @@ public class CarvingData {
         return chunkZ;
     }
 
-    public void carve(int x, int y, int z) {
+    public void carve(int x, int y, int z, CarvingType type) {
         isInRange(x, y, z);
-        carvedBlocks.put(new Vector(x, y, z), CarvingType.CENTER);
-    }
-
-    public void carveWall(int x, int y, int z) {
-        isInRange(x, y, z);
-        if(isCarved(x, y, z)) return;
-        carvedBlocks.put(new Vector(x, y, z), CarvingType.WALL);
+        carvedBlocks.put(new Vector(x, y, z), type);
     }
 
     private void isInRange(int x, int y, int z) {
@@ -70,7 +64,7 @@ public class CarvingData {
     }
 
     public enum CarvingType {
-        CENTER, WALL;
+        CENTER, WALL, TOP, BOTTOM;
     }
 
 }

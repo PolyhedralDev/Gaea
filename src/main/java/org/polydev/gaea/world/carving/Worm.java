@@ -9,12 +9,22 @@ public abstract class Worm {
     private final Vector origin;
     private final Vector running;
     private final int length;
+    private int topCut = 0;
+    private int bottomCut = 0;
     private int[] radius = new int[] {0, 0, 0};
     public Worm(int length, Random r, Vector origin) {
         this.r = r;
         this.length = length;
         this.origin = origin;
         this.running = origin;
+    }
+
+    public void setBottomCut(int bottomCut) {
+        this.bottomCut = bottomCut;
+    }
+
+    public void setTopCut(int topCut) {
+        this.topCut = topCut;
     }
 
     public Vector getOrigin() {
@@ -30,7 +40,7 @@ public abstract class Worm {
     }
 
     public WormPoint getPoint() {
-        return new WormPoint(running, radius);
+        return new WormPoint(running, radius, topCut, bottomCut);
     }
 
     public int[] getRadius() {
@@ -49,11 +59,15 @@ public abstract class Worm {
 
     public static class WormPoint {
         private final Vector origin;
+        private final int topCut;
+        private final int bottomCut;
         private final int[] rad;
 
-        public WormPoint(Vector origin, int[] rad) {
+        public WormPoint(Vector origin, int[] rad, int topCut, int bottomCut) {
             this.origin = origin;
             this.rad = rad;
+            this.topCut = topCut;
+            this.bottomCut = bottomCut;
         }
 
         private static int getChunkCoordinate(int n) {
@@ -61,7 +75,7 @@ public abstract class Worm {
             else return 15-(Math.abs(n % 16));
         }
 
-        private static double ellipseEquation(int x, int y, int z, int xr, int yr, int zr) {
+        private static double ellipseEquation(int x, int y, int z, double xr, double yr, double zr) {
             return (Math.pow(x, 2)/Math.pow(xr + 0.5D, 2)) + (Math.pow(y, 2)/Math.pow(yr + 0.5D, 2)) + (Math.pow(z, 2)/Math.pow(zr + 0.5D, 2));
         }
 
@@ -80,10 +94,18 @@ public abstract class Worm {
                     for(int z = - getRadius(2)-1; z <= getRadius(2)+1; z++) {
                         Vector position = origin.clone().add(new Vector(x, y, z));
                         if(Math.floor((double)(position.getBlockX())/16) == chunkX && Math.floor((double)(position.getBlockZ())/16) == chunkZ && position.getY() >= 0) {
-                            if(ellipseEquation(x, y, z, getRadius(0), getRadius(1), getRadius(2)) <= 1) {
-                                data.carve(position.getBlockX() - (chunkX * 16), position.getBlockY(), position.getBlockZ() - (chunkZ * 16));
-                            } else if(ellipseEquation(x, y, z, getRadius(0) + 1, getRadius(1) + 1, getRadius(2) + 1) <= 1) {
-                                data.carveWall(position.getBlockX() - (chunkX * 16), position.getBlockY(), position.getBlockZ() - (chunkZ * 16));
+                            if(ellipseEquation(x, y, z, getRadius(0), getRadius(1), getRadius(2)) <= 1 &&
+                            y >= - getRadius(1)-1 + bottomCut && y <= getRadius(1)+1 - topCut) {
+                                data.carve(position.getBlockX() - (chunkX * 16), position.getBlockY(), position.getBlockZ() - (chunkZ * 16), CarvingData.CarvingType.CENTER);
+                            } else if(ellipseEquation(x, y, z, getRadius(0) + 1.5, getRadius(1) + 1.5, getRadius(2) + 1.5) <= 1) {
+                                CarvingData.CarvingType type = CarvingData.CarvingType.WALL;
+                                if(y <= - getRadius(1)-1+bottomCut) {
+                                    type = CarvingData.CarvingType.BOTTOM;
+                                } else if(y >= getRadius(1)+1-topCut) {
+                                    type = CarvingData.CarvingType.TOP;
+                                }
+                                if(data.isCarved(position.getBlockX() - (chunkX * 16), position.getBlockY(), position.getBlockZ() - (chunkZ * 16))) continue;
+                                data.carve(position.getBlockX() - (chunkX * 16), position.getBlockY(), position.getBlockZ() - (chunkZ * 16), type);
                             }
                         }
                     }
