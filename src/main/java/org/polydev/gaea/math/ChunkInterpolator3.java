@@ -66,7 +66,7 @@ public class ChunkInterpolator3 implements ChunkInterpolator {
     }
 
     @Override
-    public double getNoise(byte x, byte z) {
+    public double getNoise(double x, double z) {
         return getNoise(x, 0, z);
     }
 
@@ -76,8 +76,9 @@ public class ChunkInterpolator3 implements ChunkInterpolator {
      * @param z The internal Z coordinate (0-15).
      * @return double - The interpolated noise at the coordinates.
      */
-    public double getNoise(byte x, int y, byte z) {
-        return interpGrid[x / 4][y / 4][z / 4].trilerp((float) (x % 4) / 4, (float) (y % 4) /4,  (float) (z % 4) / 4);
+    @Override
+    public double getNoise(double x, double y, double z) {
+        return interpGrid[((int) x) / 4][((int) y) / 4][((int) z) / 4].trilerp((float) (x % 4) / 4, (float) (y % 4) /4,  (float) (z % 4) / 4);
     }
 
     private static class CoordinatePair {

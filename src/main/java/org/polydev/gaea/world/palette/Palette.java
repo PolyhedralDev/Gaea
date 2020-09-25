@@ -127,5 +127,9 @@ public abstract class Palette<E> {
             if(col) return this.collection.get(random, x, z);
             return m;
         }
+
+        public ProbabilityCollection<E> getCollection() {
+            return collection;
+        }
     }
 }

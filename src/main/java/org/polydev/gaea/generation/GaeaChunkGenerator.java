@@ -1,5 +1,6 @@
 package org.polydev.gaea.generation;
 
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.generator.ChunkGenerator;
 import org.jetbrains.annotations.NotNull;
@@ -46,7 +47,7 @@ public abstract class GaeaChunkGenerator extends ChunkGenerator {
                     biome.setBiome(x, z, b.getVanillaBiome());
                 }
                 for(int y = world.getMaxHeight()-1; y >= 0; y--) {
-                    if(!chunk.getType(x, y, z).isSolid()) {
+                    if(!chunk.getType(x, y, z).equals(Material.STONE)) {
                         paletteLevel = 0;
                         continue;
                     }
@@ -56,18 +57,18 @@ public abstract class GaeaChunkGenerator extends ChunkGenerator {
             }
         }
         for(GenerationPopulator g : getGenerationPopulators(world)) {
-            chunk = g.populate(world, chunk, random, chunkX, chunkZ);
+            chunk = g.populate(world, chunk, random, chunkX, chunkZ, interp);
         }
 
         if(total != null) total.complete();
         return chunk;
     }
 
-    public double getInterpolatedNoise(byte x, byte z) {
+    public double getInterpolatedNoise(double x, double z) {
         return this.interp.getNoise(x, z);
     }
 
-    public double getInterpolatedNoise(byte x, int y, byte z) {
+    public double getInterpolatedNoise(double x, double y, double z) {
         return this.interp.getNoise(x, y, z);
     }
 

@@ -4,8 +4,8 @@ import org.bukkit.World;
 import org.polydev.gaea.biome.BiomeGrid;
 
 public interface ChunkInterpolator {
-    double getNoise(byte x, byte z);
-    double getNoise(byte x, int y, byte z);
+    double getNoise(double x, double z);
+    double getNoise(double x, double y, double z);
 
     enum InterpolationType {
         BILINEAR, TRILINEAR;

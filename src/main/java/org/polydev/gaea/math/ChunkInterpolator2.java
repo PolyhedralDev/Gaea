@@ -56,12 +56,13 @@ public class ChunkInterpolator2 implements ChunkInterpolator {
      * @param z The internal Z coordinate (0-15).
      * @return double - The interpolated noise at the coordinates.
      */
-    public double getNoise(byte x, byte z) {
-        return interpGrid[x / 4][z / 4].bilerp((float) (x % 4) / 4, (float) (z % 4) / 4);
+    @Override
+    public double getNoise(double x, double z) {
+        return interpGrid[((int) x) / 4][((int) z) / 4].bilerp((float) (x % 4) / 4, (float) (z % 4) / 4);
     }
 
     @Override
-    public double getNoise(byte x, int y, byte z) {
+    public double getNoise(double x, double y, double z) {
         return getNoise(x, z);
     }
 }
