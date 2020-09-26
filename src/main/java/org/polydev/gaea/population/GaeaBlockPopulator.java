@@ -1,7 +1,11 @@
 package org.polydev.gaea.population;
 
-import org.bukkit.generator.BlockPopulator;
+import org.bukkit.Chunk;
+import org.bukkit.World;
+import org.jetbrains.annotations.NotNull;
 
-public abstract class GaeaBlockPopulator extends BlockPopulator {
-    public GaeaBlockPopulator() {}
+import java.util.Random;
+
+public abstract class GaeaBlockPopulator {
+    public abstract void populate(@NotNull World world, @NotNull Random random, @NotNull Chunk chunk);
 }

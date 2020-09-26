@@ -10,8 +10,6 @@ import org.polydev.gaea.biome.Generator;
  */
 public class ChunkInterpolator3 implements ChunkInterpolator {
     private final Interpolator3[][][] interpGrid = new Interpolator3[4][64][4];
-    private final int chunkX;
-    private final int chunkZ;
     private final BiomeGrid grid;
     private final FastNoise noise;
     private final int xOrigin;
@@ -28,12 +26,11 @@ public class ChunkInterpolator3 implements ChunkInterpolator {
     public ChunkInterpolator3(World w, int chunkX, int chunkZ, BiomeGrid grid, FastNoise noise) {
         this.xOrigin = chunkX << 4;
         this.zOrigin = chunkZ << 4;
-        this.chunkX = chunkX;
-        this.chunkZ = chunkZ;
         this.grid = grid;
         this.noise = noise;
         this.w = w;
         Generator[][] gridTemp = new Generator[8][8];
+
 
         for(int x = -2; x < 6; x++) {
             for(int z = -2; z < 6; z++) {
@@ -41,28 +38,42 @@ public class ChunkInterpolator3 implements ChunkInterpolator {
             }
         }
 
+        double[][][] stor = storeNoise(gridTemp);
+
         for(byte x = 0; x < 4; x++) {
             for(byte z = 0; z < 4; z++) {
                 for(int y = 0; y < 64; y++) {
                     interpGrid[x][y][z] = new Interpolator3(
-                            biomeAvg(x, y*4,  z, gridTemp) * 2.0f,
-                            biomeAvg(x+1, y*4,  z, gridTemp) * 2.0f,
-                            biomeAvg(x, y*4 + 4,  z, gridTemp) * 2.0f,
-                            biomeAvg(x+1, y*4 + 4,  z, gridTemp) * 2.0f,
-                            biomeAvg(x, y*4,  z + 1, gridTemp) * 2.0f,
-                            biomeAvg(x + 1, y*4,  z + 1, gridTemp) * 2.0f,
-                            biomeAvg(x, y*4 + 4,  z + 1, gridTemp) * 2.0f,
-                            biomeAvg(x + 1, y*4 + 4,  z + 1, gridTemp) * 2.0f);
+                            biomeAvg(x, y,  z, stor) * 2.0f,
+                            biomeAvg(x+1, y,  z, stor) * 2.0f,
+                            biomeAvg(x, y + 1,  z, stor) * 2.0f,
+                            biomeAvg(x+1, y + 1,  z, stor) * 2.0f,
+                            biomeAvg(x, y, z + 1, stor) * 2.0f,
+                            biomeAvg(x + 1, y, z + 1, stor) * 2.0f,
+                            biomeAvg(x, y + 1, z + 1, stor) * 2.0f,
+                            biomeAvg(x + 1, y + 1,  z + 1, stor) * 2.0f);
                 }
             }
         }
     }
 
-    private double biomeAvg(int x, int y, int z, Generator[][] g) {
-        return (g[x+3][z+2].getNoise(noise, w, x*4+xOrigin, y,  z*4+zOrigin)
-        + g[x+1][z+2].getNoise(noise, w, x*4+xOrigin, y,  z*4+zOrigin)
-        + g[x+2][z+3].getNoise(noise, w, x*4+xOrigin, y,  z*4+zOrigin)
-        + g[x+2][z+1].getNoise(noise, w, x*4+xOrigin, y,  z*4+zOrigin))/4D;
+    private double[][][] storeNoise(Generator[][] gens) {
+        double[][][] noiseStorage = new double[8][8][65];
+        for(byte x = -2; x < 6; x++) {
+            for(byte z = -2; z < 6; z++) {
+                for(int y = 0; y < 64; y++) {
+                    noiseStorage[x+2][z+2][y] = gens[x+2][z+2].getNoise(noise, w, x*4+xOrigin, y*4, z*4+zOrigin);
+                }
+            }
+        }
+        return noiseStorage;
+    }
+
+    private double biomeAvg(int x, int y, int z, double[][][] noise) {
+        return (noise[x+3][z+2][y]
+        + noise[x+1][z+2][y]
+        + noise[x+2][z+3][y]
+        + noise[x+2][z+1][y])/4D;
     }
 
     @Override
