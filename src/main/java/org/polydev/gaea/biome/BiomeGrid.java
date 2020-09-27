@@ -2,6 +2,7 @@ package org.polydev.gaea.biome;
 
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.polydev.gaea.generation.GenerationPhase;
 import org.polydev.gaea.math.FastNoise;
 
 import javax.vecmath.Vector2f;
@@ -58,7 +59,7 @@ public abstract class BiomeGrid {
      * @param z - Z-coordinate at which to fetch biome
      * @return Biome - Biome at the given coordinates.
      */
-    public Biome getBiome(int x, int z) {
+    public Biome getBiome(int x, int z, GenerationPhase phase) {
         float biomeNoise = biome.getNoise((float) x, (float) z);
         float climateNoise = climate.getNoise((float) x, (float) z);
         return grid[normal.normalize(biomeNoise, sizeX)][normal.normalize(climateNoise, sizeZ)];
@@ -99,6 +100,10 @@ public abstract class BiomeGrid {
      * @return Biome - Biome at the given coordinates.
      */
     public Biome getBiome(Location l) {
+        return getBiome(l, GenerationPhase.POST_GEN);
+    }
+
+    public Biome getBiome(Location l, GenerationPhase phase) {
         float biomeNoise = biome.getNoise((float) l.getBlockX(), (float) l.getBlockZ());
         float climateNoise = climate.getNoise((float) l.getBlockX(), (float) l.getBlockZ());
         return grid[normal.normalize(biomeNoise, sizeX)][normal.normalize(climateNoise, sizeZ)];

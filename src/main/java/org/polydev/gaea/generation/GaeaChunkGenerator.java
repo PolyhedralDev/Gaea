@@ -44,7 +44,7 @@ public abstract class GaeaChunkGenerator extends ChunkGenerator {
                         int paletteLevel = 0;
                         int cx = (chunkX << 4) + x;
                         int cz = (chunkZ << 4) + z;
-                        Biome b = grid.getBiome(cx, cz);
+                        Biome b = grid.getBiome(cx, cz, GenerationPhase.PALETTE_APPLY);
                         if(x % 4 == 0 && z % 4 == 0) {
                             biome.setBiome(x, z, b.getVanillaBiome());
                         }

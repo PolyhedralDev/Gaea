@@ -3,6 +3,7 @@ package org.polydev.gaea.math;
 import org.bukkit.World;
 import org.polydev.gaea.biome.BiomeGrid;
 import org.polydev.gaea.biome.Generator;
+import org.polydev.gaea.generation.GenerationPhase;
 
 /**
  * Class to abstract away the 16 Interpolators needed to generate a chunk.<br>
@@ -34,7 +35,7 @@ public class ChunkInterpolator3 implements ChunkInterpolator {
 
         for(int x = -2; x < 6; x++) {
             for(int z = -2; z < 6; z++) {
-                gridTemp[x+2][z+2] = grid.getBiome(xOrigin + x * 4, zOrigin + z * 4).getGenerator();
+                gridTemp[x+2][z+2] = grid.getBiome(xOrigin + x * 4, zOrigin + z * 4, GenerationPhase.BASE).getGenerator();
             }
         }
 
