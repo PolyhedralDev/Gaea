@@ -39,11 +39,13 @@ public abstract class GaeaChunkGenerator extends ChunkGenerator {
             }
             try(ProfileFuture ignored = measure("PaletteApplyTime")) {
                 org.polydev.gaea.biome.BiomeGrid grid = getBiomeGrid(world);
+                int xOrig = (chunkX << 4);
+                int zOrig = (chunkZ << 4);
                 for(byte x = 0; x < 16; x++) {
                     for(byte z = 0; z < 16; z++) {
                         int paletteLevel = 0;
-                        int cx = (chunkX << 4) + x;
-                        int cz = (chunkZ << 4) + z;
+                        int cx = xOrig + x;
+                        int cz = zOrig + z;
                         Biome b = grid.getBiome(cx, cz, GenerationPhase.PALETTE_APPLY);
                         if(x % 4 == 0 && z % 4 == 0) {
                             biome.setBiome(x, z, b.getVanillaBiome());
@@ -92,4 +94,8 @@ public abstract class GaeaChunkGenerator extends ChunkGenerator {
     public abstract List<GenerationPopulator> getGenerationPopulators(World w);
 
     public abstract org.polydev.gaea.biome.BiomeGrid getBiomeGrid(World w);
+
+    public FastNoise getNoiseGenerator() {
+        return gen;
+    }
 }
