@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.generator.BlockPopulator;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.polydev.gaea.Gaea;
 import org.polydev.gaea.util.SerializationUtil;
@@ -22,7 +23,12 @@ public class PopulationManager extends BlockPopulator {
     public void attach(GaeaBlockPopulator populator) {
         this.attachedPopulators.add(populator);
     }
+    private JavaPlugin main;
 
+
+    public PopulationManager(JavaPlugin main) {
+        this.main = main;
+    }
     private final Object popLock = new Object();
 
     @Override
@@ -30,16 +36,18 @@ public class PopulationManager extends BlockPopulator {
         needsPop.add(new ChunkCoordinate(chunk));
         int x = chunk.getX();
         int z = chunk.getZ();
-        if(world.isChunkGenerated(x + 1, z)) checkNeighbors(x + 1, z, world);
-        if(world.isChunkGenerated(x - 1, z)) checkNeighbors(x - 1, z, world);
-        if(world.isChunkGenerated(x, z + 1)) checkNeighbors(x, z + 1, world);
-        if(world.isChunkGenerated(x, z - 1)) checkNeighbors(x, z - 1, world);
+        if(main.isEnabled()) {
+            if(world.isChunkGenerated(x + 1, z)) checkNeighbors(x + 1, z, world);
+            if(world.isChunkGenerated(x - 1, z)) checkNeighbors(x - 1, z, world);
+            if(world.isChunkGenerated(x, z + 1)) checkNeighbors(x, z + 1, world);
+            if(world.isChunkGenerated(x, z - 1)) checkNeighbors(x, z - 1, world);
+        }
     }
 
     public void saveBlocks(World w) throws IOException {
         File f = new File(Gaea.getGaeaFolder(w), "chunks.bin");
         f.createNewFile();
-        SerializationUtil.toFile(needsPop, f);
+        SerializationUtil.toFile(new HashSet<>(needsPop), f);
     }
 
     public void loadBlocks(World w) throws IOException, ClassNotFoundException {
@@ -50,19 +58,21 @@ public class PopulationManager extends BlockPopulator {
 
     // Synchronize to prevent chunks from being queued for population multiple times.
     private synchronized void checkNeighbors(int x, int z, World w) {
-        ChunkCoordinate c = new ChunkCoordinate(x, z, w.getUID());
-        if(        w.isChunkGenerated(x+1, z)
-                && w.isChunkGenerated(x-1, z)
-                && w.isChunkGenerated(x, z+1)
-                && w.isChunkGenerated(x, z-1) && needsPop.contains(c)) {
-            needsPop.remove(c);
-            Random random = new Random(w.getSeed());
-            long xRand = random.nextLong() / 2L * 2L + 1L;
-            long zRand = random.nextLong() / 2L * 2L + 1L;
-            random.setSeed((long) x * xRand + (long) z * zRand ^ w.getSeed());
-            for(GaeaBlockPopulator r : attachedPopulators) {
-                r.populate(w, random, w.getChunkAt(x, z));
+        Bukkit.getScheduler().runTask(main, () -> {
+            ChunkCoordinate c = new ChunkCoordinate(x, z, w.getUID());
+            if(        w.isChunkGenerated(x+1, z)
+                    && w.isChunkGenerated(x-1, z)
+                    && w.isChunkGenerated(x, z+1)
+                    && w.isChunkGenerated(x, z-1) && needsPop.contains(c)) {
+                needsPop.remove(c);
+                Random random = new Random(w.getSeed());
+                long xRand = random.nextLong() / 2L * 2L + 1L;
+                long zRand = random.nextLong() / 2L * 2L + 1L;
+                random.setSeed((long) x * xRand + (long) z * zRand ^ w.getSeed());
+                for(GaeaBlockPopulator r : attachedPopulators) {
+                    r.populate(w, random, w.getChunkAt(x, z));
+                }
             }
-        }
+        });
     }
 }

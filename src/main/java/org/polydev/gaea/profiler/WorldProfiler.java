@@ -1,5 +1,7 @@
 package org.polydev.gaea.profiler;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.polydev.gaea.generation.GaeaChunkGenerator;
@@ -8,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class WorldProfiler {
-    private final Map<String, Measurement> measures = new HashMap<>();
+    private final BiMap<String, Measurement> measures = HashBiMap.create();
     private final World world;
     private boolean isProfiling;
 
@@ -66,6 +68,10 @@ public class WorldProfiler {
     public ProfileFuture measure(String id) {
         if(isProfiling) return measures.get(id).beginMeasurement();
         else return null;
+    }
+
+    public String getID(Measurement m) {
+        return measures.inverse().get(m);
     }
 
     public boolean isProfiling() {

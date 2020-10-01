@@ -41,23 +41,12 @@ public abstract class GaeaChunkGenerator extends ChunkGenerator {
                 org.polydev.gaea.biome.BiomeGrid grid = getBiomeGrid(world);
                 int xOrig = (chunkX << 4);
                 int zOrig = (chunkZ << 4);
-                for(byte x = 0; x < 16; x++) {
-                    for(byte z = 0; z < 16; z++) {
-                        int paletteLevel = 0;
-                        int cx = xOrig + x;
-                        int cz = zOrig + z;
+                for(byte x = 0; x < 4; x++) {
+                    for(byte z = 0; z < 4; z++) {
+                        int cx = xOrig + x*4;
+                        int cz = zOrig + z*4;
                         Biome b = grid.getBiome(cx, cz, GenerationPhase.PALETTE_APPLY);
-                        if(x % 4 == 0 && z % 4 == 0) {
-                            biome.setBiome(x, z, b.getVanillaBiome());
-                        }
-                        for(int y = world.getMaxHeight() - 1; y >= 0; y--) {
-                            if(! chunk.getType(x, y, z).equals(Material.STONE)) {
-                                paletteLevel = 0;
-                                continue;
-                            }
-                            chunk.setBlock(x, y, z, b.getGenerator().getPalette(y).get(paletteLevel, cx, cz));
-                            paletteLevel++;
-                        }
+                        biome.setBiome(x*4, z*4, b.getVanillaBiome());
                     }
                 }
             }

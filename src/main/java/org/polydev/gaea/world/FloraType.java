@@ -50,11 +50,15 @@ public enum FloraType implements Flora {
     }
 
     @Override
-    public Block getHighestValidSpawnAt(Chunk chunk, int x, int z) {
+    public List<Block> getValidSpawnsAt(Chunk chunk, int x, int z) {
+        List<Block> blocks = new ArrayList<>();
         int y;
-        for(y = chunk.getWorld().getMaxHeight() - 1; (!spawns.contains(chunk.getBlock(x, y, z).getType())) && y > 0; y--);
-        if(y <= 0) return null;
-        return chunk.getBlock(x, y, z);
+        for(y = chunk.getWorld().getMaxHeight() - 1; y > 0; y--) {
+            if(spawns.contains(chunk.getBlock(x, y, z).getType()) && chunk.getBlock(x, y+1, z).getType().isAir()) {
+                blocks.add(chunk.getBlock(x, y, z));
+            }
+        }
+        return blocks;
     }
 
     @Override

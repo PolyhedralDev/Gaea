@@ -24,7 +24,7 @@ public abstract class Carver {
                     Worm carving = getWorm(seed, new Vector((x << 4) + r.nextInt(16), r.nextInt(maxY-minY+1)+minY, (z << 4) + r.nextInt(16)));
                     for(int i = 0; i < carving.getLength(); i++) {
                         carving.step();
-                        if(carving.getRunning().clone().setY(0).distance(carving.getOrigin().clone().setY(0)) > 70) break;
+                        if(carving.getRunning().clone().setY(0).distance(carving.getOrigin().clone().setY(0)) > 65) break;
                         carving.getPoint().carve(data, chunkX, chunkZ);
                     }
                 }

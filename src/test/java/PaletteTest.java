@@ -20,6 +20,7 @@ public class PaletteTest {
         for(int i = 0; i < 100; i++) {
             assertEquals(palette.get(i, 0, 0), i % 2 == 0 ? Material.DIRT : Material.STONE);
         }
+        assertEquals(palette.get(10000, 0, 0), Material.STONE);
     }
 
     @Test

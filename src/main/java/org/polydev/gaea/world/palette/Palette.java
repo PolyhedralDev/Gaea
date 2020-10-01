@@ -1,7 +1,5 @@
 package org.polydev.gaea.world.palette;
 
-import org.bukkit.Material;
-import org.bukkit.block.data.BlockData;
 import org.polydev.gaea.math.FastNoise;
 import org.polydev.gaea.math.ProbabilityCollection;
 
@@ -32,7 +30,9 @@ public abstract class Palette<E> {
      * @return - BlockPalette instance for chaining.
      */
     public Palette<E> add(E m, int layers) {
-        pallet.add(new PaletteLayer<>(m, layers + (pallet.size() == 0 ? 0 : pallet.get(pallet.size() - 1).getLayers())));
+        for(int i = 0; i < layers; i++) {
+            pallet.add(new PaletteLayer<>(m));
+        }
         return this;
     }
 
@@ -45,12 +45,14 @@ public abstract class Palette<E> {
      */
     public Palette<E> add(ProbabilityCollection<E> m, int layers) {
         ProbabilityCollection<E> d = new ProbabilityCollection<>();
-        Iterator<ProbabilityCollection.ProbabilitySetElement<E>> i = m.iterator();
-        while(i.hasNext()) {
-            ProbabilityCollection.ProbabilitySetElement<E> e = i.next();
+        Iterator<ProbabilityCollection.ProbabilitySetElement<E>> it = m.iterator();
+        while(it.hasNext()) {
+            ProbabilityCollection.ProbabilitySetElement<E> e = it.next();
             d.add(e.getObject(), e.getProbability());
         }
-        pallet.add(new PaletteLayer<>(d, layers + (pallet.size() == 0 ? 0 : pallet.get(pallet.size() - 1).getLayers())));
+        for(int i = 0; i < layers; i++) {
+            pallet.add(new PaletteLayer<>(d));
+        }
         return this;
     }
 
@@ -64,7 +66,7 @@ public abstract class Palette<E> {
 
 
     public int getSize() {
-        return pallet.get(pallet.size()-1).getLayers();
+        return pallet.size();
     }
 
     public List<PaletteLayer<E>> getLayers() {
@@ -76,7 +78,6 @@ public abstract class Palette<E> {
      */
     public static class PaletteLayer<E> {
         private final boolean col;
-        private final int layers;
         private ProbabilityCollection<E> collection;
         private E m;
 
@@ -84,33 +85,20 @@ public abstract class Palette<E> {
          * Constructs a PaletteLayer with a ProbabilityCollection of materials and a number of layers.
          *
          * @param type   - The collection of materials to choose from.
-         * @param layers - The number of layers.
          */
-        public PaletteLayer(ProbabilityCollection<E> type, int layers) {
+        public PaletteLayer(ProbabilityCollection<E> type) {
             this.col = true;
             this.collection = type;
-            this.layers = layers;
         }
 
         /**
          * Constructs a PaletteLayer with a single Material and a number of layers.
          *
          * @param type   - The material to use.
-         * @param layers - The number of layers.
          */
-        public PaletteLayer(E type, int layers) {
+        public PaletteLayer(E type) {
             this.col = false;
             this.m = type;
-            this.layers = layers;
-        }
-
-        /**
-         * Gets the number of layers.
-         *
-         * @return int - the number of layers.
-         */
-        public int getLayers() {
-            return layers;
         }
 
         /**

@@ -1,5 +1,6 @@
 package org.polydev.gaea.profiler;
 
+import org.bukkit.Bukkit;
 import org.polydev.gaea.math.MathUtil;
 
 import java.math.BigInteger;
@@ -30,6 +31,7 @@ public class Measurement {
     public void record(long value) {
         max = Math.max(value, max);
         min = Math.min(value, min);
+        if(value/1000000 > 5000) Bukkit.getLogger().warning("Measurement took " + type.getFormatted(value));
         measurements.add(value);
     }
 
