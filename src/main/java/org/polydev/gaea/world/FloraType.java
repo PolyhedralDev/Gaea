@@ -7,6 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
+import org.polydev.gaea.math.Range;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,10 +51,9 @@ public enum FloraType implements Flora {
     }
 
     @Override
-    public List<Block> getValidSpawnsAt(Chunk chunk, int x, int z) {
+    public List<Block> getValidSpawnsAt(Chunk chunk, int x, int z, Range check) {
         List<Block> blocks = new ArrayList<>();
-        int y;
-        for(y = chunk.getWorld().getMaxHeight() - 1; y > 0; y--) {
+        for(int y : check) {
             if(spawns.contains(chunk.getBlock(x, y, z).getType()) && chunk.getBlock(x, y+1, z).getType().isAir()) {
                 blocks.add(chunk.getBlock(x, y, z));
             }
