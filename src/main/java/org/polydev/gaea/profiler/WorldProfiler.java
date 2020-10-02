@@ -6,7 +6,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.polydev.gaea.generation.GaeaChunkGenerator;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class WorldProfiler {

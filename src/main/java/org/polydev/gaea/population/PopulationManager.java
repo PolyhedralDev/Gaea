@@ -15,21 +15,21 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
 public class PopulationManager extends BlockPopulator {
     private final List<GaeaBlockPopulator> attachedPopulators = new ArrayList<>();
     private final HashSet<ChunkCoordinate> needsPop = new HashSet<>();
-    public void attach(GaeaBlockPopulator populator) {
-        this.attachedPopulators.add(populator);
-    }
-    private JavaPlugin main;
+    private final JavaPlugin main;
+    private final Object popLock = new Object();
 
 
     public PopulationManager(JavaPlugin main) {
         this.main = main;
     }
-    private final Object popLock = new Object();
+
+    public void attach(GaeaBlockPopulator populator) {
+        this.attachedPopulators.add(populator);
+    }
 
     @Override
     public void populate(@NotNull World world, @NotNull Random random, @NotNull Chunk chunk) {
@@ -47,9 +47,10 @@ public class PopulationManager extends BlockPopulator {
     public void saveBlocks(World w) throws IOException {
         File f = new File(Gaea.getGaeaFolder(w), "chunks.bin");
         f.createNewFile();
-        SerializationUtil.toFile(new HashSet<>(needsPop), f);
+        SerializationUtil.toFile(needsPop, f);
     }
 
+    @SuppressWarnings("unchecked")
     public void loadBlocks(World w) throws IOException, ClassNotFoundException {
         File f = new File(Gaea.getGaeaFolder(w), "chunks.bin");
         needsPop.addAll((HashSet<ChunkCoordinate>) SerializationUtil.fromFile(f));
@@ -60,10 +61,10 @@ public class PopulationManager extends BlockPopulator {
     private synchronized void checkNeighbors(int x, int z, World w) {
         Bukkit.getScheduler().runTask(main, () -> {
             ChunkCoordinate c = new ChunkCoordinate(x, z, w.getUID());
-            if(        w.isChunkGenerated(x+1, z)
-                    && w.isChunkGenerated(x-1, z)
-                    && w.isChunkGenerated(x, z+1)
-                    && w.isChunkGenerated(x, z-1) && needsPop.contains(c)) {
+            if(w.isChunkGenerated(x + 1, z)
+                    && w.isChunkGenerated(x - 1, z)
+                    && w.isChunkGenerated(x, z + 1)
+                    && w.isChunkGenerated(x, z - 1) && needsPop.contains(c)) {
                 needsPop.remove(c);
                 Random random = new Random(w.getSeed());
                 long xRand = random.nextLong() / 2L * 2L + 1L;

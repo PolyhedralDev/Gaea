@@ -10,6 +10,7 @@ public class ChunkCoordinate implements Serializable {
     private final int x;
     private final int z;
     private final UUID worldID;
+
     public ChunkCoordinate(int x, int z, UUID worldID) {
         this.x = x;
         this.z = z;
@@ -41,7 +42,7 @@ public class ChunkCoordinate implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if(!(obj instanceof ChunkCoordinate)) return false;
+        if(! (obj instanceof ChunkCoordinate)) return false;
         ChunkCoordinate other = (ChunkCoordinate) obj;
         return other.getX() == x && other.getZ() == z;
     }

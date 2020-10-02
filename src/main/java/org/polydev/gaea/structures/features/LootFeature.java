@@ -1,10 +1,10 @@
 package org.polydev.gaea.structures.features;
 
+import org.apache.commons.io.IOUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Container;
-import org.apache.commons.io.IOUtils;
 import org.bukkit.inventory.Inventory;
 import org.json.simple.parser.ParseException;
 import org.polydev.gaea.structures.NMSStructure;

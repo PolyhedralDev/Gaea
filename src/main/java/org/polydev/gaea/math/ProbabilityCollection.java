@@ -10,7 +10,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Class containing a set of objects with certain weighted probabilities.<br>
- *     Use to select random weighted values.
+ * Use to select random weighted values.
+ *
  * @param <E> Type of objects in the collection.
  */
 public class ProbabilityCollection<E> {
@@ -63,7 +64,7 @@ public class ProbabilityCollection<E> {
     /**
      * Add an object to this collection
      *
-     * @param object Object to add
+     * @param object      Object to add
      * @param probability share
      * @return The current probability collection, for chaining.
      */
@@ -133,7 +134,7 @@ public class ProbabilityCollection<E> {
     /**
      * Calculate the size of all element's "block" of space:
      * i.e 1-5, 6-10, 11-14, 15, 16
-     *
+     * <p>
      * We then only need to store the start index of each element
      */
     private void updateIndexes() {

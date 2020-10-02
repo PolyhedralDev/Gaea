@@ -9,5 +9,6 @@ import java.util.List;
 
 public interface Flora {
     List<Block> getValidSpawnsAt(Chunk chunk, int x, int z, Range check);
+
     boolean plant(Location l);
 }

@@ -81,6 +81,7 @@ public abstract class FractalTree {
     /**
      * Pastes the tree in the world. Must be invoked from main thread.
      */
+    @SuppressWarnings("unchecked")
     public void plant(boolean doCheck) {
         if(doCheck && ! this.getOrigin().getBlock().isPassable()) return;
         for(Map.Entry<Location, BlockData> entry : treeAssembler.entrySet()) {
@@ -92,6 +93,7 @@ public abstract class FractalTree {
         }
     }
 
+    @SuppressWarnings("rawtypes, unchecked")
     public void spawnEntity(Location spawn, Class clazz, Consumer<Entity> consumer) {
         entities.add(new EntitySpawnHolder(spawn, clazz, consumer));
     }

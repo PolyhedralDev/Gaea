@@ -1,4 +1,3 @@
-import org.polydev.gaea.math.MathUtil;
 import parsii.eval.Expression;
 import parsii.eval.Parser;
 import parsii.eval.Scope;
@@ -25,7 +24,7 @@ public class ParseTest {
             x.setValue(i);
             vals.add(e.evaluate());
         }
-        System.out.println("Parsed to " + e.evaluate() + " " + vals.size() + " times in " + (System.nanoTime()-l)/1000000 + "ms");
-        System.out.println((double)((System.nanoTime()-l))/vals.size() + "ns per");
+        System.out.println("Parsed to " + e.evaluate() + " " + vals.size() + " times in " + (System.nanoTime() - l) / 1000000 + "ms");
+        System.out.println((double) ((System.nanoTime() - l)) / vals.size() + "ns per");
     }
 }

@@ -13,9 +13,11 @@ import java.util.Random;
 
 public class PersistentDataFeature implements Feature {
     private final NamespacedKey key;
+
     public PersistentDataFeature(NamespacedKey key) {
         this.key = key;
     }
+
     @Override
     public void populate(NMSStructure s, Random r) {
         for(Location chestLoc : StructureUtil.getChestsIn(s.getBoundingLocations()[0], s.getBoundingLocations()[1])) {

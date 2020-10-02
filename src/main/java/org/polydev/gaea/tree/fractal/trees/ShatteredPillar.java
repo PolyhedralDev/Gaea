@@ -45,7 +45,8 @@ public class ShatteredPillar extends FractalTree {
             crystalLoc = new int[] {1, 1};
         }
         for(int i = - h; i < h; i++) setBlock(super.getOrigin().clone().add(1, i, 1), Material.OBSIDIAN);
-        if(getRandom().nextInt(100) < 25) spawnEntity(getOrigin().add(crystalLoc[0]+0.5, max, crystalLoc[1]+0.5), EnderCrystal.class,
-                enderCrystal -> ((EnderCrystal) enderCrystal).setShowingBottom(false));
+        if(getRandom().nextInt(100) < 25)
+            spawnEntity(getOrigin().add(crystalLoc[0] + 0.5, max, crystalLoc[1] + 0.5), EnderCrystal.class,
+                    enderCrystal -> ((EnderCrystal) enderCrystal).setShowingBottom(false));
     }
 }

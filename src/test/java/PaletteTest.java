@@ -1,6 +1,4 @@
 import org.bukkit.Material;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.junit.jupiter.api.Test;
 import org.polydev.gaea.math.ProbabilityCollection;
 import org.polydev.gaea.world.palette.Palette;
@@ -9,6 +7,8 @@ import org.polydev.gaea.world.palette.RandomPalette;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PaletteTest {
     @Test

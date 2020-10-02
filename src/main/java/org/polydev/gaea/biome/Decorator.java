@@ -30,8 +30,9 @@ public abstract class Decorator {
 
     /**
      * Sets the structures that are to be generated in a world. Intended to be invoked during subclass instantiation, or by a configuration class.
+     *
      * @param structures ProbabilityCollection of Structures
-     * @param w World in which the structures are to be generated.
+     * @param w          World in which the structures are to be generated.
      */
     public void setStructures(ProbabilityCollection<Structure> structures, World w) {
         worldStructureProb.put(w.getName(), structures);
@@ -39,8 +40,9 @@ public abstract class Decorator {
 
     /**
      * Sets the structures that are to be generated in a world. Intended to be invoked during subclass instantiation, or by a configuration class.
+     *
      * @param structures ProbabilityCollection of Structures
-     * @param w Name of world in which the structures are to be generated.
+     * @param w          Name of world in which the structures are to be generated.
      */
     public void setStructures(ProbabilityCollection<Structure> structures, String w) {
         worldStructureProb.put(w, structures);

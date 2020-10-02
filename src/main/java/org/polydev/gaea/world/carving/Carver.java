@@ -9,6 +9,7 @@ import java.util.Random;
 public abstract class Carver {
     private final int minY;
     private final int maxY;
+
     public Carver(int minY, int maxY) {
         this.minY = minY;
         this.maxY = maxY;
@@ -21,10 +22,11 @@ public abstract class Carver {
                 if(isChunkCarved(w, x, z, new Random(MathUtil.hashToLong(this.getClass().getName() + "_" + x + "&" + z)))) {
                     long seed = MathUtil.getCarverChunkSeed(x, z, w.getSeed());
                     Random r = new Random(seed);
-                    Worm carving = getWorm(seed, new Vector((x << 4) + r.nextInt(16), r.nextInt(maxY-minY+1)+minY, (z << 4) + r.nextInt(16)));
+                    Worm carving = getWorm(seed, new Vector((x << 4) + r.nextInt(16), r.nextInt(maxY - minY + 1) + minY, (z << 4) + r.nextInt(16)));
                     for(int i = 0; i < carving.getLength(); i++) {
                         carving.step();
-                        if(carving.getRunning().clone().setY(0).distance(carving.getOrigin().clone().setY(0)) > 65) break;
+                        if(carving.getRunning().clone().setY(0).distance(carving.getOrigin().clone().setY(0)) > 65)
+                            break;
                         carving.getPoint().carve(data, chunkX, chunkZ);
                     }
                 }
@@ -32,6 +34,8 @@ public abstract class Carver {
         }
         return data;
     }
+
     public abstract Worm getWorm(long seed, Vector l);
+
     public abstract boolean isChunkCarved(World w, int chunkX, int chunkZ, Random r);
 }

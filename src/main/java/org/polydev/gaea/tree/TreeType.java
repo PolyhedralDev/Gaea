@@ -8,7 +8,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.polydev.gaea.tree.fractal.FractalTree;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
@@ -61,7 +60,7 @@ public enum TreeType implements Tree {
 
     public boolean plant(Location l, Random r, boolean doSpawnCheck, JavaPlugin main) {
         if(this.getVanillaTreeType() == null) {
-            if(!spawnable.contains(l.clone().subtract(0, 1, 0).getBlock().getType())) return false;
+            if(! spawnable.contains(l.clone().subtract(0, 1, 0).getBlock().getType())) return false;
             FractalTree tree = getCustomTreeType().getTree(l, r);
             if(main.isEnabled()) BukkitTaskChainFactory.create(main).newChain()
                     .async(tree::grow)

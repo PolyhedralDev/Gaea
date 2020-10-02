@@ -39,7 +39,8 @@ public enum FloraType implements Flora {
     CORNFLOWER(Sets.newHashSet(Material.GRASS_BLOCK, Material.PODZOL), Bukkit.createBlockData("minecraft:cornflower")),
     LILY_PAD(Sets.newHashSet(Material.WATER), Bukkit.createBlockData("minecraft:lily_pad")),
     RED_MUSHROOM(Sets.newHashSet(Material.GRASS_BLOCK, Material.PODZOL, Material.DIRT, Material.STONE, Material.NETHERRACK), Bukkit.createBlockData("minecraft:red_mushroom")),
-    BROWN_MUSHROOM(Sets.newHashSet(Material.GRASS_BLOCK, Material.PODZOL, Material.DIRT, Material.STONE, Material.NETHERRACK), Bukkit.createBlockData("minecraft:brown_mushroom")),;
+    BROWN_MUSHROOM(Sets.newHashSet(Material.GRASS_BLOCK, Material.PODZOL, Material.DIRT, Material.STONE, Material.NETHERRACK), Bukkit.createBlockData("minecraft:brown_mushroom")),
+    ;
 
     private final List<BlockData> data = new ArrayList<>();
 
@@ -54,7 +55,7 @@ public enum FloraType implements Flora {
     public List<Block> getValidSpawnsAt(Chunk chunk, int x, int z, Range check) {
         List<Block> blocks = new ArrayList<>();
         for(int y : check) {
-            if(spawns.contains(chunk.getBlock(x, y, z).getType()) && chunk.getBlock(x, y+1, z).getType().isAir()) {
+            if(spawns.contains(chunk.getBlock(x, y, z).getType()) && chunk.getBlock(x, y + 1, z).getType().isAir()) {
                 blocks.add(chunk.getBlock(x, y, z));
             }
         }

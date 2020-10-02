@@ -5,8 +5,6 @@ import org.bukkit.World;
 import org.polydev.gaea.generation.GenerationPhase;
 import org.polydev.gaea.math.FastNoise;
 
-import javax.vecmath.Vector2f;
-
 public abstract class BiomeGrid {
     private final FastNoise biome;
     private final FastNoise climate;
@@ -48,10 +46,6 @@ public abstract class BiomeGrid {
         }
     }
 
-    public void setGrid(Biome[][] grid) {
-        this.grid = grid;
-    }
-
     /**
      * Gets the biome at a pair of coordinates.
      *
@@ -67,6 +61,7 @@ public abstract class BiomeGrid {
 
     /**
      * Get the raw X-noise for coordinates in the Grid.
+     *
      * @param x X coordinate
      * @param z Z coordinate
      * @return Normalized noise
@@ -81,6 +76,7 @@ public abstract class BiomeGrid {
 
     /**
      * Get the raw Z-noise for coordinates in the Grid.
+     *
      * @param x X coordinate
      * @param z Z coordinate
      * @return Normalized noise
@@ -91,6 +87,10 @@ public abstract class BiomeGrid {
 
     public Biome[][] getGrid() {
         return grid;
+    }
+
+    public void setGrid(Biome[][] grid) {
+        this.grid = grid;
     }
 
     /**
@@ -183,7 +183,9 @@ public abstract class BiomeGrid {
          * @return int - The normalized value.
          */
         protected abstract int normalize(double i, int range);
+
         protected abstract FastNoise.NoiseType getNoiseType();
+
         protected abstract int getOctaves();
     }
 

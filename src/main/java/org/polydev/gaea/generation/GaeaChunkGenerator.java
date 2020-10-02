@@ -1,6 +1,5 @@
 package org.polydev.gaea.generation;
 
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.generator.ChunkGenerator;
 import org.jetbrains.annotations.NotNull;
@@ -14,10 +13,10 @@ import java.util.List;
 import java.util.Random;
 
 public abstract class GaeaChunkGenerator extends ChunkGenerator {
+    private final ChunkInterpolator.InterpolationType interpolationType;
     private FastNoise gen;
     private ChunkInterpolator interp;
     private WorldProfiler profiler;
-    private final ChunkInterpolator.InterpolationType interpolationType;
 
     public GaeaChunkGenerator(ChunkInterpolator.InterpolationType type) {
         interpolationType = type;
@@ -43,10 +42,10 @@ public abstract class GaeaChunkGenerator extends ChunkGenerator {
                 int zOrig = (chunkZ << 4);
                 for(byte x = 0; x < 4; x++) {
                     for(byte z = 0; z < 4; z++) {
-                        int cx = xOrig + x*4;
-                        int cz = zOrig + z*4;
+                        int cx = xOrig + x * 4;
+                        int cz = zOrig + z * 4;
                         Biome b = grid.getBiome(cx, cz, GenerationPhase.PALETTE_APPLY);
-                        biome.setBiome(x*4, z*4, b.getVanillaBiome());
+                        biome.setBiome(x * 4, z * 4, b.getVanillaBiome());
                     }
                 }
             }

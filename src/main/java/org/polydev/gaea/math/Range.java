@@ -8,6 +8,7 @@ import java.util.Random;
 public class Range implements Iterable<Integer> {
     private int min;
     private int max;
+
     public Range(int min, int max) {
         if(min > max) throw new IllegalArgumentException("Minimum must not be grater than maximum!");
         this.max = max;
@@ -22,27 +23,13 @@ public class Range implements Iterable<Integer> {
         return max;
     }
 
-    public int getMin() {
-        return min;
-    }
-
     public Range setMax(int max) {
         this.max = max;
         return this;
     }
 
-    public int getRange() {
-        return max-min;
-    }
-
-    public Range multiply(int mult) {
-        min*=mult;
-        max*=mult;
-        return this;
-    }
-
-    public Range reflect(int pt) {
-        return new Range(2*pt-this.getMax(), 2*pt-this.getMin());
+    public int getMin() {
+        return min;
     }
 
     public Range setMin(int min) {
@@ -50,8 +37,22 @@ public class Range implements Iterable<Integer> {
         return this;
     }
 
+    public int getRange() {
+        return max - min;
+    }
+
+    public Range multiply(int mult) {
+        min *= mult;
+        max *= mult;
+        return this;
+    }
+
+    public Range reflect(int pt) {
+        return new Range(2 * pt - this.getMax(), 2 * pt - this.getMin());
+    }
+
     public int get(Random r) {
-        return r.nextInt((max-min)+1)+min;
+        return r.nextInt((max - min) + 1) + min;
     }
 
     public Range intersects(Range other) {
@@ -76,7 +77,7 @@ public class Range implements Iterable<Integer> {
 
     @Override
     public String toString() {
-        return  "Min: " + getMin() + ", Max:" + getMax();
+        return "Min: " + getMin() + ", Max:" + getMax();
     }
 
     @Override
@@ -86,7 +87,7 @@ public class Range implements Iterable<Integer> {
 
     @Override
     public boolean equals(Object obj) {
-        if(!(obj instanceof Range)) return false;
+        if(! (obj instanceof Range)) return false;
         Range other = (Range) obj;
         return other.getMin() == this.getMin() && other.getMax() == this.getMax();
     }
@@ -96,9 +97,10 @@ public class Range implements Iterable<Integer> {
     public Iterator<Integer> iterator() {
         return new RangeIterator(this);
     }
+
     private static class RangeIterator implements Iterator<Integer> {
-        private Integer current;
         private final Range m;
+        private Integer current;
 
         public RangeIterator(Range m) {
             this.m = m;

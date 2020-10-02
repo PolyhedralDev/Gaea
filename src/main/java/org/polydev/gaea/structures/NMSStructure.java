@@ -1,9 +1,9 @@
 package org.polydev.gaea.structures;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import com.esotericsoftware.reflectasm.ConstructorAccess;
 import com.esotericsoftware.reflectasm.MethodAccess;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -200,6 +200,10 @@ public class NMSStructure {
         return this.origin;
     }
 
+    public void setOrigin(Location origin) {
+        this.origin = origin;
+    }
+
     /**
      * Gets the dimensions of a structure.
      *
@@ -233,10 +237,6 @@ public class NMSStructure {
         if(rotation % 90 != 0 || rotation > 360)
             throw new IllegalArgumentException("Invalid rotation provided. Rotation must be multiple of 90.");
         this.rotation = rotation;
-    }
-
-    public void setOrigin(Location origin) {
-        this.origin = origin;
     }
 
     /**

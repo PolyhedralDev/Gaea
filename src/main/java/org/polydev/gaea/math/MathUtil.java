@@ -8,6 +8,7 @@ import java.util.Random;
 public class MathUtil {
     /**
      * Gets the standard deviation of an array of doubles.
+     *
      * @param numArray The array of numbers to calculate the standard deviation of.
      * @return double - The standard deviation.
      */
@@ -30,22 +31,24 @@ public class MathUtil {
 
     /**
      * Gets the carver seed for a chunk.
+     *
      * @param chunkX Chunk's X coordinate
      * @param chunkZ Chunk's Z coordinate
-     * @param seed World seed
+     * @param seed   World seed
      * @return long - The carver seed.
      */
     public static long getCarverChunkSeed(int chunkX, int chunkZ, long seed) {
         Random r = new Random(seed);
-        return chunkX*r.nextLong()^chunkZ*r.nextLong()^seed;
+        return chunkX * r.nextLong() ^ chunkZ * r.nextLong() ^ seed;
     }
+
     public static long hashToLong(String s) {
-        if (s == null) {
+        if(s == null) {
             return 0;
         }
         long hash = 0;
-        for (char c : s.toCharArray()) {
-            hash = 31L*hash + c;
+        for(char c : s.toCharArray()) {
+            hash = 31L * hash + c;
         }
         return hash;
     }

@@ -77,14 +77,14 @@ public abstract class Palette<E> {
      * Class representation of a layer of a BlockPalette.
      */
     public static class PaletteLayer<E> {
-        private final boolean col;
+        private final boolean col; // Is layer using a collection?
         private ProbabilityCollection<E> collection;
         private E m;
 
         /**
          * Constructs a PaletteLayer with a ProbabilityCollection of materials and a number of layers.
          *
-         * @param type   - The collection of materials to choose from.
+         * @param type - The collection of materials to choose from.
          */
         public PaletteLayer(ProbabilityCollection<E> type) {
             this.col = true;
@@ -94,7 +94,7 @@ public abstract class Palette<E> {
         /**
          * Constructs a PaletteLayer with a single Material and a number of layers.
          *
-         * @param type   - The material to use.
+         * @param type - The material to use.
          */
         public PaletteLayer(E type) {
             this.col = false;

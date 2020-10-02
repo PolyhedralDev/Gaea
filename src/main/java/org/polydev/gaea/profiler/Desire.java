@@ -18,6 +18,7 @@ public enum Desire {
 
     /**
      * Gets the color to display when the numerical value is higher than desired.
+     *
      * @return ChatColor - color of the value.
      */
     public ChatColor getHighColor() {
@@ -26,6 +27,7 @@ public enum Desire {
 
     /**
      * Gets the color to display when the numerical value is lower than desired.
+     *
      * @return ChatColor - color of the value.
      */
     public ChatColor getLowColor() {

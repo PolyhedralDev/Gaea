@@ -19,8 +19,9 @@ public class Measurement {
 
     /**
      * Constructs a new Measurement with a desired value and DataType.
+     *
      * @param desirable The desired value of the measurement.
-     * @param type The type of data the measurement is holding.
+     * @param type      The type of data the measurement is holding.
      */
     public Measurement(long desirable, DataType type) {
         this.desirable = desirable;
@@ -31,7 +32,7 @@ public class Measurement {
     public void record(long value) {
         max = Math.max(value, max);
         min = Math.min(value, min);
-        if(value/1000000 > 5000) Bukkit.getLogger().warning("Measurement took " + type.getFormatted(value));
+        if(value / 1000000 > 5000) Bukkit.getLogger().warning("Measurement took " + type.getFormatted(value));
         measurements.add(value);
     }
 
