@@ -35,7 +35,9 @@ public enum TreeType implements Tree {
     DARK_OAK(org.bukkit.TreeType.DARK_OAK, null),
     BROWN_MUSHROOM(org.bukkit.TreeType.BROWN_MUSHROOM, null),
     RED_MUSHROOM(org.bukkit.TreeType.RED_MUSHROOM, null),
-    SWAMP_OAK(org.bukkit.TreeType.SWAMP, null);
+    SWAMP_OAK(org.bukkit.TreeType.SWAMP, null),
+    WARPED_FUNGUS(org.bukkit.TreeType.WARPED_FUNGUS, null),
+    CRIMSON_FUNGUS(org.bukkit.TreeType.CRIMSON_FUNGUS, null);
 
     private final org.bukkit.TreeType vanillaType;
     private final Set<Material> spawnable;
