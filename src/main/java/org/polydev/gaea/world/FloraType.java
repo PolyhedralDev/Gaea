@@ -38,8 +38,8 @@ public enum FloraType implements Flora {
     ALLIUM(Sets.newHashSet(Material.GRASS_BLOCK, Material.PODZOL), Bukkit.createBlockData("minecraft:allium")),
     CORNFLOWER(Sets.newHashSet(Material.GRASS_BLOCK, Material.PODZOL), Bukkit.createBlockData("minecraft:cornflower")),
     LILY_PAD(Sets.newHashSet(Material.WATER), Bukkit.createBlockData("minecraft:lily_pad")),
-    RED_MUSHROOM(Sets.newHashSet(Material.GRASS_BLOCK, Material.PODZOL, Material.DIRT, Material.STONE, Material.NETHERRACK), Bukkit.createBlockData("minecraft:red_mushroom")),
-    BROWN_MUSHROOM(Sets.newHashSet(Material.GRASS_BLOCK, Material.PODZOL, Material.DIRT, Material.STONE, Material.NETHERRACK), Bukkit.createBlockData("minecraft:brown_mushroom")),
+    RED_MUSHROOM(Sets.newHashSet(Material.GRASS_BLOCK, Material.PODZOL, Material.DIRT, Material.STONE, Material.NETHERRACK, Material.MYCELIUM), Bukkit.createBlockData("minecraft:red_mushroom")),
+    BROWN_MUSHROOM(Sets.newHashSet(Material.GRASS_BLOCK, Material.PODZOL, Material.DIRT, Material.STONE, Material.NETHERRACK, Material.MYCELIUM), Bukkit.createBlockData("minecraft:brown_mushroom")),
     ;
 
     private final List<BlockData> data = new ArrayList<>();
