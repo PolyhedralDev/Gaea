@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.polydev.gaea.tree.fractal.FractalTree;
 import org.polydev.gaea.tree.fractal.TreeGetter;
 import org.polydev.gaea.tree.fractal.trees.Cactus;
+import org.polydev.gaea.tree.fractal.trees.IceSpike;
 import org.polydev.gaea.tree.fractal.trees.OakTree;
 import org.polydev.gaea.tree.fractal.trees.ShatteredPillar;
 import org.polydev.gaea.tree.fractal.trees.ShatteredTree;
@@ -54,6 +55,12 @@ public enum CustomTreeType implements TreeGetter {
         @Override
         public FractalTree getTree(Location l, Random r) {
             return new Cactus(l, r);
+        }
+    },
+    ICE_SPIKE {
+        @Override
+        public FractalTree getTree(Location l, Random r) {
+            return new IceSpike(l, r);
         }
     }
 }

@@ -23,6 +23,6 @@ public class Cactus extends FractalTree {
     @Override
     public void grow() {
         int h = super.getRandom().nextInt(4) + 1;
-        for(int i = 0; i < h; i++) setBlock(super.getOrigin().clone().add(0, i, 0), Material.CACTUS);
+        for(int i = 0; i < h; i++) setBlock(super.getOrigin().clone().add(0, i+1, 0), Material.CACTUS);
     }
 }

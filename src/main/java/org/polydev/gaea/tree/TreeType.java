@@ -19,6 +19,7 @@ public enum TreeType implements Tree {
     SMALL_SHATTERED_PILLAR(null, Collections.singleton(Material.END_STONE)),
     LARGE_SHATTERED_PILLAR(null, Collections.singleton(Material.END_STONE)),
     CACTUS(null, Sets.newHashSet(Material.SAND, Material.RED_SAND)),
+    ICE_SPIKE(null, Sets.newHashSet(Material.SNOW_BLOCK, Material.SNOW, Material.STONE, Material.GRASS_BLOCK)),
     OAK(org.bukkit.TreeType.TREE, null),
     LARGE_OAK(org.bukkit.TreeType.BIG_TREE, null),
     SPRUCE(org.bukkit.TreeType.REDWOOD, null),

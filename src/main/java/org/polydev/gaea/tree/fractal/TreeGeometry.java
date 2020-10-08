@@ -40,6 +40,18 @@ public class TreeGeometry {
         }
     }
 
+    public void generateSponge(Location l, ProbabilityCollection<Material> m, int radius, boolean overwrite, int sponginess) {
+        for(int x = - radius; x <= radius; x++) {
+            for(int y = - radius; y <= radius; y++) {
+                for(int z = - radius; z <= radius; z++) {
+                    Vector position = l.toVector().clone().add(new Vector(x, y, z));
+                    if(tree.getRandom().nextInt(100) < sponginess && l.toVector().distance(position) <= radius + 0.5 && (overwrite || tree.getMaterial(position.toLocation(l.getWorld())).isAir()))
+                        tree.setBlock(position.toLocation(l.getWorld()), m.get());
+                }
+            }
+        }
+    }
+
     public void generateCylinder(Location l, ProbabilityCollection<Material> m, int radius, int height, boolean overwrite) {
         for(int x = - radius; x <= radius; x++) {
             for(int y = 0; y <= height; y++) {
