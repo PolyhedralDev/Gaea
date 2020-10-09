@@ -1,5 +1,6 @@
 package org.polydev.gaea.structures.loot;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.json.simple.JSONArray;
@@ -27,7 +28,9 @@ public class Entry {
      * @param entry The JSON Object to instantiate from.
      */
     public Entry(JSONObject entry) {
-        this.item = Material.valueOf(entry.get("name").toString().toUpperCase());
+        String id = entry.get("name").toString();
+        if(id.contains(":")) this.item = Bukkit.createBlockData(id).getMaterial();
+        else this.item = Material.valueOf(entry.get("name").toString().toUpperCase());
         this.weight = (long) entry.get("weight");
         if(entry.containsKey("functions")) {
             for(Object function : (JSONArray) entry.get("functions")) {

@@ -44,14 +44,15 @@ public class PopulationManager extends BlockPopulator {
         }
     }
 
-    public void saveBlocks(World w) throws IOException {
+    @SuppressWarnings("unchecked")
+    public synchronized void saveBlocks(World w) throws IOException {
         File f = new File(Gaea.getGaeaFolder(w), "chunks.bin");
         f.createNewFile();
-        SerializationUtil.toFile(needsPop, f);
+        SerializationUtil.toFile((HashSet<ChunkCoordinate>) needsPop.clone(), f);
     }
 
     @SuppressWarnings("unchecked")
-    public void loadBlocks(World w) throws IOException, ClassNotFoundException {
+    public synchronized void loadBlocks(World w) throws IOException, ClassNotFoundException {
         File f = new File(Gaea.getGaeaFolder(w), "chunks.bin");
         needsPop.addAll((HashSet<ChunkCoordinate>) SerializationUtil.fromFile(f));
     }

@@ -48,6 +48,9 @@
                         <goals>
                             <goal>shade</goal>
                         </goals>
+                        <configuration>
+                            <outputFile>target/prod/${project.artifactId}.jar</outputFile>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

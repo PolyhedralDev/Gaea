@@ -1,0 +1,5 @@
+name: Gaea
+api-version: 1.16
+author: dfsek
+main: org.polydev.gaea.Gaea
+version: 1.0.0
