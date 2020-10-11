@@ -59,14 +59,13 @@ public class PopulationManager extends BlockPopulator {
 
 
     // Synchronize to prevent chunks from being queued for population multiple times.
-    private synchronized void checkNeighbors(int x, int z, World w) {
+    public synchronized void checkNeighbors(int x, int z, World w) {
         Bukkit.getScheduler().runTask(main, () -> {
             ChunkCoordinate c = new ChunkCoordinate(x, z, w.getUID());
             if(w.isChunkGenerated(x + 1, z)
                     && w.isChunkGenerated(x - 1, z)
                     && w.isChunkGenerated(x, z + 1)
                     && w.isChunkGenerated(x, z - 1) && needsPop.contains(c)) {
-                needsPop.remove(c);
                 Random random = new Random(w.getSeed());
                 long xRand = random.nextLong() / 2L * 2L + 1L;
                 long zRand = random.nextLong() / 2L * 2L + 1L;
@@ -74,6 +73,7 @@ public class PopulationManager extends BlockPopulator {
                 for(GaeaBlockPopulator r : attachedPopulators) {
                     r.populate(w, random, w.getChunkAt(x, z));
                 }
+                needsPop.remove(c);
             }
         });
     }
