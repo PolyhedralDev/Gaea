@@ -1,8 +1,10 @@
 package org.polydev.gaea;
 
+import org.bstats.bukkit.Metrics;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.polydev.gaea.structures.NMSStructure;
 
 import java.io.File;
 
@@ -17,6 +19,7 @@ public class Gaea extends JavaPlugin {
     @Override
     public void onEnable() {
         super.onEnable();
+        Metrics metrics = new Metrics(this, 9092);
         saveDefaultConfig();
         reloadConfig();
         FileConfiguration configuration = getConfig();

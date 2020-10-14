@@ -31,7 +31,7 @@ public abstract class FractalTree {
      * @param random - The random object to use whilst generating the tree.
      */
     public FractalTree(Location origin, Random random) {
-        this.origin = origin;
+        this.origin = origin.add(0, 1, 0);
         this.random = random;
     }
 
@@ -82,8 +82,7 @@ public abstract class FractalTree {
      * Pastes the tree in the world. Must be invoked from main thread.
      */
     @SuppressWarnings("unchecked")
-    public void plant(boolean doCheck) {
-        if(doCheck && ! this.getOrigin().getBlock().isPassable()) return;
+    public void plant() {
         for(Map.Entry<Location, BlockData> entry : treeAssembler.entrySet()) {
             if(replaceable.contains(entry.getKey().getBlock().getType()))
                 entry.getKey().getBlock().setBlockData(entry.getValue(), false);

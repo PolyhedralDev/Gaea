@@ -1,5 +1,6 @@
 package org.polydev.gaea.lang;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import java.util.Arrays;
@@ -13,12 +14,12 @@ public class SingleLineMessage implements Message {
     }
     @Override
     public void log(Logger logger, Level level, String... args) {
-        logger.log(level, String.format(message, Arrays.asList(args).toArray()));
+        logger.log(level, ChatColor.translateAlternateColorCodes('&', String.format(message, Arrays.asList(args).toArray())));
     }
 
     @Override
     public void send(CommandSender sender, String... args) {
-        sender.sendMessage(String.format(message, Arrays.asList(args).toArray()));
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(message, Arrays.asList(args).toArray())));
     }
 
     @Override
