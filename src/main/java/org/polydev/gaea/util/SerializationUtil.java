@@ -1,5 +1,7 @@
 package org.polydev.gaea.util;
 
+import org.polydev.gaea.serial.MovedObjectInputStream;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -10,7 +12,7 @@ import java.io.Serializable;
 
 public class SerializationUtil {
     public static Object fromFile(File f) throws IOException, ClassNotFoundException {
-        ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f));
+        ObjectInputStream ois = new MovedObjectInputStream(new FileInputStream(f), "com.dfsek.betterend.gaea", "org.polydev.gaea"); // Backwards compat with old BetterEnd shade location
         Object o = ois.readObject();
         ois.close();
         return o;

@@ -62,7 +62,7 @@ public enum TreeType implements Tree {
 
     public boolean plant(Location l, Random r, JavaPlugin main) {
         if(this.getVanillaTreeType() == null) {
-            if(! spawnable.contains(l.clone().subtract(0, 1, 0).getBlock().getType())) return false;
+            if(! spawnable.contains(l.subtract(0, 1, 0).getBlock().getType())) return false;
             FractalTree tree = getCustomTreeType().getTree(l, r);
             if(main.isEnabled()) co.aikar.taskchain.BukkitTaskChainFactory.create(main).newChain()
                     .async(tree::grow)
