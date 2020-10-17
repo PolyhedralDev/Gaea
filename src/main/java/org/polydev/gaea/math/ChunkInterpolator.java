@@ -11,7 +11,7 @@ public interface ChunkInterpolator {
     enum InterpolationType {
         BILINEAR, TRILINEAR;
 
-        public ChunkInterpolator getInstance(World w, int chunkX, int chunkZ, BiomeGrid grid, FastNoise noise) {
+        public ChunkInterpolator getInstance(World w, int chunkX, int chunkZ, BiomeGrid grid, FastNoiseLite noise) {
             switch(this) {
                 case TRILINEAR:
                     return new ChunkInterpolator3(w, chunkX, chunkZ, grid, noise);

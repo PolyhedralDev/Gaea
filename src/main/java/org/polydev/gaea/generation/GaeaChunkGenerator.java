@@ -5,7 +5,7 @@ import org.bukkit.generator.ChunkGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.polydev.gaea.biome.Biome;
 import org.polydev.gaea.math.ChunkInterpolator;
-import org.polydev.gaea.math.FastNoise;
+import org.polydev.gaea.math.FastNoiseLite;
 import org.polydev.gaea.profiler.ProfileFuture;
 import org.polydev.gaea.profiler.WorldProfiler;
 
@@ -14,7 +14,7 @@ import java.util.Random;
 
 public abstract class GaeaChunkGenerator extends ChunkGenerator {
     private final ChunkInterpolator.InterpolationType interpolationType;
-    private FastNoise gen;
+    private FastNoiseLite gen;
     private ChunkInterpolator interp;
     private WorldProfiler profiler;
 
@@ -26,8 +26,9 @@ public abstract class GaeaChunkGenerator extends ChunkGenerator {
     public @NotNull ChunkData generateChunkData(@NotNull World world, @NotNull Random random, int chunkX, int chunkZ, @NotNull BiomeGrid biome) {
         try(ProfileFuture ignore = measure("TotalChunkGenTime")) {
             if(gen == null) {
-                gen = new FastNoise((int) world.getSeed());
-                gen.setNoiseType(FastNoise.NoiseType.SimplexFractal);
+                gen = new FastNoiseLite((int) world.getSeed());
+                gen.setNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
+                gen.setFractalType(FastNoiseLite.FractalType.FBm);
                 gen.setFractalOctaves(getNoiseOctaves(world));
                 gen.setFrequency(getNoiseFrequency(world));
             }
@@ -73,7 +74,7 @@ public abstract class GaeaChunkGenerator extends ChunkGenerator {
         return null;
     }
 
-    public abstract ChunkData generateBase(@NotNull World world, @NotNull Random random, int x, int z, FastNoise noise);
+    public abstract ChunkData generateBase(@NotNull World world, @NotNull Random random, int x, int z, FastNoiseLite noise);
 
     public abstract int getNoiseOctaves(World w);
 
@@ -83,7 +84,7 @@ public abstract class GaeaChunkGenerator extends ChunkGenerator {
 
     public abstract org.polydev.gaea.biome.BiomeGrid getBiomeGrid(World w);
 
-    public FastNoise getNoiseGenerator() {
+    public FastNoiseLite getNoiseGenerator() {
         return gen;
     }
 }

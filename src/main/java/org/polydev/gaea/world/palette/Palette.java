@@ -1,6 +1,6 @@
 package org.polydev.gaea.world.palette;
 
-import org.polydev.gaea.math.FastNoise;
+import org.polydev.gaea.math.FastNoiseLite;
 import org.polydev.gaea.math.ProbabilityCollection;
 
 import java.util.ArrayList;
@@ -111,7 +111,7 @@ public abstract class Palette<E> {
             return m;
         }
 
-        public E get(FastNoise random, int x, int z) {
+        public E get(FastNoiseLite random, int x, int z) {
             if(col) return this.collection.get(random, x, z);
             return m;
         }

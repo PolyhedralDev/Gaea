@@ -116,10 +116,10 @@ public class ProbabilityCollection<E> {
         return this.collection.floor(toFind).getObject();
     }
 
-    public E get(FastNoise random, int x, int z) {
+    public E get(FastNoiseLite random, int x, int z) {
         if(this.totalProbability == 0) return null;
         ProbabilitySetElement<E> toFind = new ProbabilitySetElement<>(null, 0);
-        toFind.setIndex(NormalizationUtil.normalize(random.getNoise(x, z), this.totalProbability) + 1);
+        toFind.setIndex(NormalizationUtil.normalize(random.getNoise(x, z), this.totalProbability, 1) + 1);
 
         return this.collection.floor(toFind).getObject();
     }

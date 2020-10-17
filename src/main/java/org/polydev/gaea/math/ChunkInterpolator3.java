@@ -12,20 +12,20 @@ import org.polydev.gaea.generation.GenerationPhase;
 public class ChunkInterpolator3 implements ChunkInterpolator {
     private final Interpolator3[][][] interpGrid = new Interpolator3[4][64][4];
     private final BiomeGrid grid;
-    private final FastNoise noise;
+    private final FastNoiseLite noise;
     private final int xOrigin;
     private final int zOrigin;
     private final World w;
 
     /**
-     * Instantiates a 3D ChunkInterpolator at a pair of chunk coordinates, with a BiomeGrid and FastNoise instance.
+     * Instantiates a 3D ChunkInterpolator at a pair of chunk coordinates, with a BiomeGrid and FastNoiseLite instance.
      *
      * @param chunkX X coordinate of the chunk.
      * @param chunkZ Z coordinate of the chunk.
      * @param grid   BiomeGrid to use for noise fetching.
-     * @param noise  FastNoise instance to use.
+     * @param noise  FastNoiseLite instance to use.
      */
-    public ChunkInterpolator3(World w, int chunkX, int chunkZ, BiomeGrid grid, FastNoise noise) {
+    public ChunkInterpolator3(World w, int chunkX, int chunkZ, BiomeGrid grid, FastNoiseLite noise) {
         this.xOrigin = chunkX << 4;
         this.zOrigin = chunkZ << 4;
         this.grid = grid;
@@ -46,14 +46,14 @@ public class ChunkInterpolator3 implements ChunkInterpolator {
             for(byte z = 0; z < 4; z++) {
                 for(int y = 0; y < 64; y++) {
                     interpGrid[x][y][z] = new Interpolator3(
-                            biomeAvg(x, y, z, stor) * 2.0f,
-                            biomeAvg(x + 1, y, z, stor) * 2.0f,
-                            biomeAvg(x, y + 1, z, stor) * 2.0f,
-                            biomeAvg(x + 1, y + 1, z, stor) * 2.0f,
-                            biomeAvg(x, y, z + 1, stor) * 2.0f,
-                            biomeAvg(x + 1, y, z + 1, stor) * 2.0f,
-                            biomeAvg(x, y + 1, z + 1, stor) * 2.0f,
-                            biomeAvg(x + 1, y + 1, z + 1, stor) * 2.0f);
+                            biomeAvg(x, y, z, stor),
+                            biomeAvg(x + 1, y, z, stor),
+                            biomeAvg(x, y + 1, z, stor),
+                            biomeAvg(x + 1, y + 1, z, stor),
+                            biomeAvg(x, y, z + 1, stor),
+                            biomeAvg(x + 1, y, z + 1, stor),
+                            biomeAvg(x, y + 1, z + 1, stor),
+                            biomeAvg(x + 1, y + 1, z + 1, stor));
                 }
             }
         }

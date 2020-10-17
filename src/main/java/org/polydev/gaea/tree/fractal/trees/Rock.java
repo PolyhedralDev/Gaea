@@ -2,7 +2,7 @@ package org.polydev.gaea.tree.fractal.trees;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.polydev.gaea.math.FastNoise;
+import org.polydev.gaea.math.FastNoiseLite;
 import org.polydev.gaea.math.ProbabilityCollection;
 import org.polydev.gaea.tree.fractal.FractalTree;
 import org.polydev.gaea.tree.fractal.TreeGeometry;
@@ -12,8 +12,8 @@ import java.util.Random;
 
 public class Rock extends FractalTree {
     private final TreeGeometry geo;
-    private final FastNoise noise;
-    private final FastNoise rock;
+    private final FastNoiseLite noise;
+    private final FastNoiseLite rock;
     private static final ProbabilityCollection<Material> ice = new ProbabilityCollection<Material>().add(Material.PACKED_ICE, 95).add(Material.BLUE_ICE, 5);
 
     /**
@@ -25,8 +25,8 @@ public class Rock extends FractalTree {
     public Rock(Location origin, Random random) {
         super(origin, random);
         int seed = origin.hashCode();
-        this.noise = new FastNoise(seed);
-        this.rock = new FastNoise(++seed);
+        this.noise = new FastNoiseLite(seed);
+        this.rock = new FastNoiseLite(++seed);
         geo = new TreeGeometry(this);
     }
 

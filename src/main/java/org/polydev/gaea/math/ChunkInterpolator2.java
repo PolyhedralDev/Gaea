@@ -14,18 +14,18 @@ public class ChunkInterpolator2 implements ChunkInterpolator {
 
     private final int xOrigin;
     private final int zOrigin;
-    private final FastNoise noise;
+    private final FastNoiseLite noise;
     private final World w;
 
     /**
-     * Instantiates a ChunkInterpolator at a pair of chunk coordinates, with a BiomeGrid and FastNoise instance.
+     * Instantiates a ChunkInterpolator at a pair of chunk coordinates, with a BiomeGrid and FastNoiseLite instance.
      *
      * @param chunkX X coordinate of the chunk.
      * @param chunkZ Z coordinate of the chunk.
      * @param grid   BiomeGrid to use for noise fetching.
-     * @param noise  FastNoise instance to use.
+     * @param noise  FastNoiseLite instance to use.
      */
-    public ChunkInterpolator2(World w, int chunkX, int chunkZ, BiomeGrid grid, FastNoise noise) {
+    public ChunkInterpolator2(World w, int chunkX, int chunkZ, BiomeGrid grid, FastNoiseLite noise) {
         this.xOrigin = chunkX << 4;
         this.zOrigin = chunkZ << 4;
         this.noise = noise;
@@ -38,10 +38,10 @@ public class ChunkInterpolator2 implements ChunkInterpolator {
         }
         for(byte x = 0; x < 4; x++) {
             for(byte z = 0; z < 4; z++) {
-                interpGrid[x][z] = new Interpolator(biomeAvg(x, z, gridTemp) * 2.0f,
-                        biomeAvg(x + 1, z, gridTemp) * 2.0f,
-                        biomeAvg(x, z + 1, gridTemp) * 2.0f,
-                        biomeAvg(x + 1, z + 1, gridTemp) * 2.0f);
+                interpGrid[x][z] = new Interpolator(biomeAvg(x, z, gridTemp),
+                        biomeAvg(x + 1, z, gridTemp),
+                        biomeAvg(x, z + 1, gridTemp),
+                        biomeAvg(x + 1, z + 1, gridTemp));
             }
         }
     }

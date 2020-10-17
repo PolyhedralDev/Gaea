@@ -3,11 +3,11 @@ package org.polydev.gaea.biome;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.polydev.gaea.generation.GenerationPhase;
-import org.polydev.gaea.math.FastNoise;
+import org.polydev.gaea.math.FastNoiseLite;
 
 public abstract class BiomeGrid {
-    private final FastNoise biome;
-    private final FastNoise climate;
+    private final FastNoiseLite biome;
+    private final FastNoiseLite climate;
     private final World world;
     private final int sizeX;
     private final int sizeZ;
@@ -18,8 +18,8 @@ public abstract class BiomeGrid {
         this.sizeX = 16;
         this.sizeZ = 16;
         this.world = w;
-        this.biome = new FastNoise((int) w.getSeed());
-        this.climate = new FastNoise((int) w.getSeed() + 1);
+        this.biome = new FastNoiseLite((int) w.getSeed());
+        this.climate = new FastNoiseLite((int) w.getSeed() + 1);
         setNormalType(normal);
         this.biome.setFrequency(freq1);
         this.climate.setFrequency(freq2);
@@ -29,8 +29,8 @@ public abstract class BiomeGrid {
         this.sizeX = sizeX;
         this.sizeZ = sizeZ;
         this.world = w;
-        this.biome = new FastNoise((int) w.getSeed());
-        this.climate = new FastNoise((int) w.getSeed() + 1);
+        this.biome = new FastNoiseLite((int) w.getSeed());
+        this.climate = new FastNoiseLite((int) w.getSeed() + 1);
         setNormalType(normal);
         this.biome.setFrequency(freq1);
         this.climate.setFrequency(freq2);
@@ -41,7 +41,9 @@ public abstract class BiomeGrid {
         this.biome.setNoiseType(normal.getNoiseType());
         this.climate.setNoiseType(normal.getNoiseType());
         if(normal.getOctaves() != 0) {
+            this.biome.setFractalType(FastNoiseLite.FractalType.FBm);
             this.biome.setFractalOctaves(normal.getOctaves());
+            this.climate.setFractalType(FastNoiseLite.FractalType.FBm);
             this.climate.setFractalOctaves(normal.getOctaves());
         }
     }
@@ -131,8 +133,8 @@ public abstract class BiomeGrid {
             }
 
             @Override
-            protected FastNoise.NoiseType getNoiseType() {
-                return FastNoise.NoiseType.Value;
+            protected FastNoiseLite.NoiseType getNoiseType() {
+                return FastNoiseLite.NoiseType.Value;
             }
 
             @Override
@@ -151,8 +153,8 @@ public abstract class BiomeGrid {
             }
 
             @Override
-            protected FastNoise.NoiseType getNoiseType() {
-                return FastNoise.NoiseType.SimplexFractal;
+            protected FastNoiseLite.NoiseType getNoiseType() {
+                return FastNoiseLite.NoiseType.OpenSimplex2;
             }
 
             @Override
@@ -162,12 +164,12 @@ public abstract class BiomeGrid {
         }, LOOKUP4096 {
             @Override
             protected int normalize(double i, int range) {
-                return NormalizationUtil.normalize(i, range);
+                return NormalizationUtil.normalize(i, range, getOctaves());
             }
 
             @Override
-            protected FastNoise.NoiseType getNoiseType() {
-                return FastNoise.NoiseType.SimplexFractal;
+            protected FastNoiseLite.NoiseType getNoiseType() {
+                return FastNoiseLite.NoiseType.OpenSimplex2;
             }
 
             @Override
@@ -184,7 +186,7 @@ public abstract class BiomeGrid {
          */
         protected abstract int normalize(double i, int range);
 
-        protected abstract FastNoise.NoiseType getNoiseType();
+        protected abstract FastNoiseLite.NoiseType getNoiseType();
 
         protected abstract int getOctaves();
     }

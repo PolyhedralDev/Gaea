@@ -1,13 +1,13 @@
 package org.polydev.gaea.world.palette;
 
-import org.polydev.gaea.math.FastNoise;
+import org.polydev.gaea.math.FastNoiseLite;
 
 import java.util.List;
 
 public class SimplexPalette<E> extends Palette<E> {
-    private final FastNoise r;
+    private final FastNoiseLite r;
 
-    public SimplexPalette(FastNoise r) {
+    public SimplexPalette(FastNoiseLite r) {
         this.r = r;
     }
 
