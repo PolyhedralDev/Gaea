@@ -1,9 +1,13 @@
 package org.polydev.gaea.math;
 
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.polydev.gaea.biome.BiomeGrid;
 import org.polydev.gaea.biome.Generator;
 import org.polydev.gaea.generation.GenerationPhase;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Class to abstract away the 16 Interpolators needed to generate a chunk.<br>
@@ -11,7 +15,9 @@ import org.polydev.gaea.generation.GenerationPhase;
  */
 public class ChunkInterpolator3 implements ChunkInterpolator {
     private final Interpolator3[][][] interpGrid = new Interpolator3[4][64][4];
-    private final BiomeGrid grid;
+    private final Generator[][] gens = new Generator[7][7];
+    private final boolean[][] needsBiomeInterp = new boolean[5][5];
+    private final double[][][] noiseStorage = new double[7][7][65];
     private final FastNoiseLite noise;
     private final int xOrigin;
     private final int zOrigin;
@@ -28,60 +34,84 @@ public class ChunkInterpolator3 implements ChunkInterpolator {
     public ChunkInterpolator3(World w, int chunkX, int chunkZ, BiomeGrid grid, FastNoiseLite noise) {
         this.xOrigin = chunkX << 4;
         this.zOrigin = chunkZ << 4;
-        this.grid = grid;
         this.noise = noise;
         this.w = w;
-        Generator[][] gridTemp = new Generator[8][8];
 
 
-        for(int x = - 2; x < 6; x++) {
-            for(int z = - 2; z < 6; z++) {
-                gridTemp[x + 2][z + 2] = grid.getBiome(xOrigin + x * 4, zOrigin + z * 4, GenerationPhase.BASE).getGenerator();
+        for(int x = - 1; x < 6; x++) {
+            for(int z = - 1; z < 6; z++) {
+                gens[x + 1][z + 1] = grid.getBiome(xOrigin + x * 4, zOrigin + z * 4, GenerationPhase.BASE).getGenerator();
+            }
+        }
+        for(int x = 0; x < 5; x++) {
+            for(int z = 0; z < 5; z++) {
+                needsBiomeInterp[x][z] = compareGens(x+1, z+1);
             }
         }
 
-        double[][][] stor = storeNoise(gridTemp);
+        storeNoise();
 
-        for(byte x = 0; x < 4; x++) {
-            for(byte z = 0; z < 4; z++) {
+        for(byte x = 0; x <= 3; x++) {
+            for(byte z = 0; z <= 3; z++) {
                 for(int y = 0; y < 64; y++) {
                     interpGrid[x][y][z] = new Interpolator3(
-                            biomeAvg(x, y, z, stor),
-                            biomeAvg(x + 1, y, z, stor),
-                            biomeAvg(x, y + 1, z, stor),
-                            biomeAvg(x + 1, y + 1, z, stor),
-                            biomeAvg(x, y, z + 1, stor),
-                            biomeAvg(x + 1, y, z + 1, stor),
-                            biomeAvg(x, y + 1, z + 1, stor),
-                            biomeAvg(x + 1, y + 1, z + 1, stor));
+                            biomeAvg(x, y, z),
+                            biomeAvg(x + 1, y, z),
+                            biomeAvg(x, y + 1, z),
+                            biomeAvg(x + 1, y + 1, z),
+                            biomeAvg(x, y, z + 1),
+                            biomeAvg(x + 1, y, z + 1),
+                            biomeAvg(x, y + 1, z + 1),
+                            biomeAvg(x + 1, y + 1, z + 1));
                 }
             }
         }
     }
 
-    private double[][][] storeNoise(Generator[][] gens) {
-        double[][][] noiseStorage = new double[8][8][65];
-        for(byte x = - 2; x < 6; x++) {
-            for(byte z = - 2; z < 6; z++) {
+    private boolean compareGens(int x, int z) {
+        Generator comp = gens[x][z];
+        if(!comp.equals(gens[x+1][z])) return true;
+
+        if(!comp.equals(gens[x][z+1])) return true;
+
+        if(!comp.equals(gens[x-1][z])) return true;
+
+        if(!comp.equals(gens[x][z-1])) return true;
+
+        if(!comp.equals(gens[x+1][z+1])) return true;
+
+        if(!comp.equals(gens[x-1][z-1])) return true;
+
+        if(!comp.equals(gens[x+1][z-1])) return true;
+
+        return !comp.equals(gens[x - 1][z + 1]);
+    }
+    private void storeNoise() {
+        for(byte x = - 1; x < 6; x++) {
+            for(byte z = - 1; z < 6; z++) {
                 for(int y = 0; y < 64; y++) {
-                    noiseStorage[x + 2][z + 2][y] = gens[x + 2][z + 2].getNoise(noise, w, x * 4 + xOrigin, y * 4, z * 4 + zOrigin);
+                    noiseStorage[x + 1][z + 1][y] = gens[x + 1][z + 1].getNoise(noise, w, x * 4 + xOrigin, y * 4, z * 4 + zOrigin);
                 }
             }
         }
-        return noiseStorage;
     }
 
-    private double biomeAvg(int x, int y, int z, double[][][] noise) {
-        return (noise[x + 3][z + 2][y]
-                + noise[x + 1][z + 2][y]
-                + noise[x + 2][z + 3][y]
-                + noise[x + 2][z + 1][y]
-                + noise[x + 1][z + 1][y]
-                + noise[x + 3][z + 3][y]
-                + noise[x + 3][z + 1][y]
-                + noise[x + 1][z + 3][y]
-                + noise[x + 2][z + 2][y]
+    private double biomeAvg(int x, int y, int z) {
+        if(needsBiomeInterp[x][z]) return (noiseStorage[x + 2][z + 1][y]
+                + noiseStorage[x][z + 1][y]
+                + noiseStorage[x + 1][z + 2][y]
+                + noiseStorage[x + 1][z][y]
+                + noiseStorage[x][z][y]
+                + noiseStorage[x + 2][z + 2][y]
+                + noiseStorage[x + 2][z][y]
+                + noiseStorage[x][z + 2][y]
+                + noiseStorage[x + 1][z + 1][y]
         ) / 9D;
+        else return (noiseStorage[x + 2][z + 1][y]
+                + noiseStorage[x][z + 1][y]
+                + noiseStorage[x + 1][z + 2][y]
+                + noiseStorage[x + 1][z][y]
+                + noiseStorage[x+1][z+1][y]) / 5D;
     }
 
     @Override
@@ -99,41 +129,5 @@ public class ChunkInterpolator3 implements ChunkInterpolator {
     @Override
     public double getNoise(double x, double y, double z) {
         return interpGrid[((int) x) / 4][((int) y) / 4][((int) z) / 4].trilerp((float) (x % 4) / 4, (float) (y % 4) / 4, (float) (z % 4) / 4);
-    }
-
-    private static class CoordinatePair {
-        private final int x;
-        private final int z;
-
-        public CoordinatePair(int x, int z) {
-            this.x = x;
-            this.z = z;
-        }
-
-        public int getX() {
-            return x;
-        }
-
-        public int getZ() {
-            return z;
-        }
-
-        @Override
-        public int hashCode() {
-            return this.toString().hashCode();
-        }
-
-
-        @Override
-        public boolean equals(Object obj) {
-            if(! (obj instanceof CoordinatePair)) return false;
-            CoordinatePair other = (CoordinatePair) obj;
-            return this.x == other.getX() && this.z == other.getZ();
-        }
-
-        @Override
-        public String toString() {
-            return x + ":" + z;
-        }
     }
 }
