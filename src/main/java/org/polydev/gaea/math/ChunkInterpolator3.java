@@ -51,8 +51,8 @@ public class ChunkInterpolator3 implements ChunkInterpolator {
 
         storeNoise();
 
-        for(byte x = 0; x <= 3; x++) {
-            for(byte z = 0; z <= 3; z++) {
+        for(byte x = 0; x < 4; x++) {
+            for(byte z = 0; z < 4; z++) {
                 for(int y = 0; y < 64; y++) {
                     interpGrid[x][y][z] = new Interpolator3(
                             biomeAvg(x, y, z),
@@ -107,11 +107,14 @@ public class ChunkInterpolator3 implements ChunkInterpolator {
                 + noiseStorage[x][z + 2][y]
                 + noiseStorage[x + 1][z + 1][y]
         ) / 9D;
-        else return (noiseStorage[x + 2][z + 1][y]
-                + noiseStorage[x][z + 1][y]
-                + noiseStorage[x + 1][z + 2][y]
-                + noiseStorage[x + 1][z][y]
-                + noiseStorage[x+1][z+1][y]) / 5D;
+        else {
+            if(gens[x+1][z+1].useMinimalInterpolation()) return noiseStorage[x+1][z+1][y];
+            else return (noiseStorage[x + 2][z + 1][y]
+                    + noiseStorage[x][z + 1][y]
+                    + noiseStorage[x + 1][z + 2][y]
+                    + noiseStorage[x + 1][z][y]
+                    + noiseStorage[x+1][z+1][y]) / 5D;
+        }
     }
 
     @Override

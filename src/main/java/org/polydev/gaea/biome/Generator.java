@@ -33,4 +33,10 @@ public abstract class Generator {
      * @return BlocPalette - The biome's palette.
      */
     public abstract Palette<BlockData> getPalette(int y);
+
+    /**
+     * Returns true if the biome should be interpolated just once, false to use advanced interpolation + blending.
+     * @return Whether biome should use minimal interpolation
+     */
+    public abstract boolean useMinimalInterpolation();
 }
