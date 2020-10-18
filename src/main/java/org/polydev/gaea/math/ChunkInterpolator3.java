@@ -75,7 +75,13 @@ public class ChunkInterpolator3 implements ChunkInterpolator {
         return (noise[x + 3][z + 2][y]
                 + noise[x + 1][z + 2][y]
                 + noise[x + 2][z + 3][y]
-                + noise[x + 2][z + 1][y]) / 4D;
+                + noise[x + 2][z + 1][y]
+                + noise[x + 1][z + 1][y]
+                + noise[x + 3][z + 3][y]
+                + noise[x + 3][z + 1][y]
+                + noise[x + 1][z + 3][y]
+                + noise[x + 2][z + 2][y]
+        ) / 9D;
     }
 
     @Override
