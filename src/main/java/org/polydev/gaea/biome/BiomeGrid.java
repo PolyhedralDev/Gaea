@@ -6,47 +6,30 @@ import org.polydev.gaea.generation.GenerationPhase;
 import org.polydev.gaea.math.FastNoiseLite;
 
 public abstract class BiomeGrid {
-    private final FastNoiseLite biome;
-    private final FastNoiseLite climate;
+    private final FastNoiseLite noiseX;
+    private final FastNoiseLite noiseZ;
     private final World world;
     private final int sizeX;
     private final int sizeZ;
     private Biome[][] grid;
-    private NormalType normal = NormalType.LOOKUP;
 
-    public BiomeGrid(World w, float freq1, float freq2) {
-        this.sizeX = 16;
-        this.sizeZ = 16;
-        this.world = w;
-        this.biome = new FastNoiseLite((int) w.getSeed());
-        this.climate = new FastNoiseLite((int) w.getSeed() + 1);
-        setNormalType(normal);
-        this.biome.setFrequency(freq1);
-        this.climate.setFrequency(freq2);
-    }
 
     public BiomeGrid(World w, float freq1, float freq2, int sizeX, int sizeZ) {
         this.sizeX = sizeX;
         this.sizeZ = sizeZ;
         this.world = w;
-        this.biome = new FastNoiseLite((int) w.getSeed());
-        this.climate = new FastNoiseLite((int) w.getSeed() + 1);
-        setNormalType(normal);
-        this.biome.setFrequency(freq1);
-        this.climate.setFrequency(freq2);
+        this.noiseX = new FastNoiseLite((int) w.getSeed());
+        this.noiseZ = new FastNoiseLite((int) w.getSeed() + 1);
+        this.noiseX.setNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
+        this.noiseX.setFractalType(FastNoiseLite.FractalType.FBm);
+        this.noiseX.setFractalOctaves(4);
+        this.noiseZ.setNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
+        this.noiseZ.setFractalType(FastNoiseLite.FractalType.FBm);
+        this.noiseZ.setFractalOctaves(4);
+        this.noiseX.setFrequency(freq1);
+        this.noiseZ.setFrequency(freq2);
     }
 
-    public void setNormalType(NormalType n) {
-        this.normal = n;
-        this.biome.setNoiseType(normal.getNoiseType());
-        this.climate.setNoiseType(normal.getNoiseType());
-        if(normal.getOctaves() != 0) {
-            this.biome.setFractalType(FastNoiseLite.FractalType.FBm);
-            this.biome.setFractalOctaves(normal.getOctaves());
-            this.climate.setFractalType(FastNoiseLite.FractalType.FBm);
-            this.climate.setFractalOctaves(normal.getOctaves());
-        }
-    }
 
     /**
      * Gets the biome at a pair of coordinates.
@@ -56,43 +39,7 @@ public abstract class BiomeGrid {
      * @return Biome - Biome at the given coordinates.
      */
     public Biome getBiome(int x, int z, GenerationPhase phase) {
-        float biomeNoise = biome.getNoise((float) x, (float) z);
-        float climateNoise = climate.getNoise((float) x, (float) z);
-        return grid[normal.normalize(biomeNoise, sizeX)][normal.normalize(climateNoise, sizeZ)];
-    }
-
-    /**
-     * Get the raw X-noise for coordinates in the Grid.
-     *
-     * @param x X coordinate
-     * @param z Z coordinate
-     * @return Normalized noise
-     */
-    public int getBiomeNoiseX(int x, int z) {
-        return normal.normalize(biome.getNoise((float) x, (float) z), sizeX);
-    }
-
-    public float[] getRawNoise(int x, int z) {
-        return new float[] {biome.getNoise(x, z), climate.getNoise(x, z)};
-    }
-
-    /**
-     * Get the raw Z-noise for coordinates in the Grid.
-     *
-     * @param x X coordinate
-     * @param z Z coordinate
-     * @return Normalized noise
-     */
-    public int getBiomeNoiseZ(int x, int z) {
-        return normal.normalize(climate.getNoise((float) x, (float) z), sizeZ);
-    }
-
-    public Biome[][] getGrid() {
-        return grid;
-    }
-
-    public void setGrid(Biome[][] grid) {
-        this.grid = grid;
+        return grid[getBiomeNoiseX(x, z)][getBiomeNoiseZ(x, z)];
     }
 
     /**
@@ -105,10 +52,48 @@ public abstract class BiomeGrid {
         return getBiome(l, GenerationPhase.POST_GEN);
     }
 
+    public float[] getRawNoise(int x, int z) {
+        return new float[] {noiseX.getNoise(x, z), noiseZ.getNoise(x, z)};
+    }
+
+    /**
+     * Get the raw X-noise for coordinates in the Grid.
+     *
+     * @param x X coordinate
+     * @param z Z coordinate
+     * @return Normalized noise
+     */
+    public int getBiomeNoiseX(int x, int z) {
+        return normalize(noiseX.getNoise((float) x, (float) z), sizeX);
+    }
+
+    /**
+     * Get the raw Z-noise for coordinates in the Grid.
+     *
+     * @param x X coordinate
+     * @param z Z coordinate
+     * @return Normalized noise
+     */
+    public int getBiomeNoiseZ(int x, int z) {
+        return normalize(noiseZ.getNoise((float) x, (float) z), sizeZ);
+    }
+
+    public Biome[][] getGrid() {
+        return grid;
+    }
+
+    public void setGrid(Biome[][] grid) {
+        if(grid.length != sizeX) throw new IllegalArgumentException("Invalid length for grid, expected " + sizeX + ", got " + grid.length);
+        for(Biome[] gridLayer : grid) {
+            if(gridLayer.length != sizeZ) throw new IllegalArgumentException("Invalid length for grid layer, expected " + sizeZ + ", got " + gridLayer.length);
+        }
+        this.grid = grid;
+    }
+
     public Biome getBiome(Location l, GenerationPhase phase) {
-        float biomeNoise = biome.getNoise((float) l.getBlockX(), (float) l.getBlockZ());
-        float climateNoise = climate.getNoise((float) l.getBlockX(), (float) l.getBlockZ());
-        return grid[normal.normalize(biomeNoise, sizeX)][normal.normalize(climateNoise, sizeZ)];
+        float biomeNoise = noiseX.getNoise((float) l.getBlockX(), (float) l.getBlockZ());
+        float climateNoise = noiseZ.getNoise((float) l.getBlockX(), (float) l.getBlockZ());
+        return grid[normalize(biomeNoise, sizeX)][normalize(climateNoise, sizeZ)];
     }
 
     public World getWorld() {
@@ -123,72 +108,14 @@ public abstract class BiomeGrid {
         return sizeZ;
     }
 
-    public enum NormalType {
-        LEGACY {
-            @Override
-            protected int normalize(double i, int range) {
-                if(i > 0) i = Math.pow(i, 0.8125); // Redistribute
-                else i = - Math.pow(- i, 0.8125); // Redistribute
-                return Math.min((int) Math.floor((i + 1) * 8), 15);
-            }
-
-            @Override
-            protected FastNoiseLite.NoiseType getNoiseType() {
-                return FastNoiseLite.NoiseType.Value;
-            }
-
-            @Override
-            protected int getOctaves() {
-                return 0;
-            }
-        }, LOOKUP {
-            private final double[] lookup = new double[] {- 0.30535656213760376D, - 0.24068142473697662D, - 0.1912580281496048D, - 0.1484183818101883D, - 0.10884492099285126D, - 0.07152662426233292D, - 0.03578951954841614D, - 7.427185773849487E-4D, 0.03426129370927811D, 0.07007939368486404D, 0.10747101902961731D, 0.147150918841362D, 0.19017954170703888D, 0.23992890119552612D, 0.3045589327812195D, 0.6485831141471863D};
-
-            @Override
-            protected int normalize(double i, int range) {
-                for(int j = 0; j < lookup.length; j++) {
-                    if(i < lookup[j]) return j;
-                }
-                return lookup.length - 1;
-            }
-
-            @Override
-            protected FastNoiseLite.NoiseType getNoiseType() {
-                return FastNoiseLite.NoiseType.OpenSimplex2;
-            }
-
-            @Override
-            protected int getOctaves() {
-                return 5;
-            }
-        }, LOOKUP4096 {
-            @Override
-            protected int normalize(double i, int range) {
-                return NormalizationUtil.normalize(i, range, getOctaves());
-            }
-
-            @Override
-            protected FastNoiseLite.NoiseType getNoiseType() {
-                return FastNoiseLite.NoiseType.OpenSimplex2;
-            }
-
-            @Override
-            protected int getOctaves() {
-                return 4;
-            }
-        };
-
-        /**
-         * Takes a noise input and normalizes it to a value between 0 and 15 inclusive.
-         *
-         * @param i - The noise value to normalize.
-         * @return int - The normalized value.
-         */
-        protected abstract int normalize(double i, int range);
-
-        protected abstract FastNoiseLite.NoiseType getNoiseType();
-
-        protected abstract int getOctaves();
+    /**
+     * Takes a noise input and normalizes it to a value between 0 and 15 inclusive.
+     *
+     * @param i - The noise value to normalize.
+     * @return int - The normalized value.
+     */
+    protected int normalize(double i, int range) {
+        return NormalizationUtil.normalize(i, range, 4);
     }
 
 }
