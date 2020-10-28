@@ -5,7 +5,6 @@ import org.polydev.gaea.structures.features.Feature;
 import java.util.List;
 
 /**
- * Interface to be implemented by a custom generator's Biome enum.<br>
  * Represents a custom biome, and contains methods to retrieve information about each type.
  */
 public interface Biome {
@@ -18,9 +17,9 @@ public interface Biome {
     org.bukkit.block.Biome getVanillaBiome();
 
     /**
-     * Gets the BiomeTerrain instance used to generate the biome.
+     * Gets the Generator instance used to generate the biome.
      *
-     * @return BiomeTerrain - The terrain generation instance.
+     * @return The Generator instance.
      */
     Generator getGenerator();
 

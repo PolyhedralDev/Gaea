@@ -4,6 +4,7 @@ import org.bukkit.World;
 import org.bukkit.generator.ChunkGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.polydev.gaea.biome.Biome;
+import org.polydev.gaea.biome.BiomeContainer;
 import org.polydev.gaea.math.ChunkInterpolator;
 import org.polydev.gaea.math.FastNoiseLite;
 import org.polydev.gaea.profiler.ProfileFuture;
@@ -34,18 +35,18 @@ public abstract class GaeaChunkGenerator extends ChunkGenerator {
             }
             ChunkData chunk;
             try(ProfileFuture ignored = measure("ChunkBaseGenTime")) {
-                interp = interpolationType.getInstance(world, chunkX, chunkZ, this.getBiomeGrid(world), gen);
+                interp = interpolationType.getInstance(world, chunkX, chunkZ, this.getContainer(world), gen);
                 chunk = generateBase(world, random, chunkX, chunkZ, gen);
             }
             try(ProfileFuture ignored = measure("PaletteApplyTime")) {
-                org.polydev.gaea.biome.BiomeGrid grid = getBiomeGrid(world);
+                BiomeContainer container = getContainer(world);
                 int xOrig = (chunkX << 4);
                 int zOrig = (chunkZ << 4);
                 for(byte x = 0; x < 4; x++) {
                     for(byte z = 0; z < 4; z++) {
                         int cx = xOrig + x * 4;
                         int cz = zOrig + z * 4;
-                        Biome b = grid.getBiome(cx, cz, GenerationPhase.PALETTE_APPLY);
+                        Biome b = container.getBiome(cx, cz, GenerationPhase.PALETTE_APPLY);
                         biome.setBiome(x * 4, z * 4, b.getVanillaBiome());
                     }
                 }
@@ -82,7 +83,7 @@ public abstract class GaeaChunkGenerator extends ChunkGenerator {
 
     public abstract List<GenerationPopulator> getGenerationPopulators(World w);
 
-    public abstract org.polydev.gaea.biome.BiomeGrid getBiomeGrid(World w);
+    public abstract BiomeContainer getContainer(World w);
 
     public FastNoiseLite getNoiseGenerator() {
         return gen;

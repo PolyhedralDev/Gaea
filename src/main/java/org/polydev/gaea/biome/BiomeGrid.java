@@ -1,11 +1,10 @@
 package org.polydev.gaea.biome;
 
-import org.bukkit.Location;
 import org.bukkit.World;
 import org.polydev.gaea.generation.GenerationPhase;
 import org.polydev.gaea.math.FastNoiseLite;
 
-public abstract class BiomeGrid {
+public abstract class BiomeGrid extends BiomeContainer {
     private final FastNoiseLite noiseX;
     private final FastNoiseLite noiseZ;
     private final World world;
@@ -15,6 +14,7 @@ public abstract class BiomeGrid {
 
 
     public BiomeGrid(World w, float freq1, float freq2, int sizeX, int sizeZ) {
+        super(w);
         this.sizeX = sizeX;
         this.sizeZ = sizeZ;
         this.world = w;
@@ -38,18 +38,9 @@ public abstract class BiomeGrid {
      * @param z - Z-coordinate at which to fetch biome
      * @return Biome - Biome at the given coordinates.
      */
+    @Override
     public Biome getBiome(int x, int z, GenerationPhase phase) {
         return grid[getBiomeNoiseX(x, z)][getBiomeNoiseZ(x, z)];
-    }
-
-    /**
-     * Gets the biome at a location.
-     *
-     * @param l - The location at which to fetch the biome.
-     * @return Biome - Biome at the given coordinates.
-     */
-    public Biome getBiome(Location l) {
-        return getBiome(l, GenerationPhase.POST_GEN);
     }
 
     public float[] getRawNoise(int x, int z) {
@@ -90,15 +81,6 @@ public abstract class BiomeGrid {
         this.grid = grid;
     }
 
-    public Biome getBiome(Location l, GenerationPhase phase) {
-        float biomeNoise = noiseX.getNoise((float) l.getBlockX(), (float) l.getBlockZ());
-        float climateNoise = noiseZ.getNoise((float) l.getBlockX(), (float) l.getBlockZ());
-        return grid[normalize(biomeNoise, sizeX)][normalize(climateNoise, sizeZ)];
-    }
-
-    public World getWorld() {
-        return world;
-    }
 
     public int getSizeX() {
         return sizeX;
@@ -117,5 +99,4 @@ public abstract class BiomeGrid {
     protected int normalize(double i, int range) {
         return NormalizationUtil.normalize(i, range, 4);
     }
-
 }

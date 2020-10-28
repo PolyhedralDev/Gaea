@@ -1,13 +1,10 @@
 package org.polydev.gaea.math;
 
-import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.polydev.gaea.biome.BiomeContainer;
 import org.polydev.gaea.biome.BiomeGrid;
 import org.polydev.gaea.biome.Generator;
 import org.polydev.gaea.generation.GenerationPhase;
-
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Class to abstract away the 16 Interpolators needed to generate a chunk.<br>
@@ -28,10 +25,10 @@ public class ChunkInterpolator3 implements ChunkInterpolator {
      *
      * @param chunkX X coordinate of the chunk.
      * @param chunkZ Z coordinate of the chunk.
-     * @param grid   BiomeGrid to use for noise fetching.
+     * @param container   BiomeGrid to use for noise fetching.
      * @param noise  FastNoiseLite instance to use.
      */
-    public ChunkInterpolator3(World w, int chunkX, int chunkZ, BiomeGrid grid, FastNoiseLite noise) {
+    public ChunkInterpolator3(World w, int chunkX, int chunkZ, BiomeContainer container, FastNoiseLite noise) {
         this.xOrigin = chunkX << 4;
         this.zOrigin = chunkZ << 4;
         this.noise = noise;
@@ -40,7 +37,7 @@ public class ChunkInterpolator3 implements ChunkInterpolator {
 
         for(int x = - 1; x < 6; x++) {
             for(int z = - 1; z < 6; z++) {
-                gens[x + 1][z + 1] = grid.getBiome(xOrigin + x * 4, zOrigin + z * 4, GenerationPhase.BASE).getGenerator();
+                gens[x + 1][z + 1] = container.getBiome(xOrigin + x * 4, zOrigin + z * 4, GenerationPhase.BASE).getGenerator();
             }
         }
         for(int x = 0; x < 5; x++) {
