@@ -62,11 +62,6 @@ tasks.test {
     maxParallelForks = 12
 }
 
-//val shadowRelocation = tasks.withType<ConfigureShadowRelocation> {
-//    target = tasks.shadowJar.get()
-//    prefix = "org.polydev.gaea.libs"
-//}
-
 val shadowRelocation = tasks.create("shadowRelocation", ConfigureShadowRelocation::class) {
     target = tasks.shadowJar.get()
     prefix = "libs"
@@ -77,7 +72,6 @@ tasks.withType<ShadowJar> {
     archiveClassifier.set("")
     archiveBaseName.set("Gaea")
     setVersion(project.version)
-//    relocate("", "")
     dependsOn(shadowRelocation)
 }
 
