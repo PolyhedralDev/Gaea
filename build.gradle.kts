@@ -35,7 +35,7 @@ java {
 
 group = "com.solostudios.omnivoxscraper"
 //version = "0.0.1-alpha.3"
-val versionObj = Version("1", "12", "2", "gradle.1")
+val versionObj = Version("1", "12", "3")
 version = versionObj
 
 dependencies {
