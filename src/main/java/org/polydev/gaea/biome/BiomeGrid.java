@@ -7,27 +7,27 @@ import org.polydev.gaea.math.FastNoiseLite;
 public abstract class BiomeGrid extends BiomeContainer {
     private final FastNoiseLite noiseX;
     private final FastNoiseLite noiseZ;
-    private final World world;
     private final int sizeX;
     private final int sizeZ;
     private Biome[][] grid;
 
 
-    public BiomeGrid(World w, float freq1, float freq2, int sizeX, int sizeZ) {
+    public BiomeGrid(World w, float xFreq, float zFreq, int sizeX, int sizeZ) {
         super(w);
         this.sizeX = sizeX;
         this.sizeZ = sizeZ;
-        this.world = w;
+
         this.noiseX = new FastNoiseLite((int) w.getSeed());
-        this.noiseZ = new FastNoiseLite((int) w.getSeed() + 1);
         this.noiseX.setNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
         this.noiseX.setFractalType(FastNoiseLite.FractalType.FBm);
         this.noiseX.setFractalOctaves(4);
+        this.noiseX.setFrequency(xFreq);
+
+        this.noiseZ = new FastNoiseLite((int) w.getSeed() + 1);
         this.noiseZ.setNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
         this.noiseZ.setFractalType(FastNoiseLite.FractalType.FBm);
         this.noiseZ.setFractalOctaves(4);
-        this.noiseX.setFrequency(freq1);
-        this.noiseZ.setFrequency(freq2);
+        this.noiseZ.setFrequency(zFreq);
     }
 
 

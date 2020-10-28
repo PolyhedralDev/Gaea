@@ -27,7 +27,7 @@ public class Interpolator {
      * @param t  - Distance from v0. Total distance between v0 and v1 is 1 unit.
      * @param v0 - Value at v0.
      * @param v1 - Value at v1.
-     * @return double - The interpolated value.
+     * @return Interpolated value.
      */
     public static double lerp(double t, double v0, double v1) {
         return v0 + t * (v1 - v0);
@@ -38,12 +38,11 @@ public class Interpolator {
      *
      * @param s - X value
      * @param t - Z value
-     * @return double - The interpolated value.
+     * @return Interpolated value.
      */
     public double bilerp(double s, double t) {
         double v01 = lerp(s, v0, v1);
         double v23 = lerp(s, v2, v3);
-        double v = lerp(t, v01, v23);
-        return v;
+        return lerp(t, v01, v23);
     }
 }

@@ -10,7 +10,7 @@ public class MathUtil {
      * Gets the standard deviation of an array of doubles.
      *
      * @param numArray The array of numbers to calculate the standard deviation of.
-     * @return double - The standard deviation.
+     * @return The standard deviation.
      */
     public static double standardDeviation(double[] numArray) {
         double sum = 0.0, standardDeviation = 0.0;
@@ -35,7 +35,7 @@ public class MathUtil {
      * @param chunkX Chunk's X coordinate
      * @param chunkZ Chunk's Z coordinate
      * @param seed   World seed
-     * @return long - The carver seed.
+     * @return The carver seed.
      */
     public static long getCarverChunkSeed(int chunkX, int chunkZ, long seed) {
         Random r = new Random(seed);

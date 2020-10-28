@@ -10,17 +10,18 @@ public interface ChunkInterpolator {
     double getNoise(double x, double y, double z);
 
     enum InterpolationType {
-        BILINEAR, TRILINEAR;
-
-        public ChunkInterpolator getInstance(World w, int chunkX, int chunkZ, BiomeContainer container, FastNoiseLite noise) {
-            switch(this) {
-                case TRILINEAR:
-                    return new ChunkInterpolator3(w, chunkX, chunkZ, container, noise);
-                case BILINEAR:
-                    return new ChunkInterpolator2(w, chunkX, chunkZ, container, noise);
-                default:
-                    return null;
+        BILINEAR {
+            @Override
+            public ChunkInterpolator getInstance(World w, int chunkX, int chunkZ, BiomeContainer container, FastNoiseLite noise) {
+                return new ChunkInterpolator2(w, chunkX, chunkZ, container, noise);
             }
-        }
+        },
+        TRILINEAR {
+            @Override
+            public ChunkInterpolator getInstance(World w, int chunkX, int chunkZ, BiomeContainer container, FastNoiseLite noise) {
+                return new ChunkInterpolator3(w, chunkX, chunkZ, container, noise);
+            }
+        };
+        public abstract ChunkInterpolator getInstance(World w, int chunkX, int chunkZ, BiomeContainer container, FastNoiseLite noise);
     }
 }

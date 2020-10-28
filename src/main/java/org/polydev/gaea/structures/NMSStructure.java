@@ -14,8 +14,10 @@ import java.util.Random;
  *
  * @author dfsek
  * @since 2.0.0
+ * @deprecated NMS is cringe
  */
 @SuppressWarnings({"unchecked", "rawtypes"})
+@Deprecated
 public class NMSStructure {
     private static final String version = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
     public static int pasteMethodIndex;
