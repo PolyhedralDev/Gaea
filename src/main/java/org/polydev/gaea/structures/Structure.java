@@ -7,6 +7,7 @@ import org.polydev.gaea.structures.spawn.StructureSpawnInfo;
 import java.util.List;
 import java.util.Random;
 
+@Deprecated
 public interface Structure {
     NMSStructure getInstance(Location origin, Random r);
 

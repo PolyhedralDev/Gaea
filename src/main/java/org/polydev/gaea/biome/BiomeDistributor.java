@@ -8,10 +8,10 @@ import org.polydev.gaea.generation.GenerationPhase;
  * Class to hold biomes and determine their distribution in the world.
  * @see Biome
  */
-public abstract class BiomeContainer {
+public abstract class BiomeDistributor {
 
     private final World world;
-    public BiomeContainer(World world) {
+    public BiomeDistributor(World world) {
         this.world = world;
     }
 
@@ -40,7 +40,7 @@ public abstract class BiomeContainer {
      * @param z Z coordinate
      * @return Biome at coordinates
      * This implementation defaults to the POST_GEN GenerationPhase.
-     * @see BiomeContainer#getBiome(int, int, GenerationPhase)
+     * @see BiomeDistributor#getBiome(int, int, GenerationPhase)
      */
     public Biome getBiome(int x, int z) { // Not final, so people can override and change default GenerationPhase
         return getBiome(x, z, GenerationPhase.POST_GEN);
@@ -51,15 +51,15 @@ public abstract class BiomeContainer {
      * @param l Location at which to get Biome
      * @return Biome at location
      * This implementation defaults to the POST_GEN GenerationPhase.
-     * @see BiomeContainer#getBiome(int, int, GenerationPhase)
+     * @see BiomeDistributor#getBiome(int, int, GenerationPhase)
      */
     public final Biome getBiome(Location l) {
         return getBiome(l.getBlockX(), l.getBlockZ());
     }
 
     /**
-     * Get the World this BiomeContainer operates in
-     * @return World assigned to BiomeContainer
+     * Get the World this BiomeDistributor operates in
+     * @return World assigned to BiomeDistributor
      */
     public World getWorld() {
         return world;

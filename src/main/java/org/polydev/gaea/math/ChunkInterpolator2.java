@@ -1,8 +1,7 @@
 package org.polydev.gaea.math;
 
 import org.bukkit.World;
-import org.polydev.gaea.biome.BiomeContainer;
-import org.polydev.gaea.biome.BiomeGrid;
+import org.polydev.gaea.biome.BiomeDistributor;
 import org.polydev.gaea.biome.Generator;
 import org.polydev.gaea.generation.GenerationPhase;
 
@@ -26,7 +25,7 @@ public class ChunkInterpolator2 implements ChunkInterpolator {
      * @param container   BiomeGrid to use for noise fetching.
      * @param noise  FastNoiseLite instance to use.
      */
-    public ChunkInterpolator2(World w, int chunkX, int chunkZ, BiomeContainer container, FastNoiseLite noise) {
+    public ChunkInterpolator2(World w, int chunkX, int chunkZ, BiomeDistributor container, FastNoiseLite noise) {
         this.xOrigin = chunkX << 4;
         this.zOrigin = chunkZ << 4;
         this.noise = noise;

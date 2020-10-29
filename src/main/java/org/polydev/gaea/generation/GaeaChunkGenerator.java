@@ -4,7 +4,7 @@ import org.bukkit.World;
 import org.bukkit.generator.ChunkGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.polydev.gaea.biome.Biome;
-import org.polydev.gaea.biome.BiomeContainer;
+import org.polydev.gaea.biome.BiomeDistributor;
 import org.polydev.gaea.math.ChunkInterpolator;
 import org.polydev.gaea.math.FastNoiseLite;
 import org.polydev.gaea.profiler.ProfileFuture;
@@ -38,8 +38,8 @@ public abstract class GaeaChunkGenerator extends ChunkGenerator {
                 interp = interpolationType.getInstance(world, chunkX, chunkZ, this.getContainer(world), gen);
                 chunk = generateBase(world, random, chunkX, chunkZ, gen);
             }
-            try(ProfileFuture ignored = measure("PaletteApplyTime")) {
-                BiomeContainer container = getContainer(world);
+            try(ProfileFuture ignored = measure("BiomeSetTime")) {
+                BiomeDistributor container = getContainer(world);
                 int xOrig = (chunkX << 4);
                 int zOrig = (chunkZ << 4);
                 for(byte x = 0; x < 4; x++) {
@@ -83,7 +83,7 @@ public abstract class GaeaChunkGenerator extends ChunkGenerator {
 
     public abstract List<GenerationPopulator> getGenerationPopulators(World w);
 
-    public abstract BiomeContainer getContainer(World w);
+    public abstract BiomeDistributor getContainer(World w);
 
     public FastNoiseLite getNoiseGenerator() {
         return gen;

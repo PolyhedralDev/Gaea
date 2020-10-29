@@ -4,7 +4,7 @@ import org.bukkit.World;
 import org.polydev.gaea.generation.GenerationPhase;
 import org.polydev.gaea.math.FastNoiseLite;
 
-public abstract class BiomeGrid extends BiomeContainer {
+public class BiomeGrid extends BiomeDistributor {
     private final FastNoiseLite noiseX;
     private final FastNoiseLite noiseZ;
     private final int sizeX;
