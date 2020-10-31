@@ -62,7 +62,7 @@ public class ChunkInterpolator2 implements ChunkInterpolator {
      */
     @Override
     public double getNoise(double x, double z) {
-        return interpGrid[((int) x) / 4][((int) z) / 4].bilerp((float) (x % 4) / 4, (float) (z % 4) / 4);
+        return interpGrid[((int) x) / 4][((int) z) / 4].bilerp((x % 4) / 4, (z % 4) / 4);
     }
 
     @Override

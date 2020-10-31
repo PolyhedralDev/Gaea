@@ -131,6 +131,6 @@ public class ChunkInterpolator3 implements ChunkInterpolator {
      */
     @Override
     public double getNoise(double x, double y, double z) {
-        return interpGrid[((int) x) / 4][((int) y) / 4][((int) z) / 4].trilerp((float) (x % 4) / 4, (float) (y % 4) / 4, (float) (z % 4) / 4);
+        return interpGrid[((int) x) / 4][((int) y) / 4][((int) z) / 4].trilerp((x % 4) / 4, (y % 4) / 4, (z % 4) / 4);
     }
 }

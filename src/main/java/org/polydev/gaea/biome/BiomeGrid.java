@@ -14,7 +14,7 @@ public abstract class BiomeGrid {
     private Biome[][] grid;
 
 
-    public BiomeGrid(World w, float freq1, float freq2, int sizeX, int sizeZ) {
+    public BiomeGrid(World w, double freq1, double freq2, int sizeX, int sizeZ) {
         this.sizeX = sizeX;
         this.sizeZ = sizeZ;
         this.world = w;
@@ -52,8 +52,8 @@ public abstract class BiomeGrid {
         return getBiome(l, GenerationPhase.POST_GEN);
     }
 
-    public float[] getRawNoise(int x, int z) {
-        return new float[] {noiseX.getNoise(x, z), noiseZ.getNoise(x, z)};
+    public double[] getRawNoise(int x, int z) {
+        return new double[] {noiseX.getNoise(x, z), noiseZ.getNoise(x, z)};
     }
 
     /**
@@ -64,7 +64,7 @@ public abstract class BiomeGrid {
      * @return Normalized noise
      */
     public int getBiomeNoiseX(int x, int z) {
-        return normalize(noiseX.getNoise((float) x, (float) z), sizeX);
+        return normalize(noiseX.getNoise(x, z), sizeX);
     }
 
     /**
@@ -75,7 +75,7 @@ public abstract class BiomeGrid {
      * @return Normalized noise
      */
     public int getBiomeNoiseZ(int x, int z) {
-        return normalize(noiseZ.getNoise((float) x, (float) z), sizeZ);
+        return normalize(noiseZ.getNoise(x, z), sizeZ);
     }
 
     public Biome[][] getGrid() {
@@ -91,8 +91,8 @@ public abstract class BiomeGrid {
     }
 
     public Biome getBiome(Location l, GenerationPhase phase) {
-        float biomeNoise = noiseX.getNoise((float) l.getBlockX(), (float) l.getBlockZ());
-        float climateNoise = noiseZ.getNoise((float) l.getBlockX(), (float) l.getBlockZ());
+        double biomeNoise = noiseX.getNoise(l.getBlockX(), l.getBlockZ());
+        double climateNoise = noiseZ.getNoise(l.getBlockX(), l.getBlockZ());
         return grid[normalize(biomeNoise, sizeX)][normalize(climateNoise, sizeZ)];
     }
 

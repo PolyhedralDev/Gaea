@@ -78,7 +78,7 @@ public abstract class GaeaChunkGenerator extends ChunkGenerator {
 
     public abstract int getNoiseOctaves(World w);
 
-    public abstract float getNoiseFrequency(World w);
+    public abstract double getNoiseFrequency(World w);
 
     public abstract List<GenerationPopulator> getGenerationPopulators(World w);
 

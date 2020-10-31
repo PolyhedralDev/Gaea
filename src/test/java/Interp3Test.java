@@ -6,7 +6,7 @@ public class Interp3Test {
         for(int y = 0; y < 8; y++) {
             for(int x = 0; x < 8; x++) {
                 for(int z = 0; z < 8; z++) {
-                    System.out.print(i.trilerp((float) x / 6, (float) y / 6, (float) z / 6) + " ");
+                    System.out.print(i.trilerp(x / 6D, y / 6D, z / 6D) + " ");
                 }
                 System.out.println();
             }

@@ -9,17 +9,24 @@ public interface ChunkInterpolator {
     double getNoise(double x, double y, double z);
 
     enum InterpolationType {
-        BILINEAR, TRILINEAR;
-
-        public ChunkInterpolator getInstance(World w, int chunkX, int chunkZ, BiomeGrid grid, FastNoiseLite noise) {
-            switch(this) {
-                case TRILINEAR:
-                    return new ChunkInterpolator3(w, chunkX, chunkZ, grid, noise);
-                case BILINEAR:
-                    return new ChunkInterpolator2(w, chunkX, chunkZ, grid, noise);
-                default:
-                    return null;
+        /**
+         * 2D (Bilinear) interpolation
+         */
+        BILINEAR {
+            @Override
+            public ChunkInterpolator getInstance(World w, int chunkX, int chunkZ, BiomeGrid grid, FastNoiseLite noise) {
+                return new ChunkInterpolator2(w, chunkX, chunkZ, grid, noise);
             }
-        }
+        },
+        /**
+         * 3D (Trilinear) interpolation
+         */
+        TRILINEAR {
+            @Override
+            public ChunkInterpolator getInstance(World w, int chunkX, int chunkZ, BiomeGrid grid, FastNoiseLite noise) {
+                return new ChunkInterpolator3(w, chunkX, chunkZ, grid, noise);
+            }
+        };
+        public abstract ChunkInterpolator getInstance(World w, int chunkX, int chunkZ, BiomeGrid grid, FastNoiseLite noise);
     }
 }
