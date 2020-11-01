@@ -2,5 +2,5 @@ name: Gaea
 api-version: 1.16
 author: dfsek
 main: org.polydev.gaea.Gaea
-version: 1.11.5
+version: 1.13.0
 load: STARTUP
