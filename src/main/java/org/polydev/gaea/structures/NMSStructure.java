@@ -60,9 +60,9 @@ public class NMSStructure {
             Class chunkCoordIntPairClass = Class.forName("net.minecraft.server." + version + ".ChunkCoordIntPair");
             Class craftBlockClass = Class.forName("org.bukkit.craftbukkit." + version + ".block.CraftBlock");
             Class generatorAccessClass;
-            if(version.startsWith("v1_16_R2"))
-                generatorAccessClass = Class.forName("net.minecraft.server." + version + ".WorldAccess");
-            else generatorAccessClass = Class.forName("net.minecraft.server." + version + ".GeneratorAccess");
+            if(version.startsWith("v1_15"))
+                generatorAccessClass = Class.forName("net.minecraft.server." + version + ".GeneratorAccess");
+            else generatorAccessClass = Class.forName("net.minecraft.server." + version + ".WorldAccess");
             nbtStreamToolsAccess = MethodAccess.get(nbtStreamToolsClass);
             loadNBTStreamFromInputStreamIndex = nbtStreamToolsAccess.getIndex("a", InputStream.class);
             definedStructureConstructorAccess = ConstructorAccess.get(definedStructureClass);
