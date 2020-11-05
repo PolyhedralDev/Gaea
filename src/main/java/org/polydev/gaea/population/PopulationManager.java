@@ -7,6 +7,8 @@ import org.bukkit.generator.BlockPopulator;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.polydev.gaea.Gaea;
+import org.polydev.gaea.profiler.ProfileFuture;
+import org.polydev.gaea.profiler.WorldProfiler;
 import org.polydev.gaea.util.SerializationUtil;
 
 import java.io.File;
@@ -21,7 +23,7 @@ public class PopulationManager extends BlockPopulator {
     private final HashSet<ChunkCoordinate> needsPop = new HashSet<>();
     private final JavaPlugin main;
     private final Object popLock = new Object();
-
+    private WorldProfiler profiler;
 
     public PopulationManager(JavaPlugin main) {
         this.main = main;
@@ -33,15 +35,28 @@ public class PopulationManager extends BlockPopulator {
 
     @Override
     public void populate(@NotNull World world, @NotNull Random random, @NotNull Chunk chunk) {
-        needsPop.add(new ChunkCoordinate(chunk));
-        int x = chunk.getX();
-        int z = chunk.getZ();
-        if(main.isEnabled()) {
-            if(world.isChunkGenerated(x + 1, z)) checkNeighbors(x + 1, z, world);
-            if(world.isChunkGenerated(x - 1, z)) checkNeighbors(x - 1, z, world);
-            if(world.isChunkGenerated(x, z + 1)) checkNeighbors(x, z + 1, world);
-            if(world.isChunkGenerated(x, z - 1)) checkNeighbors(x, z - 1, world);
+        try(ProfileFuture ignored = measure()) {
+            needsPop.add(new ChunkCoordinate(chunk));
+            int x = chunk.getX();
+            int z = chunk.getZ();
+            if(main.isEnabled()) {
+                for(int xi = - 1; xi <= 1; xi++) {
+                    for(int zi = - 1; zi <= 1; zi++) {
+                        if(xi == 0 && zi == 0) continue;
+                        if(world.isChunkGenerated(xi + x, zi + z)) checkNeighbors(xi + x, zi + z, world);
+                    }
+                }
+            }
         }
+    }
+
+    private ProfileFuture measure() {
+        if(profiler != null) return profiler.measure("PopulationManagerTime");
+        return null;
+    }
+
+    public void attachProfiler(WorldProfiler p) {
+        this.profiler = p;
     }
 
     @SuppressWarnings("unchecked")
@@ -60,12 +75,12 @@ public class PopulationManager extends BlockPopulator {
 
     // Synchronize to prevent chunks from being queued for population multiple times.
     public synchronized void checkNeighbors(int x, int z, World w) {
-        Bukkit.getScheduler().runTask(main, () -> {
-            ChunkCoordinate c = new ChunkCoordinate(x, z, w.getUID());
-            if(w.isChunkGenerated(x + 1, z)
-                    && w.isChunkGenerated(x - 1, z)
-                    && w.isChunkGenerated(x, z + 1)
-                    && w.isChunkGenerated(x, z - 1) && needsPop.contains(c)) {
+        ChunkCoordinate c = new ChunkCoordinate(x, z, w.getUID());
+        if(w.isChunkGenerated(x + 1, z)
+                && w.isChunkGenerated(x - 1, z)
+                && w.isChunkGenerated(x, z + 1)
+                && w.isChunkGenerated(x, z - 1) && needsPop.contains(c)) {
+            Bukkit.getScheduler().runTask(main, () -> {
                 Random random = new Random(w.getSeed());
                 long xRand = random.nextLong() / 2L * 2L + 1L;
                 long zRand = random.nextLong() / 2L * 2L + 1L;
@@ -74,7 +89,7 @@ public class PopulationManager extends BlockPopulator {
                     r.populate(w, random, w.getChunkAt(x, z));
                 }
                 needsPop.remove(c);
-            }
-        });
+            });
+        }
     }
 }

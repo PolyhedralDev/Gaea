@@ -37,7 +37,7 @@ public abstract class GaeaChunkGenerator extends ChunkGenerator {
                 interp = interpolationType.getInstance(world, chunkX, chunkZ, this.getBiomeGrid(world), gen);
                 chunk = generateBase(world, random, chunkX, chunkZ, gen);
             }
-            try(ProfileFuture ignored = measure("PaletteApplyTime")) {
+            try(ProfileFuture ignored = measure("BiomeApplyTime")) {
                 org.polydev.gaea.biome.BiomeGrid grid = getBiomeGrid(world);
                 int xOrig = (chunkX << 4);
                 int zOrig = (chunkZ << 4);
@@ -67,6 +67,10 @@ public abstract class GaeaChunkGenerator extends ChunkGenerator {
 
     public void attachProfiler(WorldProfiler p) {
         this.profiler = p;
+    }
+
+    public WorldProfiler getProfiler() {
+        return profiler;
     }
 
     private ProfileFuture measure(String id) {

@@ -6,7 +6,7 @@
 
     <groupId>org.polydev.gaea</groupId>
     <artifactId>Gaea</artifactId>
-    <version>1.13.0</version>
+    <version>1.13.2</version>
     <build>
         <plugins>
             <plugin>
