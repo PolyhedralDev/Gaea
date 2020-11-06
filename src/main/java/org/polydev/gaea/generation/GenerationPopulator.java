@@ -7,5 +7,5 @@ import org.polydev.gaea.math.ChunkInterpolator;
 import java.util.Random;
 
 public abstract class GenerationPopulator {
-    public abstract ChunkGenerator.ChunkData populate(World world, ChunkGenerator.ChunkData chunk, Random r, int chunkX, int chunkZ, ChunkInterpolator interp);
+    public abstract void populate(World world, ChunkGenerator.ChunkData chunk, Random r, int chunkX, int chunkZ, ChunkInterpolator interp);
 }

@@ -15,7 +15,6 @@ import java.util.Random;
 public abstract class GaeaChunkGenerator extends ChunkGenerator {
     private final ChunkInterpolator.InterpolationType interpolationType;
     private FastNoiseLite gen;
-    private ChunkInterpolator interp;
     private WorldProfiler profiler;
 
     public GaeaChunkGenerator(ChunkInterpolator.InterpolationType type) {
@@ -33,9 +32,10 @@ public abstract class GaeaChunkGenerator extends ChunkGenerator {
                 gen.setFrequency(getNoiseFrequency(world));
             }
             ChunkData chunk;
+            ChunkInterpolator interp;
             try(ProfileFuture ignored = measure("ChunkBaseGenTime")) {
                 interp = interpolationType.getInstance(world, chunkX, chunkZ, this.getBiomeGrid(world), gen);
-                chunk = generateBase(world, random, chunkX, chunkZ, gen);
+                chunk = generateBase(world, random, chunkX, chunkZ, interp);
             }
             try(ProfileFuture ignored = measure("BiomeApplyTime")) {
                 org.polydev.gaea.biome.BiomeGrid grid = getBiomeGrid(world);
@@ -51,18 +51,10 @@ public abstract class GaeaChunkGenerator extends ChunkGenerator {
                 }
             }
             for(GenerationPopulator g : getGenerationPopulators(world)) {
-                chunk = g.populate(world, chunk, random, chunkX, chunkZ, interp);
+                g.populate(world, chunk, random, chunkX, chunkZ, interp);
             }
             return chunk;
         }
-    }
-
-    public double getInterpolatedNoise(double x, double z) {
-        return this.interp.getNoise(x, z);
-    }
-
-    public double getInterpolatedNoise(double x, double y, double z) {
-        return this.interp.getNoise(x, y, z);
     }
 
     public void attachProfiler(WorldProfiler p) {
@@ -78,7 +70,7 @@ public abstract class GaeaChunkGenerator extends ChunkGenerator {
         return null;
     }
 
-    public abstract ChunkData generateBase(@NotNull World world, @NotNull Random random, int x, int z, FastNoiseLite noise);
+    public abstract ChunkData generateBase(@NotNull World world, @NotNull Random random, int x, int z, ChunkInterpolator noise);
 
     public abstract int getNoiseOctaves(World w);
 

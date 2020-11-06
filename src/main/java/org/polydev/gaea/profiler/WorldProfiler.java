@@ -44,8 +44,7 @@ public class WorldProfiler {
                     .append(ChatColor.GREEN)
                     .append((double) Math.round((e.getValue().getStdDev() / 1000000) * 100D) / 100D)
                     .append("ms")
-                    .append(ChatColor.GOLD)
-                    .append("\n");
+                    .append(ChatColor.GOLD).append(" (x").append(e.getValue().size()).append(")\n");
         }
         return result.toString();
     }

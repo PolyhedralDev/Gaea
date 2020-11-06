@@ -36,6 +36,10 @@ public class Measurement {
         measurements.add(value);
     }
 
+    public int size() {
+        return measurements.size();
+    }
+
     public ProfileFuture beginMeasurement() {
         ProfileFuture future = new ProfileFuture();
         long current = System.nanoTime();
