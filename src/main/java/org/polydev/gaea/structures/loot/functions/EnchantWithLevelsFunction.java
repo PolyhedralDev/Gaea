@@ -34,7 +34,7 @@ public class EnchantWithLevelsFunction implements Function {
         double enchant = (r.nextDouble() * (max - min)) + min;
         List<Enchantment> possible = new ArrayList<>();
         for(Enchantment ench : Enchantment.values()) {
-            if(ench.canEnchantItem(original) && (disabled == null || this.disabled.contains(ench.getName()))) {
+            if(ench.canEnchantItem(original) && (disabled == null || !this.disabled.contains(ench.getName()))) {
                 possible.add(ench);
             }
         }
