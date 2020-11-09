@@ -47,6 +47,31 @@ public enum TreeType implements Tree {
         this.spawnable = spawnable;
     }
 
+    public static TreeType fromBukkit(org.bukkit.TreeType type) {
+        switch(type) {
+            case TREE: return OAK;
+            case BIRCH: return BIRCH;
+            case ACACIA: return ACACIA;
+            case SWAMP: return SWAMP_OAK;
+            case JUNGLE: return JUNGLE;
+            case REDWOOD: return SPRUCE;
+            case BIG_TREE: return LARGE_OAK;
+            case DARK_OAK: return DARK_OAK;
+            case COCOA_TREE: return JUNGLE_COCOA;
+            case TALL_BIRCH: return TALL_BIRCH;
+            case JUNGLE_BUSH: return JUNGLE_BUSH;
+            case CHORUS_PLANT: return CHORUS_PLANT;
+            case MEGA_REDWOOD: return MEGA_SPRUCE;
+            case RED_MUSHROOM: return RED_MUSHROOM;
+            case SMALL_JUNGLE: return SMALL_JUNGLE;
+            case TALL_REDWOOD: return LARGE_SPRUCE;
+            case WARPED_FUNGUS: return WARPED_FUNGUS;
+            case BROWN_MUSHROOM: return BROWN_MUSHROOM;
+            case CRIMSON_FUNGUS: return CRIMSON_FUNGUS;
+            default: throw new IllegalArgumentException();
+        }
+    }
+
     public boolean isCustom() {
         return this.vanillaType == null;
     }
