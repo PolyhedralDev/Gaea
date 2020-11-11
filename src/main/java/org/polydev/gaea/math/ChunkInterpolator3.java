@@ -62,7 +62,7 @@ public class ChunkInterpolator3 implements ChunkInterpolator {
                             biomeAvg(x, y, z + 1),
                             biomeAvg(x + 1, y, z + 1),
                             biomeAvg(x, y + 1, z + 1),
-                            biomeAvg(x + 1, y + 1, z + 1));
+                            biomeAvg(x + 1, y + 1, z + 1), gens[x+1][z+1].getInterpolationType());
                 }
             }
         }
