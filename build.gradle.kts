@@ -35,7 +35,7 @@ java {
 
 group = "org.polydev.gaea"
 //version = "0.0.1-alpha.3"
-val versionObj = Version("1", "12", "3")
+val versionObj = Version("1", "14", "2")
 version = versionObj
 
 dependencies {
