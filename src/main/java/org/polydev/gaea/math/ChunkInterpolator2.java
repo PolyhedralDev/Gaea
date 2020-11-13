@@ -41,7 +41,7 @@ public class ChunkInterpolator2 implements ChunkInterpolator {
                 interpGrid[x][z] = new Interpolator(biomeAvg(x, z, gridTemp),
                         biomeAvg(x + 1, z, gridTemp),
                         biomeAvg(x, z + 1, gridTemp),
-                        biomeAvg(x + 1, z + 1, gridTemp));
+                        biomeAvg(x + 1, z + 1, gridTemp), gridTemp[x+1][z+1].getInterpolationType());
             }
         }
     }

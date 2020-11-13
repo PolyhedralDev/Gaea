@@ -3,6 +3,7 @@ package org.polydev.gaea.biome;
 import org.bukkit.World;
 import org.bukkit.block.data.BlockData;
 import org.polydev.gaea.math.FastNoiseLite;
+import org.polydev.gaea.math.Interpolator;
 import org.polydev.gaea.world.palette.Palette;
 
 public abstract class Generator {
@@ -39,4 +40,13 @@ public abstract class Generator {
      * @return Whether biome should use minimal interpolation
      */
     public abstract boolean useMinimalInterpolation();
+
+
+    /**
+     * Get the type of interpolation to use in this biome.
+     * @return Interpolation type
+     */
+    public Interpolator.Type getInterpolationType() {
+        return Interpolator.Type.LINEAR;
+    }
 }
