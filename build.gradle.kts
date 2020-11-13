@@ -54,10 +54,10 @@ tasks.withType<ShadowJar> {
     archiveClassifier.set("")
     archiveBaseName.set("Gaea")
     setVersion(project.version)
-    relocate("org.apache.commons", "com.dfsek.terra.libs.commons")
-    relocate("org.bstats.bukkit", "com.dfsek.terra.libs.bstats")
-    relocate("co.aikar.taskchain", "com.dfsek.terra.libs.taskchain")
-    relocate("com.esotericsoftware", "com.dfsek.terra.libs.reflectasm")
+    relocate("org.apache.commons", "com.dfsek.gaea.libs.commons")
+    relocate("org.bstats.bukkit", "com.dfsek.gaea.libs.bstats")
+    relocate("co.aikar.taskchain", "com.dfsek.gaea.libs.taskchain")
+    relocate("com.esotericsoftware", "com.dfsek.gaea.libs.reflectasm")
 }
 
 /**
