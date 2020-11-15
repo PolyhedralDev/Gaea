@@ -28,23 +28,35 @@ public class Entry {
      * @param entry The JSON Object to instantiate from.
      */
     public Entry(JSONObject entry) {
+
         String id = entry.get("name").toString();
-        if(id.contains(":")) this.item = Bukkit.createBlockData(id).getMaterial();
+        if(id.contains(":")) this.item = Material.matchMaterial(id);
         else this.item = Material.valueOf(entry.get("name").toString().toUpperCase());
-        this.weight = (long) entry.get("weight");
+
+        long weight1;
+        try {
+            weight1 = (long) entry.get("weight");
+        } catch(NullPointerException e) {
+            weight1 = 1;
+        }
+
+        this.weight = weight1;
         if(entry.containsKey("functions")) {
             for(Object function : (JSONArray) entry.get("functions")) {
                 switch(((String) ((JSONObject) function).get("function"))) {
+                    case "minecraft:set_count":
                     case "set_count":
                         long max = (long) ((JSONObject) ((JSONObject) function).get("count")).get("max");
                         long min = (long) ((JSONObject) ((JSONObject) function).get("count")).get("min");
                         functions.add(new AmountFunction(Math.toIntExact(min), Math.toIntExact(max)));
                         break;
+                    case "minecraft:set_damage":
                     case "set_damage":
                         long maxDamage = (long) ((JSONObject) ((JSONObject) function).get("damage")).get("max");
                         long minDamage = (long) ((JSONObject) ((JSONObject) function).get("damage")).get("min");
                         functions.add(new DamageFunction(Math.toIntExact(minDamage), Math.toIntExact(maxDamage)));
                         break;
+                    case "minecraft:enchant_with_levels":
                     case "enchant_with_levels":
                         long maxEnchant = (long) ((JSONObject) ((JSONObject) function).get("levels")).get("max");
                         long minEnchant = (long) ((JSONObject) ((JSONObject) function).get("levels")).get("min");
