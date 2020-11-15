@@ -1,4 +1,3 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ConfigureShadowRelocation
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import java.io.ByteArrayOutputStream
 
@@ -8,24 +7,12 @@ plugins {
 }
 
 repositories {
-    flatDir {
-        dirs("lib")
-    }
-    maven {
-        url = uri("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
-    }
-    maven {
-        url = uri("http://maven.enginehub.org/repo/")
-    }
-    maven {
-        url = uri("https://repo.codemc.org/repository/maven-public")
-    }
-    maven {
-        url = uri("https://papermc.io/repo/repository/maven-public/")
-    }
-    maven {
-        url = uri("https://repo.aikar.co/content/groups/aikar/")
-    }
+    flatDir { dirs("lib") }
+    maven { url = uri("https://hub.spigotmc.org/nexus/content/repositories/snapshots/") }
+    maven { url = uri("http://maven.enginehub.org/repo/") }
+    maven { url = uri("https://repo.codemc.org/repository/maven-public") }
+    maven { url = uri("https://papermc.io/repo/repository/maven-public/") }
+    maven { url = uri("https://repo.aikar.co/content/groups/aikar/") }
 }
 
 java {
@@ -34,24 +21,23 @@ java {
 }
 
 group = "org.polydev.gaea"
-//version = "0.0.1-alpha.3"
-val versionObj = Version("1", "14", "2")
+val versionObj = Version("1", "14", "3", true)
 version = versionObj
 
 dependencies {
     compileOnly("org.jetbrains:annotations:20.1.0") // more recent.
-    compileOnly("org.spigotmc:spigot-api:1.16.2-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot-api:1.16.4-R0.1-SNAPSHOT")
     implementation("com.googlecode.json-simple:json-simple:1.1")
     implementation("commons-io:commons-io:2.4")
     implementation("co.aikar:taskchain-bukkit:3.7.2")
     implementation("com.esotericsoftware:reflectasm:1.11.9")
-    compile("org.bstats:bstats-bukkit:1.7")
+    implementation("org.bstats:bstats-bukkit:1.7")
     
     // JUnit.
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.0")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.0")
-
-    testImplementation("org.spigotmc:spigot-api:1.16.2-R0.1-SNAPSHOT")
+    
+    testImplementation("org.spigotmc:spigot-api:1.16.4-R0.1-SNAPSHOT")
 }
 
 tasks.test {
@@ -74,17 +60,16 @@ tasks.withType<ShadowJar> {
     relocate("com.esotericsoftware", "org.polydev.gaea.libs.reflectasm")
 }
 
-
 /**
  * Version class that does version stuff.
  */
-class Version(val major: String, val minor: String, val revision: String, val preReleaseData: String? = null) {
+class Version(val major: String, val minor: String, val revision: String, val preRelease: Boolean = false) {
     
     override fun toString(): String {
-        return if (preReleaseData.isNullOrBlank())
+        return if (preRelease)
             "$major.$minor.$revision"
         else //Only use git hash if it's a prerelease.
-            "$major.$minor.$revision-$preReleaseData+${getGitHash()}"
+            "$major.$minor.$revision-BETA+${getGitHash()}"
     }
 }
 
