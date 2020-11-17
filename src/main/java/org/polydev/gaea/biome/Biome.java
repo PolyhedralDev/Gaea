@@ -1,5 +1,6 @@
 package org.polydev.gaea.biome;
 
+import org.bukkit.World;
 import org.polydev.gaea.structures.features.Feature;
 
 import java.util.List;
@@ -37,4 +38,13 @@ public interface Biome {
      * @return Decorator - the Decorator instance.
      */
     Decorator getDecorator();
+
+    /**
+     * Gets the BiomeTerrain instance used to generate the biome in this world.
+     *
+     * @return BiomeTerrain - The terrain generation instance.
+     */
+    default Generator getGenerator(World w) {
+        return getGenerator();
+    }
 }
