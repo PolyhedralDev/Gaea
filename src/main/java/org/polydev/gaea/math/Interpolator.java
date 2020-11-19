@@ -1,5 +1,7 @@
 package org.polydev.gaea.math;
 
+import org.apache.commons.math3.util.FastMath;
+
 import java.lang.reflect.Type;
 
 /**
@@ -36,7 +38,7 @@ public class Interpolator {
     public static double lerp(double t, double v0, double v1, Type type) {
         switch(type) {
             case LINEAR: return v0 + t * (v1 - v0);
-            case NEAREST_NEIGHBOR: return Math.abs(v0-t) > Math.abs(v1-t) ? v1 : v0;
+            case NEAREST_NEIGHBOR: return FastMath.abs(v0-t) > FastMath.abs(v1-t) ? v1 : v0;
             default: throw new IllegalStateException();
         }
     }

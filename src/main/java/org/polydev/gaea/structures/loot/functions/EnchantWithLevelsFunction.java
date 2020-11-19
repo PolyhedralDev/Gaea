@@ -1,5 +1,6 @@
 package org.polydev.gaea.structures.loot.functions;
 
+import org.apache.commons.math3.util.FastMath;
 import org.bukkit.Bukkit;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -38,7 +39,7 @@ public class EnchantWithLevelsFunction implements Function {
                 possible.add(ench);
             }
         }
-        int numEnchant = (r.nextInt((int) Math.abs(enchant)) / 10 + 1);
+        int numEnchant = (r.nextInt((int) FastMath.abs(enchant)) / 10 + 1);
         if(possible.size() >= numEnchant) {
             Collections.shuffle(possible);
             iter:
@@ -49,9 +50,9 @@ public class EnchantWithLevelsFunction implements Function {
                 }
                 int lvl = r.nextInt(1 + (int) (((enchant / 40 > 1) ? 1 : enchant / 40) * (chosen.getMaxLevel())));
                 try {
-                    original.addEnchantment(chosen, Math.max(lvl, 1));
+                    original.addEnchantment(chosen, FastMath.max(lvl, 1));
                 } catch(IllegalArgumentException e) {
-                    Bukkit.getLogger().warning("[Gaea] Attempted to enchant " + original.getType() + " with " + chosen + " at level " + Math.max(lvl, 1) + ", but an unexpected exception occurred! Usually this is caused by a misbehaving enchantment plugin.");
+                    Bukkit.getLogger().warning("[Gaea] Attempted to enchant " + original.getType() + " with " + chosen + " at level " + FastMath.max(lvl, 1) + ", but an unexpected exception occurred! Usually this is caused by a misbehaving enchantment plugin.");
                 }
             }
         }

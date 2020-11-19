@@ -1,5 +1,6 @@
 package org.polydev.gaea.tree.fractal.trees;
 
+import org.apache.commons.math3.util.FastMath;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.util.Vector;
@@ -31,7 +32,7 @@ public class SpruceTree extends FractalTree {
     }
 
     private void growTrunk(Location l1, Vector diff) {
-        if(diff.getY() < 0) diff.rotateAroundAxis(TreeGeometry.getPerpendicular(diff.clone()).normalize(), Math.PI);
+        if(diff.getY() < 0) diff.rotateAroundAxis(TreeGeometry.getPerpendicular(diff.clone()).normalize(), FastMath.PI);
         int d = (int) diff.length();
         int rad = 7;
         for(int i = 0; i < d; i++) {

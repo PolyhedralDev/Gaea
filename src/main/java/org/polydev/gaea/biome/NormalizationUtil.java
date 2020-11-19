@@ -1,5 +1,7 @@
 package org.polydev.gaea.biome;
 
+import org.apache.commons.math3.util.FastMath;
+
 /**
  * Ultra-fast normalization utility for pre-defined lookup table based on 160 million points of Cellular noise generated from 1-octave Simplex noise.
  */
@@ -36,8 +38,8 @@ public class NormalizationUtil {
                 end = mid;
             }
         }
-        double left = Math.abs(normalMap[start] - d);
-        double right = Math.abs(normalMap[end] - d);
+        double left = FastMath.abs(normalMap[start] - d);
+        double right = FastMath.abs(normalMap[end] - d);
         if(left <= right) {
             return start * (num) / (normalMap.length);
         }

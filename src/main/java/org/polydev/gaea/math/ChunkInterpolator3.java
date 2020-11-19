@@ -1,5 +1,6 @@
 package org.polydev.gaea.math;
 
+import org.apache.commons.math3.util.FastMath;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.polydev.gaea.biome.BiomeGrid;
@@ -135,6 +136,6 @@ public class ChunkInterpolator3 implements ChunkInterpolator {
     }
 
     private static int reRange(int value, int high) {
-        return Math.max(Math.min(value, high), 0);
+        return FastMath.max(FastMath.min(value, high), 0);
     }
 }

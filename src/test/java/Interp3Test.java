@@ -25,6 +25,6 @@ public class Interp3Test {
     }
     @Test
     public void interpLN() {
-        assertEquals(1, Interpolator.lerp(1, 0.8, 1.2, Interpolator.Type.LINEAR));
+        assertEquals(1, Interpolator.lerp(0.5, 0.8, 1.2, Interpolator.Type.LINEAR));
     }
 }

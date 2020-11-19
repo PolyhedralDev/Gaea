@@ -1,5 +1,6 @@
 package org.polydev.gaea.tree.fractal.trees;
 
+import org.apache.commons.math3.util.FastMath;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.util.Vector;
@@ -36,19 +37,19 @@ public class OakTree extends FractalTree {
             geo.generateSphere(l1, Material.OAK_LEAVES, 1 + super.getRandom().nextInt(2) + (3 - recursions), false);
             if(recursions > 2) return;
         }
-        if(diff.getY() < 0) diff.rotateAroundAxis(TreeGeometry.getPerpendicular(diff.clone()).normalize(), Math.PI);
+        if(diff.getY() < 0) diff.rotateAroundAxis(TreeGeometry.getPerpendicular(diff.clone()).normalize(), FastMath.PI);
         int d = (int) diff.length();
         for(int i = 0; i < d; i++) {
-            geo.generateSphere(l1.clone().add(diff.clone().multiply((double) i / d)), Material.OAK_WOOD, Math.max((int) d1, 0), true);
+            geo.generateSphere(l1.clone().add(diff.clone().multiply((double) i / d)), Material.OAK_WOOD, FastMath.max((int) d1, 0), true);
         }
         double runningAngle = (double) 45 / (recursions + 1);
-        growBranch(l1.clone().add(diff), diff.clone().multiply(0.75).rotateAroundX(Math.toRadians(runningAngle + getNoise())).rotateAroundZ(Math.toRadians(getNoise())),
+        growBranch(l1.clone().add(diff), diff.clone().multiply(0.75).rotateAroundX(FastMath.toRadians(runningAngle + getNoise())).rotateAroundZ(FastMath.toRadians(getNoise())),
                 d1 - 1, recursions + 1);
-        growBranch(l1.clone().add(diff), diff.clone().multiply(0.75).rotateAroundX(Math.toRadians(- runningAngle + getNoise())).rotateAroundZ(Math.toRadians(getNoise())),
+        growBranch(l1.clone().add(diff), diff.clone().multiply(0.75).rotateAroundX(FastMath.toRadians(- runningAngle + getNoise())).rotateAroundZ(FastMath.toRadians(getNoise())),
                 d1 - 1, recursions + 1);
-        growBranch(l1.clone().add(diff), diff.clone().multiply(0.75).rotateAroundZ(Math.toRadians(runningAngle + getNoise())).rotateAroundX(Math.toRadians(getNoise())),
+        growBranch(l1.clone().add(diff), diff.clone().multiply(0.75).rotateAroundZ(FastMath.toRadians(runningAngle + getNoise())).rotateAroundX(FastMath.toRadians(getNoise())),
                 d1 - 1, recursions + 1);
-        growBranch(l1.clone().add(diff), diff.clone().multiply(0.75).rotateAroundZ(Math.toRadians(- runningAngle + getNoise())).rotateAroundX(Math.toRadians(getNoise())),
+        growBranch(l1.clone().add(diff), diff.clone().multiply(0.75).rotateAroundZ(FastMath.toRadians(- runningAngle + getNoise())).rotateAroundX(FastMath.toRadians(getNoise())),
                 d1 - 1, recursions + 1);
     }
 

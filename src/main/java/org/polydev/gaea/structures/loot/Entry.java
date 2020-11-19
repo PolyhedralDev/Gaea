@@ -1,5 +1,6 @@
 package org.polydev.gaea.structures.loot;
 
+import org.apache.commons.math3.util.FastMath;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -48,13 +49,13 @@ public class Entry {
                     case "set_count":
                         long max = (long) ((JSONObject) ((JSONObject) function).get("count")).get("max");
                         long min = (long) ((JSONObject) ((JSONObject) function).get("count")).get("min");
-                        functions.add(new AmountFunction(Math.toIntExact(min), Math.toIntExact(max)));
+                        functions.add(new AmountFunction(FastMath.toIntExact(min), FastMath.toIntExact(max)));
                         break;
                     case "minecraft:set_damage":
                     case "set_damage":
                         long maxDamage = (long) ((JSONObject) ((JSONObject) function).get("damage")).get("max");
                         long minDamage = (long) ((JSONObject) ((JSONObject) function).get("damage")).get("min");
-                        functions.add(new DamageFunction(Math.toIntExact(minDamage), Math.toIntExact(maxDamage)));
+                        functions.add(new DamageFunction(FastMath.toIntExact(minDamage), FastMath.toIntExact(maxDamage)));
                         break;
                     case "minecraft:enchant_with_levels":
                     case "enchant_with_levels":
@@ -63,7 +64,7 @@ public class Entry {
                         JSONArray disabled = null;
                         if(((JSONObject) function).containsKey("disabled_enchants"))
                             disabled = (JSONArray) ((JSONObject) function).get("disabled_enchants");
-                        functions.add(new EnchantWithLevelsFunction(Math.toIntExact(minEnchant), Math.toIntExact(maxEnchant), disabled));
+                        functions.add(new EnchantWithLevelsFunction(FastMath.toIntExact(minEnchant), FastMath.toIntExact(maxEnchant), disabled));
                         break;
                 }
             }
