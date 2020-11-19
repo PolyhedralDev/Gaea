@@ -2,6 +2,7 @@ package org.polydev.gaea.structures;
 
 import com.esotericsoftware.reflectasm.ConstructorAccess;
 import com.esotericsoftware.reflectasm.MethodAccess;
+import it.unimi.dsi.util.XoRoShiRo128PlusPlusRandom;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
@@ -334,12 +335,12 @@ public class NMSStructure {
             info = definedStructureInfoMethodAccess.invoke(info, mysteryBooleanMethodIndex, false);
             info = definedStructureInfoMethodAccess.invoke(info, chunkCoordIntPairMethodIndex, (Object) null);
             info = definedStructureInfoMethodAccess.invoke(info, mysteryBooleancMethodIndex, false);
-            info = definedStructureInfoMethodAccess.invoke(info, setRandomMethodIndex, new Random());
+            info = definedStructureInfoMethodAccess.invoke(info, setRandomMethodIndex, new XoRoShiRo128PlusPlusRandom());
 
             if(version.startsWith("v1_15")) {
                 definedStructureMethodAccess.invoke(this.structure, pasteMethodIndex, world, pos, info);
             } else {
-                definedStructureMethodAccess.invoke(this.structure, pasteMethodIndex, world, pos, info, new Random());
+                definedStructureMethodAccess.invoke(this.structure, pasteMethodIndex, world, pos, info, new XoRoShiRo128PlusPlusRandom());
             }
         } catch(IllegalArgumentException e) {
             e.printStackTrace();

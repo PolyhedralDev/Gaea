@@ -1,6 +1,7 @@
 package org.polydev.gaea.world.carving;
 
 
+import it.unimi.dsi.util.XoRoShiRo128PlusPlusRandom;
 import org.apache.commons.math3.util.FastMath;
 import org.bukkit.World;
 import org.bukkit.util.Vector;
@@ -19,7 +20,7 @@ public class CaveCarver extends Carver {
 
     @Override
     public Worm getWorm(long seed, Vector l) {
-        return new CaveWorm(new Random(seed).nextInt(90) + 30, new Random(seed), l, maxRad);
+        return new CaveWorm(new XoRoShiRo128PlusPlusRandom(seed).nextInt(90) + 30, new XoRoShiRo128PlusPlusRandom(seed), l, maxRad);
     }
 
 
