@@ -1,6 +1,7 @@
 package org.polydev.gaea.profiler;
 
 import net.md_5.bungee.api.ChatColor;
+import org.apache.commons.math3.util.FastMath;
 
 /**
  * Class to hold a profiler data value. Contains formatting method to highlight value based on desired range.
@@ -35,7 +36,7 @@ public class DataHolder {
     public String getFormattedData(long data) {
         double range = desiredRangePercent * desired;
         ChatColor color = ChatColor.YELLOW;
-        if(Math.abs(data - desired) > range) {
+        if(FastMath.abs(data - desired) > range) {
             if(data > desired) color = type.getDesire().getHighColor();
             else color = type.getDesire().getLowColor();
         }

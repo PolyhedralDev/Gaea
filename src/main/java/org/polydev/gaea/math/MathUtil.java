@@ -1,5 +1,7 @@
 package org.polydev.gaea.math;
 
+import org.apache.commons.math3.util.FastMath;
+
 import java.util.Random;
 
 /**
@@ -23,10 +25,10 @@ public class MathUtil {
         double mean = sum / length;
 
         for(double num : numArray) {
-            standardDeviation += Math.pow(num - mean, 2);
+            standardDeviation += FastMath.pow(num - mean, 2);
         }
 
-        return Math.sqrt(standardDeviation / length);
+        return FastMath.sqrt(standardDeviation / length);
     }
 
     /**

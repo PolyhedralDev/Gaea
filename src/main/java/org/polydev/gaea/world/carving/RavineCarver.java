@@ -1,6 +1,7 @@
 package org.polydev.gaea.world.carving;
 
 
+import org.apache.commons.math3.util.FastMath;
 import org.bukkit.World;
 import org.bukkit.util.Vector;
 
@@ -38,10 +39,10 @@ public class RavineCarver extends Carver {
         public void step() {
             setRadius(new int[] {(int) runningRadius, (int) runningRadius * 4, (int) runningRadius});
             runningRadius += (getRandom().nextDouble() - 0.5) / 8;
-            runningRadius = Math.min(runningRadius, 6);
-            direction.rotateAroundX(Math.toRadians(getRandom().nextDouble() / 2));
-            direction.rotateAroundY(Math.toRadians(getRandom().nextDouble() * 3));
-            direction.rotateAroundZ(Math.toRadians(getRandom().nextDouble() / 2));
+            runningRadius = FastMath.min(runningRadius, 6);
+            direction.rotateAroundX(FastMath.toRadians(getRandom().nextDouble() / 2));
+            direction.rotateAroundY(FastMath.toRadians(getRandom().nextDouble() * 3));
+            direction.rotateAroundZ(FastMath.toRadians(getRandom().nextDouble() / 2));
             getRunning().add(direction);
         }
     }

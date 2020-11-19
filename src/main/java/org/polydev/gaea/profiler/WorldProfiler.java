@@ -2,6 +2,7 @@ package org.polydev.gaea.profiler;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import org.apache.commons.math3.util.FastMath;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.polydev.gaea.generation.GaeaChunkGenerator;
@@ -42,7 +43,7 @@ public class WorldProfiler {
                     .append(ChatColor.GOLD)
                     .append(" / ")
                     .append(ChatColor.GREEN)
-                    .append((double) Math.round((e.getValue().getStdDev() / 1000000) * 100D) / 100D)
+                    .append((double) FastMath.round((e.getValue().getStdDev() / 1000000) * 100D) / 100D)
                     .append("ms")
                     .append(ChatColor.GOLD).append(" (x").append(e.getValue().size()).append(")\n");
         }

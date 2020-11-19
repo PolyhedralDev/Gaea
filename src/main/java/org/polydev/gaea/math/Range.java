@@ -1,5 +1,6 @@
 package org.polydev.gaea.math;
 
+import org.apache.commons.math3.util.FastMath;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
@@ -57,7 +58,7 @@ public class Range implements Iterable<Integer> {
 
     public Range intersects(Range other) {
         try {
-            return new Range(Math.max(this.getMin(), other.getMin()), Math.min(this.getMax(), other.getMax()));
+            return new Range(FastMath.max(this.getMin(), other.getMin()), FastMath.min(this.getMax(), other.getMax()));
         } catch(IllegalArgumentException e) {
             return null;
         }

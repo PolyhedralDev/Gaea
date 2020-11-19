@@ -1,5 +1,7 @@
 package org.polydev.gaea.profiler;
 
+import org.apache.commons.math3.util.FastMath;
+
 public enum DataType {
     PERIOD_MILLISECONDS(Desire.LOW, 1000000, "ms"), PERIOD_NANOSECONDS(Desire.LOW, 1, "ns");
     private final Desire desire;
@@ -13,7 +15,7 @@ public enum DataType {
     }
 
     public String getFormatted(long value) {
-        return (double) Math.round(((double) value / divisor) * 100D) / 100D + unit;
+        return (double) FastMath.round(((double) value / divisor) * 100D) / 100D + unit;
     }
 
     public Desire getDesire() {

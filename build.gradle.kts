@@ -29,6 +29,7 @@ dependencies {
     compileOnly("org.spigotmc:spigot-api:1.16.4-R0.1-SNAPSHOT")
     implementation("com.googlecode.json-simple:json-simple:1.1")
     implementation("commons-io:commons-io:2.4")
+    implementation("org.apache.commons:commons-math3:3.6.1")
     implementation("co.aikar:taskchain-bukkit:3.7.2")
     implementation("com.esotericsoftware:reflectasm:1.11.9")
     implementation("org.bstats:bstats-bukkit:1.7")

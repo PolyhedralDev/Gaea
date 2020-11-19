@@ -1,5 +1,6 @@
 package org.polydev.gaea.structures.loot;
 
+import org.apache.commons.math3.util.FastMath;
 import org.bukkit.inventory.ItemStack;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -23,11 +24,11 @@ public class Pool {
      * @param pool The JSON Object to instantiate from.
      */
     public Pool(JSONObject pool) {
-        this.max = Math.toIntExact((long) ((JSONObject) pool.get("rolls")).get("max"));
-        this.min = Math.toIntExact((long) ((JSONObject) pool.get("rolls")).get("min"));
+        this.max = FastMath.toIntExact((long) ((JSONObject) pool.get("rolls")).get("max"));
+        this.min = FastMath.toIntExact((long) ((JSONObject) pool.get("rolls")).get("min"));
         for(Object entryJSON : (JSONArray) pool.get("entries")) {
             Entry entry = new Entry((JSONObject) entryJSON);
-            entries.add(entry, Math.toIntExact(entry.getWeight()));
+            entries.add(entry, FastMath.toIntExact(entry.getWeight()));
         }
     }
 

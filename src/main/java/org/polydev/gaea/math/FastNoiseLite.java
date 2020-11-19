@@ -1,5 +1,7 @@
 package org.polydev.gaea.math;// MIT License
 
+import org.apache.commons.math3.util.FastMath;
+
 /*
 
 Copyright(c) 2020 Jordan Peck (jordan.me2@gmail.com)
@@ -358,7 +360,7 @@ public class FastNoiseLite {
     }
 
     private static double FastSqrt(double f) {
-        return Math.sqrt(f);
+        return FastMath.sqrt(f);
     }
 
     private static int FastFloor(/*FNLdouble*/ double f) {
