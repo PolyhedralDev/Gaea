@@ -1,7 +1,6 @@
 package org.polydev.gaea.structures.loot;
 
 import org.apache.commons.math3.util.FastMath;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.json.simple.JSONArray;
@@ -10,8 +9,8 @@ import org.polydev.gaea.structures.loot.functions.AmountFunction;
 import org.polydev.gaea.structures.loot.functions.DamageFunction;
 import org.polydev.gaea.structures.loot.functions.EnchantWithLevelsFunction;
 import org.polydev.gaea.structures.loot.functions.Function;
+import org.polydev.gaea.util.GlueList;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -21,7 +20,7 @@ import java.util.Random;
 public class Entry {
     private final Material item;
     private final long weight;
-    private final List<Function> functions = new ArrayList<>();
+    private final List<Function> functions = new GlueList<>();
 
     /**
      * Instantiates an Entry from a JSON representation.

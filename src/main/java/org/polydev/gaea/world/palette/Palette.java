@@ -2,8 +2,8 @@ package org.polydev.gaea.world.palette;
 
 import org.polydev.gaea.math.FastNoiseLite;
 import org.polydev.gaea.math.ProbabilityCollection;
+import org.polydev.gaea.util.GlueList;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -13,7 +13,7 @@ import java.util.Random;
  * Used to get a section of blocks, based on the depth at which they are found.
  */
 public abstract class Palette<E> {
-    private final List<PaletteLayer<E>> pallet = new ArrayList<>();
+    private final List<PaletteLayer<E>> pallet = new GlueList<>();
 
     /**
      * Constructs a blank palette.
