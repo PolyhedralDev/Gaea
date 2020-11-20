@@ -5,19 +5,14 @@ import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.Consumer;
+import org.polydev.gaea.util.GlueList;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
 
 public abstract class FractalTree {
     private final Map<Location, BlockData> treeAssembler = new HashMap<>();
-    private final List<EntitySpawnHolder> entities = new ArrayList<>();
+    private final List<EntitySpawnHolder> entities = new GlueList<>();
     private final Location origin;
     private final Random random;
     private final List<Material> replaceable = Arrays.asList(Material.AIR, Material.GRASS_BLOCK, Material.DIRT, Material.STONE, Material.COARSE_DIRT, Material.GRAVEL, Material.PODZOL,

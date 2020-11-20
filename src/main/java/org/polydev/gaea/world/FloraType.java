@@ -8,8 +8,8 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.polydev.gaea.math.Range;
+import org.polydev.gaea.util.GlueList;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -46,7 +46,7 @@ public enum FloraType implements Flora {
     BROWN_MUSHROOM(Sets.newHashSet(Material.GRASS_BLOCK, Material.PODZOL, Material.DIRT, Material.STONE, Material.NETHERRACK, Material.MYCELIUM), Bukkit.createBlockData("minecraft:brown_mushroom")),
     ;
 
-    private final List<BlockData> data = new ArrayList<>();
+    private final List<BlockData> data = new GlueList<>();
 
     private final Set<Material> spawns;
 
@@ -57,7 +57,7 @@ public enum FloraType implements Flora {
 
     @Override
     public List<Block> getValidSpawnsAt(Chunk chunk, int x, int z, Range check) {
-        List<Block> blocks = new ArrayList<>();
+        List<Block> blocks = new GlueList<>();
         for(int y : check) {
             if(spawns.contains(chunk.getBlock(x, y, z).getType()) && chunk.getBlock(x, y + 1, z).getType().isAir()) {
                 blocks.add(chunk.getBlock(x, y, z));

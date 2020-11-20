@@ -5,8 +5,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.json.simple.JSONArray;
+import org.polydev.gaea.util.GlueList;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -33,7 +33,7 @@ public class EnchantWithLevelsFunction implements Function {
     @Override
     public ItemStack apply(ItemStack original, Random r) {
         double enchant = (r.nextDouble() * (max - min)) + min;
-        List<Enchantment> possible = new ArrayList<>();
+        List<Enchantment> possible = new GlueList<>();
         for(Enchantment ench : Enchantment.values()) {
             if(ench.canEnchantItem(original) && (disabled == null || !this.disabled.contains(ench.getName()))) {
                 possible.add(ench);

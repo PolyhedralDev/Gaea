@@ -6,8 +6,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.polydev.gaea.util.GlueList;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -15,7 +15,7 @@ import java.util.Random;
  * Class representation of a Loot Table to populate chest loot.
  */
 public class LootTable {
-    private final List<Pool> pools = new ArrayList<>();
+    private final List<Pool> pools = new GlueList<>();
 
     /**
      * Instantiates a LootTable from a JSON String.
@@ -39,7 +39,7 @@ public class LootTable {
      * @return List&lt;ItemStack&gt; - The list of loot fetched.
      */
     public List<ItemStack> getLoot(Random r) {
-        List<ItemStack> itemList = new ArrayList<>();
+        List<ItemStack> itemList = new GlueList<>();
         for(Pool pool : pools) {
             itemList.addAll(pool.getItems(r));
         }

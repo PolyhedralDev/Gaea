@@ -9,17 +9,17 @@ import org.jetbrains.annotations.NotNull;
 import org.polydev.gaea.Gaea;
 import org.polydev.gaea.profiler.ProfileFuture;
 import org.polydev.gaea.profiler.WorldProfiler;
+import org.polydev.gaea.util.GlueList;
 import org.polydev.gaea.util.SerializationUtil;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
 public class PopulationManager extends BlockPopulator {
-    private final List<GaeaBlockPopulator> attachedPopulators = new ArrayList<>();
+    private final List<GaeaBlockPopulator> attachedPopulators = new GlueList<>();
     private final HashSet<ChunkCoordinate> needsPop = new HashSet<>();
     private final JavaPlugin main;
     private final Object popLock = new Object();

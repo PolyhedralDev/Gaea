@@ -7,13 +7,13 @@ import org.bukkit.block.Chest;
 import org.bukkit.block.Container;
 import org.bukkit.block.DoubleChest;
 import org.bukkit.inventory.InventoryHolder;
+import org.polydev.gaea.util.GlueList;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class StructureUtil {
     public static List<Location> getChestsIn(Location minLoc, Location maxLoc) {
-        List<Location> locations = new ArrayList<>();
+        List<Location> locations = new GlueList<>();
         for(Location location : getLocationListBetween(minLoc, maxLoc)) {
             BlockState blockState = location.getBlock().getState();
             if(blockState instanceof Container) {
@@ -50,7 +50,7 @@ public class StructureUtil {
         int lowY = FastMath.min(loc1.getBlockY(), loc2.getBlockY());
         int lowZ = FastMath.min(loc1.getBlockZ(), loc2.getBlockZ());
 
-        List<Location> locs = new ArrayList<>();
+        List<Location> locs = new GlueList<>();
         for(int x = 0; x <= FastMath.abs(loc1.getBlockX() - loc2.getBlockX()); x++) {
             for(int y = 0; y <= FastMath.abs(loc1.getBlockY() - loc2.getBlockY()); y++) {
                 for(int z = 0; z <= FastMath.abs(loc1.getBlockZ() - loc2.getBlockZ()); z++) {
