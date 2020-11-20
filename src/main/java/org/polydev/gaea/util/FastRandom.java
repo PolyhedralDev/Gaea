@@ -13,19 +13,11 @@ public class FastRandom extends Random {
         this.random = new XoRoShiRo128PlusPlus(randomseed.nextLong(), randomseed.nextLong());
     }
 
-    public FastRandom(long[] seed) {
-        this.random = new XoRoShiRo128PlusPlus(seed);
-    }
-
-    public FastRandom(long seed1, long seed2) {
-        this.random = new XoRoShiRo128PlusPlus(seed1, seed2);
-    }
-
     public FastRandom(long seed) {
-        this.random = new XoRoShiRo128PlusPlus(seed, (seed - ~seed));
+        SplittableRandom randomseed = new SplittableRandom(seed);
+        this.random = new XoRoShiRo128PlusPlus(randomseed.nextLong(), randomseed.nextLong());
     }
-
-
+    
     @Override
     public boolean nextBoolean() {
         return random.nextBoolean();
