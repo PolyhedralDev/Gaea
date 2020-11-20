@@ -1,6 +1,6 @@
 package org.polydev.gaea.population;
 
-import org.bukkit.Bukkit;
+import it.unimi.dsi.util.XoRoShiRo128PlusPlusRandom;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.generator.BlockPopulator;
@@ -80,7 +80,7 @@ public class PopulationManager extends BlockPopulator {
                 && w.isChunkGenerated(x - 1, z)
                 && w.isChunkGenerated(x, z + 1)
                 && w.isChunkGenerated(x, z - 1) && needsPop.contains(c)) {
-            Random random = new Random(w.getSeed());
+            Random random = new XoRoShiRo128PlusPlusRandom(w.getSeed());
             long xRand = random.nextLong() / 2L * 2L + 1L;
             long zRand = random.nextLong() / 2L * 2L + 1L;
             random.setSeed((long) x * xRand + (long) z * zRand ^ w.getSeed());

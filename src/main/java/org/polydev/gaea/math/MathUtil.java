@@ -1,5 +1,6 @@
 package org.polydev.gaea.math;
 
+import it.unimi.dsi.util.XoRoShiRo128PlusPlusRandom;
 import org.apache.commons.math3.util.FastMath;
 
 import java.util.Random;
@@ -40,7 +41,7 @@ public class MathUtil {
      * @return long - The carver seed.
      */
     public static long getCarverChunkSeed(int chunkX, int chunkZ, long seed) {
-        Random r = new Random(seed);
+        Random r = new XoRoShiRo128PlusPlusRandom(seed);
         return chunkX * r.nextLong() ^ chunkZ * r.nextLong() ^ seed;
     }
 
