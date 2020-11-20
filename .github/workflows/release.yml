@@ -27,11 +27,6 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
       - name: Build Gaea
         run: gradle shadowJar
-      - name: Publish package
-        run: gradle publish
-        if: github.repository == 'PolyhedralDev/parsii' && github.ref == 'refs/heads/master' && !contains(github.event.head_commit.message, '[publish]')"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Publish release
         uses: marvinpinto/action-automatic-releases@latest
         with:
