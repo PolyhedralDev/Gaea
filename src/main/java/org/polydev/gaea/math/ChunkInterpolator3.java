@@ -1,14 +1,10 @@
 package org.polydev.gaea.math;
 
-import org.apache.commons.math3.util.FastMath;
-import org.bukkit.Bukkit;
+import net.jafama.FastMath;
 import org.bukkit.World;
 import org.polydev.gaea.biome.BiomeGrid;
 import org.polydev.gaea.biome.Generator;
 import org.polydev.gaea.generation.GenerationPhase;
-
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Class to abstract away the 16 Interpolators needed to generate a chunk.<br>

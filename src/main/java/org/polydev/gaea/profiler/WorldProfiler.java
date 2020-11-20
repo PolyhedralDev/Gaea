@@ -2,7 +2,7 @@ package org.polydev.gaea.profiler;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-import org.apache.commons.math3.util.FastMath;
+import net.jafama.FastMath;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.polydev.gaea.generation.GaeaChunkGenerator;

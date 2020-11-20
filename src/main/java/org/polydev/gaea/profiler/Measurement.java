@@ -1,6 +1,6 @@
 package org.polydev.gaea.profiler;
 
-import org.apache.commons.math3.util.FastMath;
+import net.jafama.FastMath;
 import org.bukkit.Bukkit;
 import org.polydev.gaea.math.MathUtil;
 import org.polydev.gaea.util.GlueList;

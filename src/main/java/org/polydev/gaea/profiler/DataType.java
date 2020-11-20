@@ -1,6 +1,6 @@
 package org.polydev.gaea.profiler;
 
-import org.apache.commons.math3.util.FastMath;
+import net.jafama.FastMath;
 
 public enum DataType {
     PERIOD_MILLISECONDS(Desire.LOW, 1000000, "ms"), PERIOD_NANOSECONDS(Desire.LOW, 1, "ns");

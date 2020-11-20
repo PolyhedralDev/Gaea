@@ -1,6 +1,6 @@
 package org.polydev.gaea.world.carving;
 
-import it.unimi.dsi.util.XoRoShiRo128PlusPlusRandom;
+import org.polydev.gaea.util.FastRandom;
 import org.bukkit.World;
 import org.bukkit.util.Vector;
 import org.polydev.gaea.math.MathUtil;
@@ -20,9 +20,9 @@ public abstract class Carver {
         CarvingData data = new CarvingData(chunkX, chunkZ);
         for(int x = chunkX - 4; x <= chunkX + 4; x++) {
             for(int z = chunkZ - 4; z <= chunkZ + 4; z++) {
-                if(isChunkCarved(w, x, z, new XoRoShiRo128PlusPlusRandom(MathUtil.hashToLong(this.getClass().getName() + "_" + x + "&" + z)))) {
+                if(isChunkCarved(w, x, z, new FastRandom(MathUtil.hashToLong(this.getClass().getName() + "_" + x + "&" + z)))) {
                     long seed = MathUtil.getCarverChunkSeed(x, z, w.getSeed());
-                    Random r = new XoRoShiRo128PlusPlusRandom(seed);
+                    Random r = new FastRandom(seed);
                     Worm carving = getWorm(seed, new Vector((x << 4) + r.nextInt(16), r.nextInt(maxY - minY + 1) + minY, (z << 4) + r.nextInt(16)));
                     for(int i = 0; i < carving.getLength(); i++) {
                         carving.step();

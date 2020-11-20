@@ -1,6 +1,6 @@
 package org.polydev.gaea.util;
 
-import org.apache.commons.math3.util.FastMath;
+import net.jafama.FastMath;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;

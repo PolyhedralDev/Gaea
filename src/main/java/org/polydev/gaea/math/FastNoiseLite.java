@@ -1,6 +1,6 @@
 package org.polydev.gaea.math;// MIT License
 
-import org.apache.commons.math3.util.FastMath;
+import net.jafama.FastMath;
 
 /*
 

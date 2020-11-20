@@ -1,7 +1,7 @@
 package org.polydev.gaea.profiler;
 
 import net.md_5.bungee.api.ChatColor;
-import org.apache.commons.math3.util.FastMath;
+import net.jafama.FastMath;
 
 /**
  * Class to hold a profiler data value. Contains formatting method to highlight value based on desired range.

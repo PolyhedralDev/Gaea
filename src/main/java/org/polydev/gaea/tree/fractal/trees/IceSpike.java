@@ -2,7 +2,6 @@ package org.polydev.gaea.tree.fractal.trees;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.util.Vector;
 import org.polydev.gaea.math.ProbabilityCollection;
 import org.polydev.gaea.tree.fractal.FractalTree;
 import org.polydev.gaea.tree.fractal.TreeGeometry;

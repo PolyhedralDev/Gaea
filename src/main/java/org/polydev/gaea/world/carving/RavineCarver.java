@@ -1,8 +1,8 @@
 package org.polydev.gaea.world.carving;
 
 
-import it.unimi.dsi.util.XoRoShiRo128PlusPlusRandom;
-import org.apache.commons.math3.util.FastMath;
+import org.polydev.gaea.util.FastRandom;
+import net.jafama.FastMath;
 import org.bukkit.World;
 import org.bukkit.util.Vector;
 
@@ -18,7 +18,7 @@ public class RavineCarver extends Carver {
 
     @Override
     public Worm getWorm(long seed, Vector l) {
-        return new RavineWorm(new XoRoShiRo128PlusPlusRandom(seed + 1).nextInt(40) + 30, new XoRoShiRo128PlusPlusRandom(seed), l);
+        return new RavineWorm(new FastRandom(seed + 1).nextInt(40) + 30, new FastRandom(seed), l);
     }
 
     @Override

@@ -1,6 +1,6 @@
 package org.polydev.gaea.tree.fractal.trees;
 
-import org.apache.commons.math3.util.FastMath;
+import net.jafama.FastMath;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.util.Vector;

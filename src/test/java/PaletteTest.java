@@ -1,4 +1,4 @@
-import it.unimi.dsi.util.XoRoShiRo128PlusPlusRandom;
+import org.polydev.gaea.util.FastRandom;
 import org.bukkit.Material;
 import org.junit.jupiter.api.Test;
 import org.polydev.gaea.math.ProbabilityCollection;
@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class PaletteTest {
     @Test
     public void getBlocks() {
-        Palette<Material> palette = new RandomPalette<>(new XoRoShiRo128PlusPlusRandom(2403));
+        Palette<Material> palette = new RandomPalette<>(new FastRandom(2403));
         for(int i = 0; i < 100; i++) {
             palette.add(i % 2 == 0 ? Material.DIRT : Material.STONE, 1);
         }
@@ -32,7 +32,7 @@ public class PaletteTest {
     @Test
     public void main() {
         long l = System.nanoTime();
-        Random r = new XoRoShiRo128PlusPlusRandom();
+        Random r = new FastRandom();
         //testing time taken to instantiate/fill palette. Realistic test.
         Palette<Material> p = new RandomPalette<>(r);
         System.out.println((System.nanoTime() - l) / 1000 + "us elapsed (Instantiation)");
@@ -69,7 +69,7 @@ public class PaletteTest {
         System.out.println();
         System.out.println("Beginning fill for stress-test");
         l = System.nanoTime();
-        Palette<Material> p2 = new RandomPalette<>(new XoRoShiRo128PlusPlusRandom(2403));
+        Palette<Material> p2 = new RandomPalette<>(new FastRandom(2403));
         for(int i = 0; i < 1000; i++) {
             p2.add(Material.DIRT, 1);
             p2.add(Material.STONE, 1);

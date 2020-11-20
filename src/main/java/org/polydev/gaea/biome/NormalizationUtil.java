@@ -1,6 +1,6 @@
 package org.polydev.gaea.biome;
 
-import org.apache.commons.math3.util.FastMath;
+import net.jafama.FastMath;
 
 /**
  * Ultra-fast normalization utility for pre-defined lookup table based on 160 million points of Cellular noise generated from 1-octave Simplex noise.
