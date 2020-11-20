@@ -1,6 +1,6 @@
 package org.polydev.gaea.structures.loot;
 
-import org.apache.commons.math3.util.FastMath;
+import net.jafama.FastMath;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.json.simple.JSONArray;

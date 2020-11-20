@@ -1,6 +1,6 @@
 package org.polydev.gaea.math;
 
-import org.apache.commons.math3.util.FastMath;
+import net.jafama.FastMath;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;

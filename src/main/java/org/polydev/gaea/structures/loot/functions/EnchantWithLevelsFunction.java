@@ -1,6 +1,6 @@
 package org.polydev.gaea.structures.loot.functions;
 
-import org.apache.commons.math3.util.FastMath;
+import net.jafama.FastMath;
 import org.bukkit.Bukkit;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;

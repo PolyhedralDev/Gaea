@@ -3,6 +3,7 @@ import java.io.ByteArrayOutputStream
 
 plugins {
     java
+    id("maven-publish")
     id("com.github.johnrengelman.shadow").version("6.0.0")
 }
 
@@ -29,11 +30,11 @@ dependencies {
     compileOnly("org.spigotmc:spigot-api:1.16.4-R0.1-SNAPSHOT")
     implementation("com.googlecode.json-simple:json-simple:1.1")
     implementation("commons-io:commons-io:2.4")
-    implementation("org.apache.commons:commons-math3:3.6.1")
+    implementation("org.apache.commons:commons-rng-core:1.3")
+    implementation("net.jafama:jafama:2.3.2")
     implementation("co.aikar:taskchain-bukkit:3.7.2")
     implementation("com.esotericsoftware:reflectasm:1.11.9")
     implementation("org.bstats:bstats-bukkit:1.7")
-    implementation("it.unimi.dsi:dsiutils:2.6.14")
     
     // JUnit.
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.0")
@@ -60,7 +61,7 @@ tasks.withType<ShadowJar> {
     relocate("org.bstats.bukkit", "org.polydev.gaea.libs.bstats")
     relocate("co.aikar.taskchain", "org.polydev.gaea.libs.taskchain")
     relocate("com.esotericsoftware", "org.polydev.gaea.libs.reflectasm")
-    relocate("it.unimi.dsi", "org.polydev.gaea.libs.unimi")
+    relocate("net.jafama", "org.polydev.gaea.libs.jafama")
 }
 
 /**

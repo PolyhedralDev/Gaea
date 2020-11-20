@@ -1,8 +1,6 @@
 package org.polydev.gaea.math;
 
-import org.apache.commons.math3.util.FastMath;
-
-import java.lang.reflect.Type;
+import net.jafama.FastMath;
 
 /**
  * Class for bilinear interpolation of values arranged on a unit square.

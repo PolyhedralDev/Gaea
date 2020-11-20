@@ -1,6 +1,6 @@
 package org.polydev.gaea.world.carving;
 
-import org.apache.commons.math3.util.FastMath;
+import net.jafama.FastMath;
 import org.bukkit.util.Vector;
 
 import java.util.Random;

@@ -1,6 +1,6 @@
 package org.polydev.gaea.structures;
 
-import org.apache.commons.math3.util.FastMath;
+import net.jafama.FastMath;
 import org.bukkit.Location;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
