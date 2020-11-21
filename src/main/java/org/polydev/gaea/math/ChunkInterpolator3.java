@@ -37,7 +37,7 @@ public class ChunkInterpolator3 implements ChunkInterpolator {
 
         for(int x = - 1; x < 6; x++) {
             for(int z = - 1; z < 6; z++) {
-                gens[x + 1][z + 1] = grid.getBiome(xOrigin + x * 4, zOrigin + z * 4, GenerationPhase.BASE).getGenerator();
+                gens[x + 1][z + 1] = grid.getBiome(xOrigin + (x << 2), zOrigin + (z << 2), GenerationPhase.BASE).getGenerator();
             }
         }
         for(int x = 0; x < 5; x++) {
@@ -87,7 +87,7 @@ public class ChunkInterpolator3 implements ChunkInterpolator {
         for(byte x = - 1; x < 6; x++) {
             for(byte z = - 1; z < 6; z++) {
                 for(int y = 0; y < 64; y++) {
-                    noiseStorage[x + 1][z + 1][y] = gens[x + 1][z + 1].getNoise(noise, w, x * 4 + xOrigin, y * 4, z * 4 + zOrigin);
+                    noiseStorage[x + 1][z + 1][y] = gens[x + 1][z + 1].getNoise(noise, w, (x << 2) + xOrigin, y << 2, (z << 2) + zOrigin);
                 }
             }
         }

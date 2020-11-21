@@ -23,7 +23,7 @@ public class JarUtil {
                 }
                 Debug.info("Output does not already exist. Creating... ");
                 try(FileOutputStream out = new FileOutputStream(dest); InputStream in = fromJar.getInputStream(entry)) {
-                    byte[] buffer = new byte[8 * 1024];
+                    byte[] buffer = new byte[(8192)];
 
                     int s;
                     while((s = in.read(buffer)) > 0) {

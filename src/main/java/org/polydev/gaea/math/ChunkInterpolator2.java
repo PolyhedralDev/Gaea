@@ -33,7 +33,7 @@ public class ChunkInterpolator2 implements ChunkInterpolator {
         Generator[][] gridTemp = new Generator[8][8];
         for(int x = - 2; x < 6; x++) {
             for(int z = - 2; z < 6; z++) {
-                gridTemp[x + 2][z + 2] = grid.getBiome(xOrigin + x * 4, zOrigin + z * 4, GenerationPhase.BASE).getGenerator();
+                gridTemp[x + 2][z + 2] = grid.getBiome(xOrigin + (x << 2), zOrigin + (z << 2), GenerationPhase.BASE).getGenerator();
             }
         }
         for(byte x = 0; x < 4; x++) {
@@ -47,10 +47,10 @@ public class ChunkInterpolator2 implements ChunkInterpolator {
     }
 
     private double biomeAvg(int x, int z, Generator[][] g) {
-        return (g[x + 3][z + 2].getNoise(noise, w, x * 4 + xOrigin, z * 4 + zOrigin)
-                + g[x + 1][z + 2].getNoise(noise, w, x * 4 + xOrigin, z * 4 + zOrigin)
-                + g[x + 2][z + 3].getNoise(noise, w, x * 4 + xOrigin, z * 4 + zOrigin)
-                + g[x + 2][z + 1].getNoise(noise, w, x * 4 + xOrigin, z * 4 + zOrigin)) / 4D;
+        return (g[x + 3][z + 2].getNoise(noise, w, (x << 2) + xOrigin, (z << 2) + zOrigin)
+                + g[x + 1][z + 2].getNoise(noise, w, (x << 2) + xOrigin, (z << 2) + zOrigin)
+                + g[x + 2][z + 3].getNoise(noise, w, (x << 2) + xOrigin, (z << 2) + zOrigin)
+                + g[x + 2][z + 1].getNoise(noise, w, (x << 2) + xOrigin, (z << 2) + zOrigin)) / 4D;
     }
 
     /**

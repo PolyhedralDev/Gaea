@@ -43,10 +43,10 @@ public abstract class GaeaChunkGenerator extends ChunkGenerator {
                 int zOrig = (chunkZ << 4);
                 for(byte x = 0; x < 4; x++) {
                     for(byte z = 0; z < 4; z++) {
-                        int cx = xOrig + x * 4;
-                        int cz = zOrig + z * 4;
+                        int cx = xOrig + (x << 2);
+                        int cz = zOrig + (z << 2);
                         Biome b = grid.getBiome(cx, cz, GenerationPhase.PALETTE_APPLY);
-                        biome.setBiome(x * 4, z * 4, b.getVanillaBiome());
+                        biome.setBiome(x << 2, z << 2, b.getVanillaBiome());
                     }
                 }
             }
