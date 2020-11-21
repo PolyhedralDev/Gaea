@@ -17,6 +17,9 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.CompletableFuture;
+
+import static io.papermc.lib.PaperLib.getChunkAtAsync;
 
 public class PopulationManager extends BlockPopulator {
     private final List<GaeaBlockPopulator> attachedPopulators = new GlueList<>();
@@ -75,6 +78,7 @@ public class PopulationManager extends BlockPopulator {
 
     // Synchronize to prevent chunks from being queued for population multiple times.
     public synchronized void checkNeighbors(int x, int z, World w) {
+        CompletableFuture<Chunk> currentChunk = getChunkAtAsync(w, x, z);
         ChunkCoordinate c = new ChunkCoordinate(x, z, w.getUID());
         if(w.isChunkGenerated(x + 1, z)
                 && w.isChunkGenerated(x - 1, z)
@@ -84,9 +88,8 @@ public class PopulationManager extends BlockPopulator {
             long xRand = (random.nextLong() / 2L << 1L) + 1L;
             long zRand = (random.nextLong() / 2L << 1L) + 1L;
             random.setSeed((long) x * xRand + (long) z * zRand ^ w.getSeed());
-            Chunk currentChunk = w.getChunkAt(x, z);
             for(GaeaBlockPopulator r : attachedPopulators) {
-                r.populate(w, random, currentChunk);
+                r.populate(w, random, currentChunk.join());
             }
             needsPop.remove(c);
         }

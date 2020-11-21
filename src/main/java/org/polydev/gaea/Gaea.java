@@ -7,6 +7,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 
+import static io.papermc.lib.PaperLib.suggestPaper;
+
 public class Gaea extends JavaPlugin {
     private static boolean debug;
 
@@ -23,6 +25,7 @@ public class Gaea extends JavaPlugin {
         reloadConfig();
         FileConfiguration configuration = getConfig();
         debug = configuration.getBoolean("debug", false);
+        suggestPaper(this);
     }
 
     public static File getGaeaFolder(World w) {
