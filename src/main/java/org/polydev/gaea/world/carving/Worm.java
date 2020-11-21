@@ -98,7 +98,7 @@ public abstract class Worm {
                         if(FastMath.floor((double) (position.getBlockX()) / 16) == chunkX && FastMath.floor((double) (position.getBlockZ()) / 16) == chunkZ && position.getY() >= 0) {
                             if(ellipseEquation(x, y, z, getRadius(0), getRadius(1), getRadius(2)) <= 1 &&
                                     y >= - getRadius(1) - 1 + bottomCut && y <= getRadius(1) + 1 - topCut) {
-                                data.carve(position.getBlockX() - (chunkX * 16), position.getBlockY(), position.getBlockZ() - (chunkZ * 16), CarvingData.CarvingType.CENTER);
+                                data.carve(position.getBlockX() - (chunkX << 4), position.getBlockY(), position.getBlockZ() - (chunkZ << 4), CarvingData.CarvingType.CENTER);
                             } else if(ellipseEquation(x, y, z, getRadius(0) + 1.5, getRadius(1) + 1.5, getRadius(2) + 1.5) <= 1) {
                                 CarvingData.CarvingType type = CarvingData.CarvingType.WALL;
                                 if(y <= - getRadius(1) - 1 + bottomCut) {
@@ -106,9 +106,9 @@ public abstract class Worm {
                                 } else if(y >= getRadius(1) + 1 - topCut) {
                                     type = CarvingData.CarvingType.TOP;
                                 }
-                                if(data.isCarved(position.getBlockX() - (chunkX * 16), position.getBlockY(), position.getBlockZ() - (chunkZ * 16)))
+                                if(data.isCarved(position.getBlockX() - (chunkX << 4), position.getBlockY(), position.getBlockZ() - (chunkZ << 4)))
                                     continue;
-                                data.carve(position.getBlockX() - (chunkX * 16), position.getBlockY(), position.getBlockZ() - (chunkZ * 16), type);
+                                data.carve(position.getBlockX() - (chunkX << 4), position.getBlockY(), position.getBlockZ() - (chunkZ << 4), type);
                             }
                         }
                     }

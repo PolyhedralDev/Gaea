@@ -38,7 +38,7 @@ public class RavineCarver extends Carver {
 
         @Override
         public void step() {
-            setRadius(new int[] {(int) runningRadius, (int) runningRadius * 4, (int) runningRadius});
+            setRadius(new int[] {(int) runningRadius, ((int) runningRadius << 2), (int) runningRadius});
             runningRadius += (getRandom().nextDouble() - 0.5) / 8;
             runningRadius = FastMath.min(runningRadius, 6);
             direction.rotateAroundX(FastMath.toRadians(getRandom().nextDouble() / 2));

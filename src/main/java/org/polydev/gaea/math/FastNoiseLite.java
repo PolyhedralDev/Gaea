@@ -389,7 +389,7 @@ public class FastNoiseLite {
     }
 
     private static double PingPong(double t) {
-        t -= (int) (t * 0.5f) * 2;
+        t -= (int) (t * 0.5f) << 1;
         return t < 1 ? t : 2 - t;
     }
 
@@ -1250,7 +1250,7 @@ public class FastNoiseLite {
             double a4 = xAFlipMask1 + a1;
             if (a4 > 0) {
                 double x4 = (xNMask | 1) + x1;
-                value += (a4 * a4) * (a4 * a4) * GradCoord(seed2, i + (xNMask & (PrimeX * 2)), j + PrimeY, k + PrimeZ, x4, y1, z1);
+                value += (a4 * a4) * (a4 * a4) * GradCoord(seed2, i + (xNMask & (PrimeX << 1)), j + PrimeY, k + PrimeZ, x4, y1, z1);
                 skip5 = true;
             }
         }
@@ -1316,7 +1316,7 @@ public class FastNoiseLite {
             if (a9 > 0) {
                 double x9 = (xNMask | 1) + x1;
                 double z9 = (zNMask | 1) + z1;
-                value += (a9 * a9) * (a9 * a9) * GradCoord(seed2, i + (xNMask & (PrimeX * 2)), j + PrimeY, k + (zNMask & (PrimeZ << 1)), x9,
+                value += (a9 * a9) * (a9 * a9) * GradCoord(seed2, i + (xNMask & (PrimeX << 1)), j + PrimeY, k + (zNMask & (PrimeZ << 1)), x9,
                         y1, z9);
             }
         }

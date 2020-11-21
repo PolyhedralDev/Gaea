@@ -81,8 +81,8 @@ public class PopulationManager extends BlockPopulator {
                 && w.isChunkGenerated(x, z + 1)
                 && w.isChunkGenerated(x, z - 1) && needsPop.contains(c)) {
             Random random = new FastRandom(w.getSeed());
-            long xRand = random.nextLong() / 2L * 2L + 1L;
-            long zRand = random.nextLong() / 2L * 2L + 1L;
+            long xRand = (random.nextLong() / 2L << 1L) + 1L;
+            long zRand = (random.nextLong() / 2L << 1L) + 1L;
             random.setSeed((long) x * xRand + (long) z * zRand ^ w.getSeed());
             for(GaeaBlockPopulator r : attachedPopulators) {
                 r.populate(w, random, w.getChunkAt(x, z));
