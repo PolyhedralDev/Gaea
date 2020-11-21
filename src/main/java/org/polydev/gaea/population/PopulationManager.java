@@ -84,9 +84,9 @@ public class PopulationManager extends BlockPopulator {
             long xRand = (random.nextLong() / 2L << 1L) + 1L;
             long zRand = (random.nextLong() / 2L << 1L) + 1L;
             random.setSeed((long) x * xRand + (long) z * zRand ^ w.getSeed());
-            Chunk currentchunk = w.getChunkAt(x, z);
+            Chunk currentChunk = w.getChunkAt(x, z);
             for(GaeaBlockPopulator r : attachedPopulators) {
-                r.populate(w, random, currentchunk);
+                r.populate(w, random, currentChunk);
             }
             needsPop.remove(c);
         }
