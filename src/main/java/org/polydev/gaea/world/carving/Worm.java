@@ -90,18 +90,18 @@ public abstract class Worm {
         }
 
         public void carve(CarvingData data, int chunkX, int chunkZ) {
-            if(FastMath.abs(origin.getBlockX() / 16 - chunkX) > 1 && FastMath.abs(origin.getBlockZ() / 16 - chunkZ) > 1) return;
             for(int x = - getRadius(0) - 1; x <= getRadius(0) + 1; x++) {
                 for(int y = - getRadius(1) - 1; y <= getRadius(1) + 1; y++) {
                     for(int z = - getRadius(2) - 1; z <= getRadius(2) + 1; z++) {
                         Vector position = origin.clone().add(new Vector(x, y, z));
                         if(FastMath.floor((double) (position.getBlockX()) / 16) == chunkX && FastMath.floor((double) (position.getBlockZ()) / 16) == chunkZ && position.getY() >= 0) {
-                            if(ellipseEquation(x, y, z, getRadius(0), getRadius(1), getRadius(2)) <= 1 &&
-                                    y >= - getRadius(1) - 1 + bottomCut && y <= getRadius(1) + 1 - topCut) {
+                            double eq = ellipseEquation(x, y, z, getRadius(0), getRadius(1), getRadius(2));
+                            if(eq <= 1 &&
+                                    y >= -getRadius(1) - 1 + bottomCut && y <= getRadius(1) + 1 - topCut) {
                                 data.carve(position.getBlockX() - (chunkX << 4), position.getBlockY(), position.getBlockZ() - (chunkZ << 4), CarvingData.CarvingType.CENTER);
-                            } else if(ellipseEquation(x, y, z, getRadius(0) + 1.5, getRadius(1) + 1.5, getRadius(2) + 1.5) <= 1) {
+                            } else if(eq <= 1.5) {
                                 CarvingData.CarvingType type = CarvingData.CarvingType.WALL;
-                                if(y <= - getRadius(1) - 1 + bottomCut) {
+                                if(y <= -getRadius(1) - 1 + bottomCut) {
                                     type = CarvingData.CarvingType.BOTTOM;
                                 } else if(y >= getRadius(1) + 1 - topCut) {
                                     type = CarvingData.CarvingType.TOP;
