@@ -44,20 +44,10 @@ public class PopulationManager extends BlockPopulator {
             int z = chunk.getZ();
             GlueList<CompletableFuture<Chunk>> chunks = new GlueList<>();
             if(main.isEnabled()) {
-                int i = 0;
                 for(int xi = - 1; xi <= 1; xi++) {
                     for(int zi = - 1; zi <= 1; zi++) {
                         if(xi == 0 && zi == 0) continue;
-                        chunks.add(i, getChunkAtAsync(world, xi + x, zi + z, false));
-                        i++;
-                    }
-                }
-                i = 0;
-                for(int xi = - 1; xi <= 1; xi++) {
-                    for(int zi = - 1; zi <= 1; zi++) {
-                        if(xi == 0 && zi == 0) continue;
-                        if(world.isChunkGenerated(xi + x, zi + z)) checkNeighbors(xi + x, zi + z, world, chunks.get(i));
-                        i++;
+                        if(world.isChunkGenerated(xi + x, zi + z)) checkNeighbors(xi + x, zi + z, world);
                     }
                 }
             }
@@ -88,12 +78,13 @@ public class PopulationManager extends BlockPopulator {
 
 
     // Synchronize to prevent chunks from being queued for population multiple times.
-    public synchronized void checkNeighbors(int x, int z, World w, CompletableFuture<Chunk> chunk) {
+    public synchronized void checkNeighbors(int x, int z, World w) {
         ChunkCoordinate c = new ChunkCoordinate(x, z, w.getUID());
         if(w.isChunkGenerated(x + 1, z)
                 && w.isChunkGenerated(x - 1, z)
                 && w.isChunkGenerated(x, z + 1)
                 && w.isChunkGenerated(x, z - 1) && needsPop.contains(c)) {
+            CompletableFuture<Chunk> chunk = getChunkAtAsync(w, z, z, false);
             Random random = new FastRandom(w.getSeed());
             long xRand = (random.nextLong() / 2L << 1L) + 1L;
             long zRand = (random.nextLong() / 2L << 1L) + 1L;
