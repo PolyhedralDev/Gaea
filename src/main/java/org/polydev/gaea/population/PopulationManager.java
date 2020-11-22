@@ -1,6 +1,5 @@
 package org.polydev.gaea.population;
 
-import org.polydev.gaea.util.FastRandom;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.generator.BlockPopulator;
@@ -9,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.polydev.gaea.Gaea;
 import org.polydev.gaea.profiler.ProfileFuture;
 import org.polydev.gaea.profiler.WorldProfiler;
+import org.polydev.gaea.util.FastRandom;
 import org.polydev.gaea.util.GlueList;
 import org.polydev.gaea.util.SerializationUtil;
 
@@ -84,7 +84,7 @@ public class PopulationManager extends BlockPopulator {
                 && w.isChunkGenerated(x - 1, z)
                 && w.isChunkGenerated(x, z + 1)
                 && w.isChunkGenerated(x, z - 1) && needsPop.contains(c)) {
-            CompletableFuture<Chunk> chunk = getChunkAtAsync(w, z, z, false);
+            CompletableFuture<Chunk> chunk = getChunkAtAsync(w, x, z, true);
             Random random = new FastRandom(w.getSeed());
             long xRand = (random.nextLong() / 2L << 1L) + 1L;
             long zRand = (random.nextLong() / 2L << 1L) + 1L;
