@@ -17,6 +17,9 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.CompletableFuture;
+
+import static io.papermc.lib.PaperLib.getChunkAtAsync;
 
 public class PopulationManager extends BlockPopulator {
     private final List<GaeaBlockPopulator> attachedPopulators = new GlueList<>();
@@ -39,11 +42,22 @@ public class PopulationManager extends BlockPopulator {
             needsPop.add(new ChunkCoordinate(chunk));
             int x = chunk.getX();
             int z = chunk.getZ();
+            GlueList<CompletableFuture<Chunk>> chunks = new GlueList<>();
             if(main.isEnabled()) {
+                int i = 0;
                 for(int xi = - 1; xi <= 1; xi++) {
                     for(int zi = - 1; zi <= 1; zi++) {
                         if(xi == 0 && zi == 0) continue;
-                        if(world.isChunkGenerated(xi + x, zi + z)) checkNeighbors(xi + x, zi + z, world);
+                        chunks.add(i, getChunkAtAsync(world, xi + x, zi + z, false));
+                        i++;
+                    }
+                }
+                i = 0;
+                for(int xi = - 1; xi <= 1; xi++) {
+                    for(int zi = - 1; zi <= 1; zi++) {
+                        if(xi == 0 && zi == 0) continue;
+                        if(world.isChunkGenerated(xi + x, zi + z)) checkNeighbors(xi + x, zi + z, world, chunks.get(i));
+                        i++;
                     }
                 }
             }
@@ -74,7 +88,7 @@ public class PopulationManager extends BlockPopulator {
 
 
     // Synchronize to prevent chunks from being queued for population multiple times.
-    public synchronized void checkNeighbors(int x, int z, World w) {
+    public synchronized void checkNeighbors(int x, int z, World w, CompletableFuture<Chunk> chunk) {
         ChunkCoordinate c = new ChunkCoordinate(x, z, w.getUID());
         if(w.isChunkGenerated(x + 1, z)
                 && w.isChunkGenerated(x - 1, z)
@@ -84,9 +98,8 @@ public class PopulationManager extends BlockPopulator {
             long xRand = (random.nextLong() / 2L << 1L) + 1L;
             long zRand = (random.nextLong() / 2L << 1L) + 1L;
             random.setSeed((long) x * xRand + (long) z * zRand ^ w.getSeed());
-            Chunk currentChunk = w.getChunkAt(x, z);
             for(GaeaBlockPopulator r : attachedPopulators) {
-                r.populate(w, random, currentChunk);
+                r.populate(w, random, chunk, x, z);
             }
             needsPop.remove(c);
         }
