@@ -1,9 +1,10 @@
 package org.polydev.gaea.world.carving;
 
-import org.polydev.gaea.util.FastRandom;
+import net.jafama.FastMath;
 import org.bukkit.World;
 import org.bukkit.util.Vector;
 import org.polydev.gaea.math.MathUtil;
+import org.polydev.gaea.util.FastRandom;
 
 import java.util.Random;
 
@@ -24,10 +25,13 @@ public abstract class Carver {
                     long seed = MathUtil.getCarverChunkSeed(x, z, w.getSeed());
                     Random r = new FastRandom(seed);
                     Worm carving = getWorm(seed, new Vector((x << 4) + r.nextInt(16), r.nextInt(maxY - minY + 1) + minY, (z << 4) + r.nextInt(16)));
+                    Vector origin = carving.getOrigin();
                     for(int i = 0; i < carving.getLength(); i++) {
                         carving.step();
-                        if(carving.getRunning().clone().setY(0).distance(carving.getOrigin().clone().setY(0)) > 64)
+                        if(carving.getRunning().clone().setY(0).distance(origin.clone().setY(0)) > 64)
                             break;
+                        if(FastMath.floorDiv(origin.getBlockX(), 16) != chunkX && FastMath.floorDiv(origin.getBlockZ(), 16) != chunkZ)
+                            continue;
                         carving.getPoint().carve(data, chunkX, chunkZ);
                     }
                 }
