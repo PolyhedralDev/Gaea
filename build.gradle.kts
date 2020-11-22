@@ -35,7 +35,6 @@ dependencies {
     implementation("co.aikar:taskchain-bukkit:3.7.2")
     implementation("com.esotericsoftware:reflectasm:1.11.9")
     implementation("org.bstats:bstats-bukkit:1.7")
-    implementation("io.papermc:paperlib:1.0.5")
 
     // JUnit.
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.0")
@@ -63,7 +62,6 @@ tasks.withType<ShadowJar> {
     relocate("co.aikar.taskchain", "org.polydev.gaea.libs.taskchain")
     relocate("com.esotericsoftware", "org.polydev.gaea.libs.reflectasm")
     relocate("net.jafama", "org.polydev.gaea.libs.jafama")
-    relocate("io.papermc.lib", "org.polydev.gaea.libs.paperlib")
 }
 
 /**

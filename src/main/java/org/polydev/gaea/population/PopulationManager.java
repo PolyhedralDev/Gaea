@@ -17,9 +17,6 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.CompletableFuture;
-
-import static io.papermc.lib.PaperLib.getChunkAtAsync;
 
 public class PopulationManager extends BlockPopulator {
     private final List<GaeaBlockPopulator> attachedPopulators = new GlueList<>();
@@ -42,7 +39,6 @@ public class PopulationManager extends BlockPopulator {
             needsPop.add(new ChunkCoordinate(chunk));
             int x = chunk.getX();
             int z = chunk.getZ();
-            GlueList<CompletableFuture<Chunk>> chunks = new GlueList<>();
             if(main.isEnabled()) {
                 for(int xi = - 1; xi <= 1; xi++) {
                     for(int zi = - 1; zi <= 1; zi++) {
@@ -84,13 +80,13 @@ public class PopulationManager extends BlockPopulator {
                 && w.isChunkGenerated(x - 1, z)
                 && w.isChunkGenerated(x, z + 1)
                 && w.isChunkGenerated(x, z - 1) && needsPop.contains(c)) {
-            CompletableFuture<Chunk> chunk = getChunkAtAsync(w, x, z, true);
             Random random = new FastRandom(w.getSeed());
             long xRand = (random.nextLong() / 2L << 1L) + 1L;
             long zRand = (random.nextLong() / 2L << 1L) + 1L;
             random.setSeed((long) x * xRand + (long) z * zRand ^ w.getSeed());
+            Chunk currentChunk = w.getChunkAt(x, z);
             for(GaeaBlockPopulator r : attachedPopulators) {
-                r.populate(w, random, chunk, x, z);
+                r.populate(w, random, currentChunk);
             }
             needsPop.remove(c);
         }
