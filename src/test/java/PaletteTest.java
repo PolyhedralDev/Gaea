@@ -1,7 +1,7 @@
-import org.polydev.gaea.util.FastRandom;
 import org.bukkit.Material;
 import org.junit.jupiter.api.Test;
 import org.polydev.gaea.math.ProbabilityCollection;
+import org.polydev.gaea.util.FastRandom;
 import org.polydev.gaea.world.palette.Palette;
 import org.polydev.gaea.world.palette.RandomPalette;
 

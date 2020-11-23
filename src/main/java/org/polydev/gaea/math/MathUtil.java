@@ -1,7 +1,7 @@
 package org.polydev.gaea.math;
 
-import org.polydev.gaea.util.FastRandom;
 import net.jafama.FastMath;
+import org.polydev.gaea.util.FastRandom;
 
 import java.util.Random;
 

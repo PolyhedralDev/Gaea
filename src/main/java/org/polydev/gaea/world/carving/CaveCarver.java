@@ -1,10 +1,10 @@
 package org.polydev.gaea.world.carving;
 
 
-import org.polydev.gaea.util.FastRandom;
 import net.jafama.FastMath;
 import org.bukkit.World;
 import org.bukkit.util.Vector;
+import org.polydev.gaea.util.FastRandom;
 
 import java.util.Random;
 

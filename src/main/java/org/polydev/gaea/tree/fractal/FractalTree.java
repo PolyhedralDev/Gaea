@@ -1,5 +1,6 @@
 package org.polydev.gaea.tree.fractal;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
@@ -11,7 +12,7 @@ import java.util.*;
 
 
 public abstract class FractalTree {
-    private final Map<Location, BlockData> treeAssembler = new HashMap<>();
+    private final Map<Location, BlockData> treeAssembler = new Object2ObjectOpenHashMap<>();
     private final List<EntitySpawnHolder> entities = new GlueList<>();
     private final Location origin;
     private final Random random;

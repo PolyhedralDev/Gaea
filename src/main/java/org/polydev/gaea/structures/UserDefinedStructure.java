@@ -1,5 +1,6 @@
 package org.polydev.gaea.structures;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.polydev.gaea.structures.features.Feature;
@@ -8,13 +9,12 @@ import org.polydev.gaea.structures.spawn.StructureSpawnInfo;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
 public class UserDefinedStructure implements Structure {
-    private static final Map<UserDefinedStructure, Object> nmsContainer = new HashMap<>();
+    private static final Map<UserDefinedStructure, Object> nmsContainer = new Object2ObjectOpenHashMap<>();
     private final String id;
     private final List<Feature> features;
     private final StructureSpawnInfo spawnInfo;

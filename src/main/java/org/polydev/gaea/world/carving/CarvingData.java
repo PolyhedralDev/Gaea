@@ -1,17 +1,17 @@
 package org.polydev.gaea.world.carving;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.generator.ChunkGenerator.ChunkData;
 import org.bukkit.util.Vector;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class CarvingData {
     private final int chunkX;
     private final int chunkZ;
-    Map<Vector, CarvingType> carvedBlocks = new HashMap<>();
+    Map<Vector, CarvingType> carvedBlocks = new Object2ObjectOpenHashMap<>();
 
     public CarvingData(int chunkX, int chunkZ) {
         this.chunkX = chunkX;
