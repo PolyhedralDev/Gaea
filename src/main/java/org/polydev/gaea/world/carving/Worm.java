@@ -72,11 +72,6 @@ public abstract class Worm {
             this.bottomCut = bottomCut;
         }
 
-        private static int getChunkCoordinate(int n) {
-            if(n >= 0) return n % 16;
-            else return 15 - (FastMath.abs(n % 16));
-        }
-
         private static double ellipseEquation(int x, int y, int z, double xr, double yr, double zr) {
             return (FastMath.pow(x, 2) / FastMath.pow(xr + 0.5D, 2)) + (FastMath.pow(y, 2) / FastMath.pow(yr + 0.5D, 2)) + (FastMath.pow(z, 2) / FastMath.pow(zr + 0.5D, 2));
         }
@@ -90,25 +85,30 @@ public abstract class Worm {
         }
 
         public void carve(CarvingData data, int chunkX, int chunkZ) {
-            for(int x = - getRadius(0) - 1; x <= getRadius(0) + 1; x++) {
-                for(int y = - getRadius(1) - 1; y <= getRadius(1) + 1; y++) {
-                    for(int z = - getRadius(2) - 1; z <= getRadius(2) + 1; z++) {
+            int xRad = getRadius(0);
+            int yRad = getRadius(1);
+            int zRad = getRadius(2);
+            int originX = (chunkX << 4);
+            int originZ = (chunkZ << 4);
+            for(int x = -xRad - 1; x <= xRad + 1; x++) {
+                for(int y = -yRad - 1; y <= yRad + 1; y++) {
+                    for(int z = -zRad - 1; z <= zRad + 1; z++) {
                         Vector position = origin.clone().add(new Vector(x, y, z));
                         if(FastMath.floor((double) (position.getBlockX()) / 16) == chunkX && FastMath.floor((double) (position.getBlockZ()) / 16) == chunkZ && position.getY() >= 0) {
-                            double eq = ellipseEquation(x, y, z, getRadius(0), getRadius(1), getRadius(2));
+                            double eq = ellipseEquation(x, y, z, xRad, yRad, zRad);
                             if(eq <= 1 &&
-                                    y >= -getRadius(1) - 1 + bottomCut && y <= getRadius(1) + 1 - topCut) {
-                                data.carve(position.getBlockX() - (chunkX << 4), position.getBlockY(), position.getBlockZ() - (chunkZ << 4), CarvingData.CarvingType.CENTER);
+                                    y >= -yRad - 1 + bottomCut && y <= yRad + 1 - topCut) {
+                                data.carve(position.getBlockX() - originX, position.getBlockY(), position.getBlockZ() - originZ, CarvingData.CarvingType.CENTER);
                             } else if(eq <= 1.5) {
                                 CarvingData.CarvingType type = CarvingData.CarvingType.WALL;
-                                if(y <= -getRadius(1) - 1 + bottomCut) {
+                                if(y <= -yRad - 1 + bottomCut) {
                                     type = CarvingData.CarvingType.BOTTOM;
-                                } else if(y >= getRadius(1) + 1 - topCut) {
+                                } else if(y >= yRad + 1 - topCut) {
                                     type = CarvingData.CarvingType.TOP;
                                 }
-                                if(data.isCarved(position.getBlockX() - (chunkX << 4), position.getBlockY(), position.getBlockZ() - (chunkZ << 4)))
+                                if(data.isCarved(position.getBlockX() - originX, position.getBlockY(), position.getBlockZ() - originZ))
                                     continue;
-                                data.carve(position.getBlockX() - (chunkX << 4), position.getBlockY(), position.getBlockZ() - (chunkZ << 4), type);
+                                data.carve(position.getBlockX() - originX, position.getBlockY(), position.getBlockZ() - originZ, type);
                             }
                         }
                     }
