@@ -25,14 +25,17 @@ public class ProbabilityCollection<E> {
     }
 
     public E get() {
+        if(array.length == 0) return null;
         return (E) array[ThreadLocalRandom.current().nextInt(array.length)];
     }
 
     public E get(Random r) {
+        if(array.length == 0) return null;
         return (E) array[r.nextInt(array.length)];
     }
 
     public E get(FastNoiseLite n, double x, double z) {
+        if(array.length == 0) return null;
         return (E) array[NormalizationUtil.normalize(n.getNoise(x, z), array.length, 1)];
     }
 
