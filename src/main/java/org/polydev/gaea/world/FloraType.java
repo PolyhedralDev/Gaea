@@ -6,6 +6,7 @@ import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
 import org.polydev.gaea.math.Range;
 import org.polydev.gaea.util.GlueList;
@@ -59,18 +60,24 @@ public enum FloraType implements Flora {
     public List<Block> getValidSpawnsAt(Chunk chunk, int x, int z, Range check) {
         List<Block> blocks = new GlueList<>();
         for(int y : check) {
-            if(spawns.contains(chunk.getBlock(x, y, z).getType()) && chunk.getBlock(x, y + 1, z).getType().isAir()) {
+            Block block = chunk.getBlock(x, y, z);
+            if(spawns.contains(block.getType()) && valid(data.size(), block)) {
                 blocks.add(chunk.getBlock(x, y, z));
             }
         }
         return blocks;
     }
 
+    private boolean valid(int size, Block block) {
+        for(int i = 1; i < data.size() + 1; i++) {
+            block = block.getRelative(BlockFace.UP);
+            if(!block.isEmpty()) return false;
+        }
+        return true;
+    }
+
     @Override
     public boolean plant(Location l) {
-        for(int i = 1; i < data.size() + 1; i++) {
-            if(! l.clone().add(0, i, 0).getBlock().isEmpty()) return false;
-        }
         for(int i = 1; i < data.size() + 1; i++) {
             l.clone().add(0, i, 0).getBlock().setBlockData(data.get(i - 1), false);
         }
