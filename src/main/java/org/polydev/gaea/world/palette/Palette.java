@@ -4,7 +4,6 @@ import org.polydev.gaea.math.FastNoiseLite;
 import org.polydev.gaea.math.ProbabilityCollection;
 import org.polydev.gaea.util.GlueList;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -44,14 +43,8 @@ public abstract class Palette<E> {
      * @return - BlockPalette instance for chaining.
      */
     public Palette<E> add(ProbabilityCollection<E> m, int layers) {
-        ProbabilityCollection<E> d = new ProbabilityCollection<>();
-        Iterator<ProbabilityCollection.ProbabilitySetElement<E>> it = m.iterator();
-        while(it.hasNext()) {
-            ProbabilityCollection.ProbabilitySetElement<E> e = it.next();
-            d.add(e.getObject(), e.getProbability());
-        }
         for(int i = 0; i < layers; i++) {
-            pallet.add(new PaletteLayer<>(d));
+            pallet.add(new PaletteLayer<>(m));
         }
         return this;
     }

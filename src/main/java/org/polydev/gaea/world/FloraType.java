@@ -61,14 +61,14 @@ public enum FloraType implements Flora {
         List<Block> blocks = new GlueList<>();
         for(int y : check) {
             Block block = chunk.getBlock(x, y, z);
-            if(spawns.contains(block.getType()) && valid(data.size(), block)) {
+            if(spawns.contains(block.getType()) && valid(block)) {
                 blocks.add(chunk.getBlock(x, y, z));
             }
         }
         return blocks;
     }
 
-    private boolean valid(int size, Block block) {
+    private boolean valid(Block block) {
         for(int i = 1; i < data.size() + 1; i++) {
             block = block.getRelative(BlockFace.UP);
             if(!block.isEmpty()) return false;

@@ -64,12 +64,3 @@ public class CacheTest {
         System.out.println(sum / longList.size() + "ns per get");
     }
 }
-
-class ProbCollFast<E> {
-    private Object[] storage;
-
-    public ProbCollFast<E> add(E item, int chance) {
-        int ogSize = storage.length;
-        int newSize = ogSize + chance;
-    }
-}
