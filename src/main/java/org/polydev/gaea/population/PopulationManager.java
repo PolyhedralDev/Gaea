@@ -1,11 +1,9 @@
 package org.polydev.gaea.population;
 
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
-import net.jafama.FastMath;
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
-import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -19,15 +17,10 @@ import org.polydev.gaea.util.SerializationUtil;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 
 public class PopulationManager extends BlockPopulator {
-    private final List<GaeaBlockPopulator> attachedPopulators = new GlueList<>();
-    private final List<AsyncGaeaBlockPopulator> attachedAsyncPopulators = new GlueList<>();
+    private final List<GaeaBlockPopulator> attachedPopulators = new GlueList<GaeaBlockPopulator>();
     private final ObjectOpenHashSet<ChunkCoordinate> needsPop = new ObjectOpenHashSet<>();
-    private final GlueList<ObjectOpenHashSet<ChunkCoordinate>> needsAsyncPop = new GlueList<>();
-    private final GlueList<ObjectOpenHashSet<ChunkCoordinate>> doingAsyncPop = new GlueList<>();
-    private final ObjectOpenHashSet<CompletableFuture<AsyncPopulationReturn>> workingAsyncPopulators = new ObjectOpenHashSet<>();
     private final JavaPlugin main;
     private final Object popLock = new Object();
     private WorldProfiler profiler;
@@ -40,70 +33,11 @@ public class PopulationManager extends BlockPopulator {
         this.attachedPopulators.add(populator);
     }
 
-    public void attach(AsyncGaeaBlockPopulator populator) {
-        this.attachedAsyncPopulators.add(populator);
-        this.needsAsyncPop.add(new ObjectOpenHashSet<>());
-    }
-
-    public synchronized void asyncPopulate(World world) {
-        for (CompletableFuture<AsyncPopulationReturn> c : workingAsyncPopulators) {
-            if (c.isDone()) {
-                AsyncPopulationReturn data = c.join();
-                int chunkX = data.getChunkX();
-                int chunkY = data.getChunkZ();
-                ChunkCoordinate chunkCoordinate = new ChunkCoordinate(chunkX, chunkY, data.getWorldID());
-                for (int i = 0; i < needsAsyncPop.size(); i++) {
-                    if (needsAsyncPop.get(i).contains(chunkCoordinate) && i < data.getPopulatorId()) {
-                        continue;
-                    }
-                }
-                HashSet<BlockCoordinate> blockList = data.getChangeList();
-                Chunk chunk = null;
-                if(world.getUID() != data.getWorldID()) { return; }
-                for (BlockCoordinate b: blockList) {
-                    if(chunk == null) {
-                        if(world.isChunkLoaded(chunkX, chunkY)) {
-                            if (workingAsyncPopulators.size() >= 64) {
-                                needsAsyncPop.get(data.getPopulatorId()).add(chunkCoordinate);
-                                workingAsyncPopulators.remove(c);
-                                workingAsyncPopulators.trim();
-                            }
-                            continue;
-                        }
-                        chunk = world.getChunkAt(chunkX, chunkY);
-                    }
-                    Block block = chunk.getBlock(chunkX, b.getY(), chunkY);
-                    block.setBlockData(b.getBlockData(), false);
-                }
-                if(chunk == null) {
-                    needsAsyncPop.get(data.getPopulatorId()).add(chunkCoordinate);
-                }
-                doingAsyncPop.get(data.getPopulatorId()).remove(chunkCoordinate);
-                workingAsyncPopulators.remove(c);
-            }
-        }
-        Random random = new FastRandom(world.getSeed());
-        long xRand = (random.nextLong() / 2L << 1L) + 1L;
-        long zRand = (random.nextLong() / 2L << 1L) + 1L;
-        for (int i = 0; i < needsAsyncPop.size(); i++) {
-            for (ChunkCoordinate c: needsAsyncPop.get(i)) {
-               if (world.isChunkLoaded(c.getX(), c.getZ())) {
-                   Random chunkRandom = new FastRandom((long) c.getX() * xRand + (long) c.getZ() * zRand ^ world.getSeed());
-                   Chunk currentChunk = world.getChunkAt(c.getX(), c.getZ());
-                   workingAsyncPopulators.add(attachedAsyncPopulators.get(i).populate(world, random, currentChunk, i));
-               }
-            }
-        }
-    }
-
     @Override
     public void populate(@NotNull World world, @NotNull Random random, @NotNull Chunk chunk) {
         try(ProfileFuture ignored = measure()) {
             ChunkCoordinate chunkCoordinate = new ChunkCoordinate(chunk);
             needsPop.add(chunkCoordinate);
-            for(ObjectOpenHashSet<ChunkCoordinate> h : needsAsyncPop) {
-                h.add(chunkCoordinate);
-            }
             int x = chunk.getX();
             int z = chunk.getZ();
             if(main.isEnabled()) {
@@ -131,22 +65,12 @@ public class PopulationManager extends BlockPopulator {
         File f = new File(Gaea.getGaeaFolder(w), "chunks.bin");
         f.createNewFile();
         SerializationUtil.toFile((ObjectOpenHashSet<ChunkCoordinate>) needsPop.clone(), f);
-        for (int i = 0; i < doingAsyncPop.size(); i++) {
-            for (ChunkCoordinate c: doingAsyncPop.get(i)) {
-                needsAsyncPop.get(i).add(c);
-            }
-        }
-        f = new File(Gaea.getGaeaFolder(w), "chunksasync.bin");
-        f.createNewFile();
-        SerializationUtil.toFile((GlueList<HashSet<ChunkCoordinate>>) needsAsyncPop.clone(), f);
     }
 
     @SuppressWarnings("unchecked")
     public synchronized void loadBlocks(World w) throws IOException, ClassNotFoundException {
         File f = new File(Gaea.getGaeaFolder(w), "chunks.bin");
         needsPop.addAll((HashSet<ChunkCoordinate>) SerializationUtil.fromFile(f));
-        f = new File(Gaea.getGaeaFolder(w), "chunksasync.bin");
-        needsAsyncPop.addAll((GlueList<ObjectOpenHashSet<ChunkCoordinate>>) SerializationUtil.fromFile(f));
     }
 
 
@@ -166,9 +90,7 @@ public class PopulationManager extends BlockPopulator {
                 r.populate(w, random, currentChunk);
             }
             needsPop.remove(c);
-            for (int i = 0; i < needsAsyncPop.size(); i++) {
-                needsAsyncPop.get(i).add(c);
-            }
+            AsyncPopulationManager.addChunk(c);
         }
     }
 }
