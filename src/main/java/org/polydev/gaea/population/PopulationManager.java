@@ -1,5 +1,6 @@
 package org.polydev.gaea.population;
 
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.jafama.FastMath;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -23,10 +24,10 @@ import java.util.concurrent.CompletableFuture;
 public class PopulationManager extends BlockPopulator {
     private final List<GaeaBlockPopulator> attachedPopulators = new GlueList<>();
     private final List<AsyncGaeaBlockPopulator> attachedAsyncPopulators = new GlueList<>();
-    private final HashSet<ChunkCoordinate> needsPop = new HashSet<>();
-    private final GlueList<HashSet<ChunkCoordinate>> needsAsyncPop = new GlueList<>();
-    private final GlueList<HashSet<ChunkCoordinate>> doingAsyncPop = new GlueList<>();
-    private final HashSet<CompletableFuture<AsyncPopulationReturn>> workingAsyncPopulators = new HashSet<>();
+    private final ObjectOpenHashSet<ChunkCoordinate> needsPop = new ObjectOpenHashSet<>();
+    private final GlueList<ObjectOpenHashSet<ChunkCoordinate>> needsAsyncPop = new GlueList<>();
+    private final GlueList<ObjectOpenHashSet<ChunkCoordinate>> doingAsyncPop = new GlueList<>();
+    private final ObjectOpenHashSet<CompletableFuture<AsyncPopulationReturn>> workingAsyncPopulators = new ObjectOpenHashSet<>();
     private final JavaPlugin main;
     private final Object popLock = new Object();
     private WorldProfiler profiler;
@@ -41,7 +42,7 @@ public class PopulationManager extends BlockPopulator {
 
     public void attach(AsyncGaeaBlockPopulator populator) {
         this.attachedAsyncPopulators.add(populator);
-        this.needsAsyncPop.add(new HashSet<>());
+        this.needsAsyncPop.add(new ObjectOpenHashSet<>());
     }
 
     public synchronized void asyncPopulate(World world) {
@@ -63,7 +64,9 @@ public class PopulationManager extends BlockPopulator {
                     if(chunk == null) {
                         if(world.isChunkLoaded(chunkX, chunkY)) {
                             if (workingAsyncPopulators.size() >= 64) {
+                                needsAsyncPop.get(data.getPopulatorId()).add(chunkCoordinate);
                                 workingAsyncPopulators.remove(c);
+                                workingAsyncPopulators.trim();
                             }
                             continue;
                         }
@@ -98,7 +101,7 @@ public class PopulationManager extends BlockPopulator {
         try(ProfileFuture ignored = measure()) {
             ChunkCoordinate chunkCoordinate = new ChunkCoordinate(chunk);
             needsPop.add(chunkCoordinate);
-            for(HashSet<ChunkCoordinate> h : needsAsyncPop) {
+            for(ObjectOpenHashSet<ChunkCoordinate> h : needsAsyncPop) {
                 h.add(chunkCoordinate);
             }
             int x = chunk.getX();
@@ -127,7 +130,7 @@ public class PopulationManager extends BlockPopulator {
     public synchronized void saveBlocks(World w) throws IOException {
         File f = new File(Gaea.getGaeaFolder(w), "chunks.bin");
         f.createNewFile();
-        SerializationUtil.toFile((HashSet<ChunkCoordinate>) needsPop.clone(), f);
+        SerializationUtil.toFile((ObjectOpenHashSet<ChunkCoordinate>) needsPop.clone(), f);
         for (int i = 0; i < doingAsyncPop.size(); i++) {
             for (ChunkCoordinate c: doingAsyncPop.get(i)) {
                 needsAsyncPop.get(i).add(c);
@@ -143,7 +146,7 @@ public class PopulationManager extends BlockPopulator {
         File f = new File(Gaea.getGaeaFolder(w), "chunks.bin");
         needsPop.addAll((HashSet<ChunkCoordinate>) SerializationUtil.fromFile(f));
         f = new File(Gaea.getGaeaFolder(w), "chunksasync.bin");
-        needsAsyncPop.addAll((GlueList<HashSet<ChunkCoordinate>>) SerializationUtil.fromFile(f));
+        needsAsyncPop.addAll((GlueList<ObjectOpenHashSet<ChunkCoordinate>>) SerializationUtil.fromFile(f));
     }
 
 
