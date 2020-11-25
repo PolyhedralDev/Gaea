@@ -48,8 +48,8 @@ public class PopulationManager extends BlockPopulator {
         for (CompletableFuture<AsyncPopulationReturn> c : workingAsyncPopulators) {
             if (c.isDone()) {
                 AsyncPopulationReturn data = c.join();
-                Integer chunkX = data.getChunkX();
-                Integer chunkY = data.getChunkZ();
+                int chunkX = data.getChunkX();
+                int chunkY = data.getChunkZ();
                 ChunkCoordinate chunkCoordinate = new ChunkCoordinate(chunkX, chunkY, data.getWorldID());
                 for (int i = 0; i < needsAsyncPop.size(); i++) {
                     if (needsAsyncPop.get(i).contains(chunkCoordinate) && i < data.getPopulatorId()) {
@@ -60,10 +60,6 @@ public class PopulationManager extends BlockPopulator {
                 Chunk chunk = null;
                 if(world.getUID() != data.getWorldID()) { return; }
                 for (BlockCoordinate b: blockList) {
-                    if (chunkX == null) {
-                        chunkX = FastMath.floorMod(b.getX(), 16);
-                        chunkY = FastMath.floorMod(b.getY(), 16);
-                    }
                     if(chunk == null) {
                         if(world.isChunkLoaded(chunkX, chunkY)) {
                             if (workingAsyncPopulators.size() >= 64) {
