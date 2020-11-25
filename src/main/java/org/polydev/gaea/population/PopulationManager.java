@@ -44,7 +44,7 @@ public class PopulationManager extends BlockPopulator {
         this.needsAsyncPop.add(new HashSet<>());
     }
 
-    public void asyncPopulate(World world) {
+    public synchronized void asyncPopulate(World world) {
         for (CompletableFuture<AsyncPopulationReturn> c : workingAsyncPopulators) {
             if (c.isDone()) {
                 AsyncPopulationReturn data = c.join();
@@ -79,13 +79,13 @@ public class PopulationManager extends BlockPopulator {
                 workingAsyncPopulators.remove(c);
             }
         }
+        Random random = new FastRandom(world.getSeed());
+        long xRand = (random.nextLong() / 2L << 1L) + 1L;
+        long zRand = (random.nextLong() / 2L << 1L) + 1L;
         for (int i = 0; i < needsAsyncPop.size(); i++) {
             for (ChunkCoordinate c: needsAsyncPop.get(i)) {
                if (world.isChunkLoaded(c.getX(), c.getZ())) {
-                   Random random = new FastRandom(world.getSeed());
-                   long xRand = (random.nextLong() / 2L << 1L) + 1L;
-                   long zRand = (random.nextLong() / 2L << 1L) + 1L;
-                   random.setSeed((long) c.getX() * xRand + (long) c.getZ() * zRand ^ world.getSeed());
+                   Random chunkRandom = new FastRandom((long) c.getX() * xRand + (long) c.getZ() * zRand ^ world.getSeed());
                    Chunk currentChunk = world.getChunkAt(c.getX(), c.getZ());
                    workingAsyncPopulators.add(attachedAsyncPopulators.get(i).populate(world, random, currentChunk, i));
                }
@@ -96,9 +96,10 @@ public class PopulationManager extends BlockPopulator {
     @Override
     public void populate(@NotNull World world, @NotNull Random random, @NotNull Chunk chunk) {
         try(ProfileFuture ignored = measure()) {
-            needsPop.add(new ChunkCoordinate(chunk));
+            ChunkCoordinate chunkCoordinate = new ChunkCoordinate(chunk);
+            needsPop.add(chunkCoordinate);
             for(HashSet<ChunkCoordinate> h : needsAsyncPop) {
-                h.add(new ChunkCoordinate(chunk));
+                h.add(chunkCoordinate);
             }
             int x = chunk.getX();
             int z = chunk.getZ();
