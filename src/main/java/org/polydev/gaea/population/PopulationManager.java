@@ -66,6 +66,9 @@ public class PopulationManager extends BlockPopulator {
                     }
                     if(chunk == null) {
                         if(world.isChunkLoaded(chunkX, chunkY)) {
+                            if (workingAsyncPopulators.size() >= 64) {
+                                workingAsyncPopulators.remove(c);
+                            }
                             continue;
                         }
                         chunk = world.getChunkAt(chunkX, chunkY);
@@ -159,8 +162,8 @@ public class PopulationManager extends BlockPopulator {
             long zRand = (random.nextLong() / 2L << 1L) + 1L;
             random.setSeed((long) x * xRand + (long) z * zRand ^ w.getSeed());
             Chunk currentChunk = w.getChunkAt(x, z);
-            for (int i = 0; i < attachedPopulators.size(); i++) {
-                attachedPopulators.get(i).populate(w, random, currentChunk);
+            for(GaeaBlockPopulator r : attachedPopulators) {
+                r.populate(w, random, currentChunk);
             }
             needsPop.remove(c);
             for (int i = 0; i < needsAsyncPop.size(); i++) {
