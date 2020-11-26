@@ -3,6 +3,7 @@ package org.polydev.gaea.population;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
+import org.bukkit.ChunkSnapshot;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.polydev.gaea.Gaea;
@@ -92,13 +93,14 @@ public class AsyncPopulationManager {
         for (int i = 0; i < needsAsyncPop.size(); i++) {
             for (ChunkCoordinate c: needsAsyncPop.get(i)) {
                 World world = Bukkit.getWorld(c.getWorldID());
-                if (world.isChunkLoaded(c.getX(), c.getZ())) {
+                if (world.isChunkLoaded(c.getX(), c.getZ()) && workingAsyncPopulators.size() <= 8) {
                     Random random = new FastRandom(world.getSeed());
                     long xRand = (random.nextLong() / 2L << 1L) + 1L;
                     long zRand = (random.nextLong() / 2L << 1L) + 1L;
                     Random chunkRandom = new FastRandom((long) c.getX() * xRand + (long) c.getZ() * zRand ^ world.getSeed());
                     Chunk currentChunk = world.getChunkAt(c.getX(), c.getZ());
-                    workingAsyncPopulators.add(attachedAsyncPopulators.get(i).populate(world, random, currentChunk, i));
+                    ChunkSnapshot snapshot = currentChunk.getChunkSnapshot(true, true, false);
+                    workingAsyncPopulators.add(attachedAsyncPopulators.get(i).populate(world, chunkRandom, snapshot, i));
                 }
             }
         }
