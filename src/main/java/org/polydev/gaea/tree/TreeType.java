@@ -19,25 +19,25 @@ public enum TreeType implements Tree {
     LARGE_SHATTERED_PILLAR(null, Collections.singleton(Material.END_STONE)),
     CACTUS(null, Sets.newHashSet(Material.SAND, Material.RED_SAND)),
     ICE_SPIKE(null, Sets.newHashSet(Material.SNOW_BLOCK, Material.SNOW, Material.STONE, Material.GRASS_BLOCK)),
-    OAK(org.bukkit.TreeType.TREE, null),
-    LARGE_OAK(org.bukkit.TreeType.BIG_TREE, null),
-    SPRUCE(org.bukkit.TreeType.REDWOOD, null),
-    LARGE_SPRUCE(org.bukkit.TreeType.TALL_REDWOOD, null),
-    MEGA_SPRUCE(org.bukkit.TreeType.MEGA_REDWOOD, null),
-    BIRCH(org.bukkit.TreeType.BIRCH, null),
+    OAK(org.bukkit.TreeType.TREE, Sets.newHashSet(Material.GRASS_BLOCK, Material.DIRT, Material.PODZOL)),
+    LARGE_OAK(org.bukkit.TreeType.BIG_TREE, Sets.newHashSet(Material.GRASS_BLOCK, Material.DIRT, Material.PODZOL)),
+    SPRUCE(org.bukkit.TreeType.REDWOOD, Sets.newHashSet(Material.GRASS_BLOCK, Material.DIRT, Material.PODZOL)),
+    LARGE_SPRUCE(org.bukkit.TreeType.TALL_REDWOOD, Sets.newHashSet(Material.GRASS_BLOCK, Material.DIRT, Material.PODZOL)),
+    MEGA_SPRUCE(org.bukkit.TreeType.MEGA_REDWOOD, Sets.newHashSet(Material.GRASS_BLOCK, Material.DIRT, Material.PODZOL)),
+    BIRCH(org.bukkit.TreeType.BIRCH, Sets.newHashSet(Material.GRASS_BLOCK, Material.DIRT, Material.PODZOL)),
     CHORUS_PLANT(org.bukkit.TreeType.CHORUS_PLANT, null),
-    ACACIA(org.bukkit.TreeType.ACACIA, null),
-    TALL_BIRCH(org.bukkit.TreeType.TALL_BIRCH, null),
-    JUNGLE(org.bukkit.TreeType.JUNGLE, null),
-    SMALL_JUNGLE(org.bukkit.TreeType.SMALL_JUNGLE, null),
-    JUNGLE_COCOA(org.bukkit.TreeType.COCOA_TREE, null),
-    JUNGLE_BUSH(org.bukkit.TreeType.JUNGLE_BUSH, null),
-    DARK_OAK(org.bukkit.TreeType.DARK_OAK, null),
-    BROWN_MUSHROOM(org.bukkit.TreeType.BROWN_MUSHROOM, null),
-    RED_MUSHROOM(org.bukkit.TreeType.RED_MUSHROOM, null),
-    SWAMP_OAK(org.bukkit.TreeType.SWAMP, null),
-    WARPED_FUNGUS(org.bukkit.TreeType.WARPED_FUNGUS, null),
-    CRIMSON_FUNGUS(org.bukkit.TreeType.CRIMSON_FUNGUS, null);
+    ACACIA(org.bukkit.TreeType.ACACIA, Sets.newHashSet(Material.GRASS_BLOCK, Material.DIRT, Material.PODZOL)),
+    TALL_BIRCH(org.bukkit.TreeType.TALL_BIRCH, Sets.newHashSet(Material.GRASS_BLOCK, Material.DIRT, Material.PODZOL)),
+    JUNGLE(org.bukkit.TreeType.JUNGLE, Sets.newHashSet(Material.GRASS_BLOCK, Material.DIRT, Material.PODZOL)),
+    SMALL_JUNGLE(org.bukkit.TreeType.SMALL_JUNGLE, Sets.newHashSet(Material.GRASS_BLOCK, Material.DIRT, Material.PODZOL)),
+    JUNGLE_COCOA(org.bukkit.TreeType.COCOA_TREE, Sets.newHashSet(Material.GRASS_BLOCK, Material.DIRT, Material.PODZOL)),
+    JUNGLE_BUSH(org.bukkit.TreeType.JUNGLE_BUSH, Sets.newHashSet(Material.GRASS_BLOCK, Material.DIRT, Material.PODZOL)),
+    DARK_OAK(org.bukkit.TreeType.DARK_OAK, Sets.newHashSet(Material.GRASS_BLOCK, Material.DIRT, Material.PODZOL)),
+    BROWN_MUSHROOM(org.bukkit.TreeType.BROWN_MUSHROOM, Sets.newHashSet(Material.GRASS_BLOCK, Material.DIRT, Material.PODZOL, Material.MYCELIUM, Material.NETHERRACK, Material.CRIMSON_NYLIUM, Material.WARPED_NYLIUM)),
+    RED_MUSHROOM(org.bukkit.TreeType.RED_MUSHROOM, Sets.newHashSet(Material.GRASS_BLOCK, Material.DIRT, Material.PODZOL, Material.MYCELIUM, Material.NETHERRACK, Material.CRIMSON_NYLIUM, Material.WARPED_NYLIUM)),
+    SWAMP_OAK(org.bukkit.TreeType.SWAMP, Sets.newHashSet(Material.GRASS_BLOCK, Material.DIRT, Material.PODZOL)),
+    WARPED_FUNGUS(org.bukkit.TreeType.WARPED_FUNGUS, Collections.singleton(Material.WARPED_NYLIUM)),
+    CRIMSON_FUNGUS(org.bukkit.TreeType.CRIMSON_FUNGUS, Collections.singleton(Material.CRIMSON_NYLIUM));
 
     private final org.bukkit.TreeType vanillaType;
     private final Set<Material> spawnable;
@@ -87,7 +87,7 @@ public enum TreeType implements Tree {
 
     public boolean plant(Location l, Random r, JavaPlugin main) {
         if(this.getVanillaTreeType() == null) {
-            if(! spawnable.contains(l.subtract(0, 1, 0).getBlock().getType())) return false;
+            if(!spawnable.contains(l.subtract(0, 1, 0).getBlock().getType())) return false;
             FractalTree tree = getCustomTreeType().getTree(l, r);
             if(main.isEnabled()) co.aikar.taskchain.BukkitTaskChainFactory.create(main).newChain()
                     .async(tree::grow)
@@ -96,5 +96,10 @@ public enum TreeType implements Tree {
             return true;
         }
         return l.getWorld().generateTree(l, this.getVanillaTreeType());
+    }
+
+    @Override
+    public Set<Material> getSpawnable() {
+        return spawnable;
     }
 }
