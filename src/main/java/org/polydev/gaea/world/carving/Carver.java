@@ -7,6 +7,7 @@ import org.polydev.gaea.math.MathUtil;
 import org.polydev.gaea.util.FastRandom;
 
 import java.util.Random;
+import java.util.function.BiConsumer;
 
 public abstract class Carver {
     private final int minY;
@@ -19,8 +20,7 @@ public abstract class Carver {
         this.maxY = maxY;
     }
 
-    public CarvingData carve(int chunkX, int chunkZ, World w) {
-        CarvingData data = new CarvingData(chunkX, chunkZ);
+    public void carve(int chunkX, int chunkZ, World w, BiConsumer<Vector, CarvingType> consumer) {
         for(int x = chunkX - carvingRadius; x <= chunkX + carvingRadius; x++) {
             for(int z = chunkZ - carvingRadius; z <= chunkZ + carvingRadius; z++) {
                 if(isChunkCarved(w, x, z, new FastRandom(MathUtil.hashToLong(this.getClass().getName() + "_" + x + "&" + z)))) {
@@ -34,12 +34,11 @@ public abstract class Carver {
                             break;
                         if(FastMath.floorDiv(origin.getBlockX(), 16) != chunkX && FastMath.floorDiv(origin.getBlockZ(), 16) != chunkZ)
                             continue;
-                        carving.getPoint().carve(data, chunkX, chunkZ);
+                        carving.getPoint().carve(chunkX, chunkZ, consumer);
                     }
                 }
             }
         }
-        return data;
     }
 
     public int getCarvingRadius() {
@@ -53,4 +52,8 @@ public abstract class Carver {
     public abstract Worm getWorm(long seed, Vector l);
 
     public abstract boolean isChunkCarved(World w, int chunkX, int chunkZ, Random r);
+
+    public enum CarvingType {
+        CENTER, WALL, TOP, BOTTOM
+    }
 }
