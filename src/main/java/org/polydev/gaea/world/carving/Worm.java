@@ -93,9 +93,9 @@ public abstract class Worm {
             int originZ = (chunkZ << 4);
             for(int x = -xRad - 1; x <= xRad + 1; x++) {
                 if(!(FastMath.floorDiv(origin.getBlockX() + x, 16) == chunkX)) continue;
-                for(int y = -yRad - 1; y <= yRad + 1; y++) {
-                    for(int z = -zRad - 1; z <= zRad + 1; z++) {
-                        if(!(FastMath.floorDiv(origin.getBlockZ() + z, 16) == chunkZ)) continue;
+                for(int z = -zRad - 1; z <= zRad + 1; z++) {
+                    if(!(FastMath.floorDiv(origin.getBlockZ() + z, 16) == chunkZ)) continue;
+                    for(int y = -yRad - 1; y <= yRad + 1; y++) {
                         Vector position = origin.clone().add(new Vector(x, y, z));
                         if(position.getY() < 0 || position.getY() > 255) continue;
                         double eq = ellipseEquation(x, y, z, xRad, yRad, zRad);
