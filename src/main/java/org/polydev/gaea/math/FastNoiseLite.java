@@ -321,12 +321,23 @@ public class FastNoiseLite {
     private double mFractalBounding = 1 / 1.75f;
 
     private CellularDistanceFunction mCellularDistanceFunction = CellularDistanceFunction.EuclideanSq;
-    private CellularReturnType       mCellularReturnType       = CellularReturnType.Distance;
-    private double                   mCellularJitterModifier   = 1.0f;
+    private CellularReturnType mCellularReturnType = CellularReturnType.Distance;
+    private double mCellularJitterModifier = 1.0f;
 
-    private DomainWarpType  mDomainWarpType      = DomainWarpType.OpenSimplex2;
+    private DomainWarpType mDomainWarpType = DomainWarpType.OpenSimplex2;
     private TransformType3D mWarpTransformType3D = TransformType3D.DefaultOpenSimplex2;
-    private double          mDomainWarpAmp       = 1.0f;
+    private double mDomainWarpAmp = 1.0f;
+
+    private static final FastNoiseLite CELLULAR_LOOKUP_DEFAULT = new FastNoiseLite();
+    private FastNoiseLite cellularNoiseLookup = CELLULAR_LOOKUP_DEFAULT;
+
+    public FastNoiseLite getCellularNoiseLookup() {
+        return cellularNoiseLookup;
+    }
+
+    public void setCellularNoiseLookup(FastNoiseLite cellularNoiseLookup) {
+        this.cellularNoiseLookup = cellularNoiseLookup;
+    }
 
     /**
      * Create new FastNoise object with default seed
@@ -1338,23 +1349,25 @@ public class FastNoiseLite {
         int xr = FastRound(x);
         int yr = FastRound(y);
 
-        double distance0   = Double.MAX_VALUE;
-        double distance1   = Double.MAX_VALUE;
-        int    closestHash = 0;
+        double distance0 = Double.MAX_VALUE;
+        double distance1 = Double.MAX_VALUE;
+        int closestHash = 0;
 
         double cellularJitter = 0.43701595f * mCellularJitterModifier;
 
-        int xPrimed     = (xr - 1) * PrimeX;
+        int xPrimed = (xr - 1) * PrimeX;
         int yPrimedBase = (yr - 1) * PrimeY;
 
-        switch (mCellularDistanceFunction) {
+        Vector2 center = new Vector2(x, y);
+
+        switch(mCellularDistanceFunction) {
             default:
             case Euclidean:
             case EuclideanSq:
-                for (int xi = xr - 1; xi <= xr + 1; xi++) {
+                for(int xi = xr - 1; xi <= xr + 1; xi++) {
                     int yPrimed = yPrimedBase;
 
-                    for (int yi = yr - 1; yi <= yr + 1; yi++) {
+                    for(int yi = yr - 1; yi <= yr + 1; yi++) {
                         int hash = Hash(seed, xPrimed, yPrimed);
                         int idx  = hash & (255 << 1);
 
@@ -1367,6 +1380,8 @@ public class FastNoiseLite {
                         if (newDistance < distance0) {
                             distance0 = newDistance;
                             closestHash = hash;
+                            center.x = (xi + RandVecs2D[idx] * cellularJitter) / mFrequency;
+                            center.y = (yi + RandVecs2D[idx | 1] * cellularJitter) / mFrequency;
                         }
                         yPrimed += PrimeY;
                     }
@@ -1390,6 +1405,8 @@ public class FastNoiseLite {
                         if (newDistance < distance0) {
                             distance0 = newDistance;
                             closestHash = hash;
+                            center.x = (xi + RandVecs2D[idx] * cellularJitter) / mFrequency;
+                            center.y = (yi + RandVecs2D[idx | 1] * cellularJitter) / mFrequency;
                         }
                         yPrimed += PrimeY;
                     }
@@ -1413,6 +1430,8 @@ public class FastNoiseLite {
                         if (newDistance < distance0) {
                             distance0 = newDistance;
                             closestHash = hash;
+                            center.x = (xi + RandVecs2D[idx] * cellularJitter) / mFrequency;
+                            center.y = (yi + RandVecs2D[idx | 1] * cellularJitter) / mFrequency;
                         }
                         yPrimed += PrimeY;
                     }
@@ -1444,6 +1463,8 @@ public class FastNoiseLite {
                 return distance1 * distance0 * 0.5f - 1;
             case Distance2Div:
                 return distance0 / distance1 - 1;
+            case NoiseLookup:
+                return cellularNoiseLookup.getNoise(center.x, center.y);
             default:
                 return 0;
         }
@@ -1455,23 +1476,25 @@ public class FastNoiseLite {
         int yr = FastRound(y);
         int zr = FastRound(z);
 
-        double distance0   = Double.MAX_VALUE;
-        double distance1   = Double.MAX_VALUE;
-        int    closestHash = 0;
+        double distance0 = Double.MAX_VALUE;
+        double distance1 = Double.MAX_VALUE;
+        int closestHash = 0;
 
         double cellularJitter = 0.39614353f * mCellularJitterModifier;
 
-        int xPrimed     = (xr - 1) * PrimeX;
+        int xPrimed = (xr - 1) * PrimeX;
         int yPrimedBase = (yr - 1) * PrimeY;
         int zPrimedBase = (zr - 1) * PrimeZ;
 
-        switch (mCellularDistanceFunction) {
+        Vector3 center = new Vector3(x, y, z);
+
+        switch(mCellularDistanceFunction) {
             case Euclidean:
             case EuclideanSq:
-                for (int xi = xr - 1; xi <= xr + 1; xi++) {
+                for(int xi = xr - 1; xi <= xr + 1; xi++) {
                     int yPrimed = yPrimedBase;
 
-                    for (int yi = yr - 1; yi <= yr + 1; yi++) {
+                    for(int yi = yr - 1; yi <= yr + 1; yi++) {
                         int zPrimed = zPrimedBase;
 
                         for (int zi = zr - 1; zi <= zr + 1; zi++) {
@@ -1488,6 +1511,9 @@ public class FastNoiseLite {
                             if (newDistance < distance0) {
                                 distance0 = newDistance;
                                 closestHash = hash;
+                                center.x = (xi + RandVecs3D[idx] * cellularJitter) / mFrequency;
+                                center.y = (yi + RandVecs3D[idx | 1] * cellularJitter) / mFrequency;
+                                center.z = (zi + RandVecs3D[idx | 2] * cellularJitter) / mFrequency;
                             }
                             zPrimed += PrimeZ;
                         }
@@ -1517,6 +1543,9 @@ public class FastNoiseLite {
                             if (newDistance < distance0) {
                                 distance0 = newDistance;
                                 closestHash = hash;
+                                center.x = (xi + RandVecs3D[idx] * cellularJitter) / mFrequency;
+                                center.y = (yi + RandVecs3D[idx | 1] * cellularJitter) / mFrequency;
+                                center.z = (zi + RandVecs3D[idx | 2] * cellularJitter) / mFrequency;
                             }
                             zPrimed += PrimeZ;
                         }
@@ -1547,6 +1576,9 @@ public class FastNoiseLite {
                             if (newDistance < distance0) {
                                 distance0 = newDistance;
                                 closestHash = hash;
+                                center.x = (xi + RandVecs3D[idx] * cellularJitter) / mFrequency;
+                                center.y = (yi + RandVecs3D[idx | 1] * cellularJitter) / mFrequency;
+                                center.z = (zi + RandVecs3D[idx | 2] * cellularJitter) / mFrequency;
                             }
                             zPrimed += PrimeZ;
                         }
@@ -1583,6 +1615,8 @@ public class FastNoiseLite {
                 return distance1 * distance0 * 0.5f - 1;
             case Distance2Div:
                 return distance0 / distance1 - 1;
+            case NoiseLookup:
+                return cellularNoiseLookup.getNoise(center.x, center.y, center.z);
             default:
                 return 0;
         }
@@ -2520,7 +2554,8 @@ public class FastNoiseLite {
         Distance2Add,
         Distance2Sub,
         Distance2Mul,
-        Distance2Div
+        Distance2Div,
+        NoiseLookup
     }
 
 
