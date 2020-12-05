@@ -74,7 +74,7 @@ public abstract class Worm {
         }
 
         private static double ellipseEquation(int x, int y, int z, double xr, double yr, double zr) {
-            return (FastMath.pow(x, 2) / FastMath.pow(xr + 0.5D, 2)) + (FastMath.pow(y, 2) / FastMath.pow(yr + 0.5D, 2)) + (FastMath.pow(z, 2) / FastMath.pow(zr + 0.5D, 2));
+            return (FastMath.pow2(x) / FastMath.pow2(xr + 0.5D)) + (FastMath.pow2(y) / FastMath.pow2(yr + 0.5D)) + (FastMath.pow2(z) / FastMath.pow2(zr + 0.5D));
         }
 
         public Vector getOrigin() {
