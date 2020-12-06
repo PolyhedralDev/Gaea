@@ -30,8 +30,7 @@ public class Entry {
     public Entry(JSONObject entry) {
 
         String id = entry.get("name").toString();
-        if(id.contains(":")) this.item = Material.matchMaterial(id);
-        else this.item = Material.valueOf(entry.get("name").toString().toUpperCase());
+        this.item = Material.matchMaterial(id);
 
         long weight1;
         try {
@@ -46,8 +45,15 @@ public class Entry {
                 switch(((String) ((JSONObject) function).get("function"))) {
                     case "minecraft:set_count":
                     case "set_count":
-                        long max = (long) ((JSONObject) ((JSONObject) function).get("count")).get("max");
-                        long min = (long) ((JSONObject) ((JSONObject) function).get("count")).get("min");
+                        Object loot = ((JSONObject) function).get("count");
+                        long max, min;
+                        if(loot instanceof Long) {
+                            max = (Long) loot;
+                            min = (Long) loot;
+                        } else {
+                            max = (long) ((JSONObject) loot).get("max");
+                            min = (long) ((JSONObject) loot).get("min");
+                        }
                         functions.add(new AmountFunction(FastMath.toIntExact(min), FastMath.toIntExact(max)));
                         break;
                     case "minecraft:set_damage":

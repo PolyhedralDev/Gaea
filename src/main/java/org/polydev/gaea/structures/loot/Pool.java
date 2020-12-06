@@ -24,8 +24,15 @@ public class Pool {
      * @param pool The JSON Object to instantiate from.
      */
     public Pool(JSONObject pool) {
-        this.max = FastMath.toIntExact((long) ((JSONObject) pool.get("rolls")).get("max"));
-        this.min = FastMath.toIntExact((long) ((JSONObject) pool.get("rolls")).get("min"));
+        Object amount = pool.get("rolls");
+        if(amount instanceof Long) {
+            max = FastMath.toIntExact((Long) amount);
+            min = FastMath.toIntExact((Long) amount);
+        } else {
+            max = FastMath.toIntExact((Long) ((JSONObject) amount).get("max"));
+            min = FastMath.toIntExact((Long) ((JSONObject) amount).get("min"));
+        }
+
         for(Object entryJSON : (JSONArray) pool.get("entries")) {
             Entry entry = new Entry((JSONObject) entryJSON);
             entries.add(entry, FastMath.toIntExact(entry.getWeight()));
