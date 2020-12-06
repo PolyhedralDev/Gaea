@@ -101,9 +101,9 @@ class Version(val major: String, val minor: String, val revision: String, val pr
 
     override fun toString(): String {
         return if (preRelease)
-            "$major.$minor.$revision"
-        else //Only use git hash if it's a prerelease.
             "$major.$minor.$revision-BETA+${getGitHash()}"
+        else //Only use git hash if it's a prerelease.
+            "$major.$minor.$revision"
     }
 }
 
