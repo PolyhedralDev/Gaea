@@ -19,7 +19,17 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.*;
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.NoSuchElementException;
+import java.util.Objects;
 
 import static net.jafama.FastMath.*;
 
@@ -38,7 +48,7 @@ import static net.jafama.FastMath.*;
  * <br>
  * Adding and removing operations much faster than ArrayList and LinkedList.
  * Searching operations nearly same with ArrayList and way better than LinkedList.
- * <p/>
+ * <p>
  * Best Case<br>
  * Add O(1)<br>
  * Remove O(1)<br>
@@ -53,11 +63,11 @@ import static net.jafama.FastMath.*;
  * Remove O(n*m)<br>
  * Search O(m)<br>
  * Access O(m)
- * <p/>
+ *
  * version v1.0
- * <p/>
+ *
  * Date: 03.11.2015
- * <p/>
+ *
  *
  * @author Ertuğrul Çetin ~ ertu.ctn@gmail.com
  * @see Collection
