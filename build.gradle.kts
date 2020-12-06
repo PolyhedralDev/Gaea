@@ -64,6 +64,36 @@ tasks.withType<ShadowJar> {
     relocate("net.jafama", "org.polydev.gaea.libs.jafama")
 }
 
+val sourcesJar by tasks.registering(Jar::class) {
+    classifier = "sources"
+    from(sourceSets.main.get().allSource)
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("mavenJava") {
+            artifact(tasks["sourcesJar"])
+            artifact(tasks["jar"])
+        }
+    }
+
+    repositories {
+        val mavenUrl = "https://repo.codemc.io/repository/maven-releases/"
+        val mavenSnapshotUrl = "https://repo.codemc.io/repository/maven-snapshots/"
+
+        maven((if (versionObj.preRelease) mavenSnapshotUrl else mavenUrl)) {
+            val mavenUsername: String? by project
+            val mavenPassword: String? by project
+            if (mavenUsername != null && mavenPassword != null) {
+                credentials {
+                    username = mavenUsername
+                    password = mavenPassword
+                }
+            }
+        }
+    }
+}
+
 /**
  * Version class that does version stuff.
  */
