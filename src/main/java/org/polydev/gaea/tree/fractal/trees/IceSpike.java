@@ -2,6 +2,7 @@ package org.polydev.gaea.tree.fractal.trees;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.util.Vector;
 import org.polydev.gaea.math.ProbabilityCollection;
 import org.polydev.gaea.tree.fractal.FractalTree;
 import org.polydev.gaea.tree.fractal.TreeGeometry;
@@ -24,18 +25,23 @@ public class IceSpike extends FractalTree {
         geo = new TreeGeometry(this);
     }
 
+    private double getOffset() {
+        return (getRandom().nextDouble() - 0.5D);
+    }
+
     /**
      * Grows the tree in memory. Intended to be invoked from an async thread.
      */
     @Override
     public void grow() {
+        Vector direction = new Vector(getOffset(), 0, getOffset());
         Location l1 = super.getOrigin().clone();
         int h = super.getRandom().nextInt(16) + 8;
         for(int i = 0; i < h; i++) {
-            geo.generateSponge(l1.clone().add(0, i, 0), ice, (int) ((1-((double) i / h))*2+1), true, 70);
+            geo.generateSponge(l1.clone().add(0, i, 0).add(direction.clone().multiply(i)), ice, (int) ((1 - ((double) i / h)) * 2 + 1), true, 80);
         }
         for(int i = 0; i < h/3; i++) {
-            setBlock(l1.clone().add(0, h+i, 0), ice.get(super.getRandom()));
+            setBlock(l1.clone().add(0, h + i, 0).add(direction.clone().multiply(h + i)), ice.get(super.getRandom()));
         }
     }
 }
