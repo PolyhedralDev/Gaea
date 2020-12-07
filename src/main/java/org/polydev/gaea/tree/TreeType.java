@@ -25,7 +25,7 @@ public enum TreeType implements Tree {
     LARGE_SPRUCE(org.bukkit.TreeType.TALL_REDWOOD, Sets.newHashSet(Material.GRASS_BLOCK, Material.DIRT, Material.PODZOL)),
     MEGA_SPRUCE(org.bukkit.TreeType.MEGA_REDWOOD, Sets.newHashSet(Material.GRASS_BLOCK, Material.DIRT, Material.PODZOL)),
     BIRCH(org.bukkit.TreeType.BIRCH, Sets.newHashSet(Material.GRASS_BLOCK, Material.DIRT, Material.PODZOL)),
-    CHORUS_PLANT(org.bukkit.TreeType.CHORUS_PLANT, null),
+    CHORUS_PLANT(org.bukkit.TreeType.CHORUS_PLANT, Sets.newHashSet(Material.END_STONE)),
     ACACIA(org.bukkit.TreeType.ACACIA, Sets.newHashSet(Material.GRASS_BLOCK, Material.DIRT, Material.PODZOL)),
     TALL_BIRCH(org.bukkit.TreeType.TALL_BIRCH, Sets.newHashSet(Material.GRASS_BLOCK, Material.DIRT, Material.PODZOL)),
     JUNGLE(org.bukkit.TreeType.JUNGLE, Sets.newHashSet(Material.GRASS_BLOCK, Material.DIRT, Material.PODZOL)),
