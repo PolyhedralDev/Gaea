@@ -1,5 +1,7 @@
 package org.polydev.gaea.population;
 
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.generator.BlockPopulator;
@@ -14,13 +16,11 @@ import org.polydev.gaea.util.SerializationUtil;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class PopulationManager extends BlockPopulator {
-    private final List<GaeaBlockPopulator> attachedPopulators = new GlueList<>();
-    private final HashSet<ChunkCoordinate> needsPop = new HashSet<>();
+    private final List<GaeaBlockPopulator> attachedPopulators = new GlueList<GaeaBlockPopulator>();
+    private final ObjectOpenHashSet<ChunkCoordinate> needsPop = new ObjectOpenHashSet<>();
     private final JavaPlugin main;
     private final Object popLock = new Object();
     private WorldProfiler profiler;
@@ -36,7 +36,8 @@ public class PopulationManager extends BlockPopulator {
     @Override
     public void populate(@NotNull World world, @NotNull Random random, @NotNull Chunk chunk) {
         try(ProfileFuture ignored = measure()) {
-            needsPop.add(new ChunkCoordinate(chunk));
+            ChunkCoordinate chunkCoordinate = new ChunkCoordinate(chunk);
+            needsPop.add(chunkCoordinate);
             int x = chunk.getX();
             int z = chunk.getZ();
             if(main.isEnabled()) {
@@ -63,7 +64,7 @@ public class PopulationManager extends BlockPopulator {
     public synchronized void saveBlocks(World w) throws IOException {
         File f = new File(Gaea.getGaeaFolder(w), "chunks.bin");
         f.createNewFile();
-        SerializationUtil.toFile((HashSet<ChunkCoordinate>) needsPop.clone(), f);
+        SerializationUtil.toFile((ObjectOpenHashSet<ChunkCoordinate>) needsPop.clone(), f);
     }
 
     @SuppressWarnings("unchecked")
@@ -89,6 +90,7 @@ public class PopulationManager extends BlockPopulator {
                 r.populate(w, random, currentChunk);
             }
             needsPop.remove(c);
+            AsyncPopulationManager.addChunk(c);
         }
     }
 }
